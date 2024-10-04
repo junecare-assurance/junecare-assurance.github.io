@@ -1,0 +1,167 @@
+<div class="popup-container">
+  <h2 class="popup-header">
+    <span class="header-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
+        <path fill="currentColor" d="M269.4 2.9C265.2 1 260.7 0 256 0s-9.2 1-13.4 2.9L54.3 82.8c-22 9.3-38.4 31-38.3 57.2.5 99.2 41.3 280.7 213.6 363.2 16.7 8 36.1 8 52.8 0C454.7 420.7 495.5 239.2 496 140c.1-26.2-16.3-47.9-38.3-57.2L269.4 2.9zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
+      </svg>
+    </span>
+    <span>Assurance protection voiture</span>
+    <button id="closePopup" class="close-button">&times;</button>
+  </h2>
+
+  <p>Offrez-vous une tranquillité d'esprit en protégeant votre véhicule</p>
+
+  <div id="coverageDetails">
+    <h4>Ce qui est couvert</h4>
+    <ul class="benefits-list">
+      <li>
+        <svg class="check-icon" viewBox="0 0 32 32">
+          <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M13.52,23.383L6.158,16.02l2.828-2.828l4.533,4.535l9.617-9.617l2.828,2.828L13.52,23.383z"/>
+        </svg>
+        <span>Rachat de franchise pour les bris de glaces latérales et arrières</span>
+      </li>
+      <li>
+        <svg class="check-icon" viewBox="0 0 32 32">
+          <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M13.52,23.383L6.158,16.02l2.828-2.828l4.533,4.535l9.617-9.617l2.828,2.828L13.52,23.383z"/>
+        </svg>
+        <span>Vos biens personnels (ordinateurs, sacs, appareils photo, etc.) sont couverts en cas de vol</span>
+      </li>
+      <li>
+        <svg class="check-icon" viewBox="0 0 32 32">
+          <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M13.52,23.383L6.158,16.02l2.828-2.828l4.533,4.535l9.617-9.617l2.828,2.828L13.52,23.383z"/>
+        </svg>
+        <span>Jusqu'à 2000 € d'indemnisation par sinistre</span>
+      </li>
+    </ul>
+  </div>
+
+  <div id="eventDetails" style="display: none;">
+    <div class="input-group">
+      <label for="nameInput">Nom :</label>
+      <input type="text" id="nameInput" class="readonly-input" readonly>
+    </div>
+    <div class="input-group">
+      <label for="dateInput">Date de début :</label>
+      <input type="text" id="dateInput" class="readonly-input" readonly>
+    </div>
+    <div class="input-group">
+      <label for="dateInputend">Date de fin :</label>
+      <input type="text" id="dateInputend" class="readonly-input" readonly>
+    </div>
+    <div class="input-group">
+      <label for="placeInput">Lieu :</label>
+      <input type="text" id="placeInput" class="readonly-input" readonly>
+    </div>
+    <div class="input-group">
+      <label for="priceInput">Prix final :</label>
+      <input type="text" id="priceInput" class="readonly-input" readonly>
+    </div>
+    <div class="input-group">
+      <label for="emailInput">Email :</label>
+      <input type="email" id="emailInput">
+    </div>
+    <div class="input-group">
+      <label for="firstNameInput">Prénom :</label>
+      <input type="text" id="firstNameInput">
+    </div>
+    <div class="input-group">
+      <label for="lastNameInput">Nom de famille :</label>
+      <input type="text" id="lastNameInput">
+    </div>
+    <div class="input-group">
+      <label for="imatriculation">Immatriculation :</label>
+      <input type="text" id="imatriculation">
+    </div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="assurance" name="assurance">
+      <label for="assurance">
+        En sélectionnant cette assurance, je confirme être résident de l'Union Européenne et déclare avoir pris connaissance, puis accepter les
+        <a href="https://igorpotard.github.io/conditions-generales.pdf" target="_blank">conditions générales</a>
+        et le
+        <a href="https://igorpotard.github.io/document-informations.pdf" target="_blank">document d'information</a>.
+      </label>
+    </div>
+  </div>
+
+  <div id="googlePayContainer" class="payment-container"></div>
+</div>
+
+<style>
+ .popup-container {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-icon {
+  margin-right: 10px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.benefits-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.benefits-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.check-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  fill: #0079CA;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.readonly-input {
+  background-color: #f0f0f0;
+  color: #888;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+.payment-container {
+  margin-top: 20px;
+  text-align: center;
+}
+</style>
