@@ -32,7 +32,6 @@ if (!window.location.href.match(/#.*$/)) {
             popup.style.transform = 'translate(-50%, -10%)';
             popup.style.padding = '20px';
             popup.style.backgroundColor = '#FFFFFF';
-            popup.style.borderRadius = '15px';
             popup.style.zIndex = '10000';
 						popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
             popup.style.overflowY = 'auto';
