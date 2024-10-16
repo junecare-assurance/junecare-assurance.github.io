@@ -19,16 +19,15 @@
         const place = placeElement ? placeElement.innerText : 'Non trouvé';
         const priceElements = document.querySelectorAll('[data-testid="purchase-plan-session"] .plan-resume-list__info div');
 
-        let totalTickets = 0;
+        let numberOfTickets = 0;
 
         priceElements.forEach(priceElement => {
             const priceText = priceElement.innerText;
             const priceMatch = priceText.match(/x (\d+)/);
-            const numberOfTickets = priceMatch ? parseInt(priceMatch[1], 10) : 0;
-            totalTickets += numberOfTickets;
+            const Tickets = priceMatch ? parseInt(priceMatch[1], 10) : 0;
+            numberOfTickets += Tickets;
         });
 
-        console.log(`Total des tickets : ${totalTickets}`);
         // Extraction du nombre de billets et du prix final
         const finalPriceElements = document.querySelectorAll('span');
         let finalPrice = 'Non trouvé';
@@ -43,7 +42,7 @@
         console.log(finalPrice);
 
 
-        return { name, date, place, totalTickets, finalPrice };
+        return { name, date, place, numberOfTickets, finalPrice };
     }
 
 
