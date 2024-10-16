@@ -139,6 +139,7 @@ if (!window.location.href.match(/#.*$/)) {
                                 .then(response => response.json())
                                 .then(data => {
 																		//vas au bubbleapps
+                                    console.log(data.response);
                                     window.location.href = data.response.link + "test/" + data.response.id;
                                 });
                         }
