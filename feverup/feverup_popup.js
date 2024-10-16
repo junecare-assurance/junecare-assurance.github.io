@@ -169,7 +169,7 @@ if (!window.location.href.match(/#.*$/)) {
 				//button pour show popup
         function addButton() {
           const intervalId = setInterval(() => {
-            const existingButton = document.querySelector('.payment__button');
+            const existingButton = document.querySelector('.payment__buttons');
             if (existingButton) {
                 existingButton.addEventListener('click', loadEventInfo);
                 //clearInterval(intervalId);
