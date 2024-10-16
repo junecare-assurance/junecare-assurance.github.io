@@ -19,7 +19,7 @@
         const date = dateElement ? dateElement.innerText : 'Non trouvé';
         const place = placeElement ? placeElement.innerText : 'Non trouvé';
         const priceText = priceElement ? priceElement.innerText : 'Non trouvé';
-
+        console.log(priceText);
         // Extraction du nombre de billets et du prix final
         const priceMatch = priceText.match(/x (\d+)/);
         const numberOfTickets = priceMatch ? priceMatch[1] : 'Non trouvé';
