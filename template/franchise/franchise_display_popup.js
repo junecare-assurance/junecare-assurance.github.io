@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 if (!window.location.href.match(/#.*$/)) {
 (function() {
     'use strict';
@@ -10,8 +12,6 @@ if (!window.location.href.match(/#.*$/)) {
     stripeScript.onload = function() {
 
         function showPopup(eventInfo) {
-
-
 						//Overlay qui noircit le fond
             const overlay = document.createElement('div');
             overlay.style.position = 'fixed';

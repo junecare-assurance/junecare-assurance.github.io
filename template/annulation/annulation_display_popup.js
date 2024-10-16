@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 if (!window.location.href.match(/#.*$/)) {
 (function() {
     'use strict';
