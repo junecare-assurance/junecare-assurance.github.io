@@ -169,21 +169,13 @@ if (!window.location.href.match(/#.*$/)) {
 
 				//button pour show popup
         function addButton() {
-            const button = document.createElement('button');
-            button.innerText = 'Afficher les informations de l\'événement';
-            button.style.position = 'fixed';
-            button.style.bottom = '10px';
-            button.style.right = '10px';
-            button.style.padding = '10px 20px';
-            button.style.backgroundColor = '#007bff';
-            button.style.color = 'white';
-            button.style.border = 'none';
-            button.style.borderRadius = '5px';
-            button.style.cursor = 'pointer';
-            button.style.zIndex = '1000';
-            button.addEventListener('click', loadEventInfo);
-
-            document.body.appendChild(button);
+          const intervalId = setInterval(() => {
+            const existingButton = document.querySelector('.purchase-summary__button');
+            if (existingButton) {
+                existingButton.addEventListener('click', loadEventInfo);
+                //clearInterval(intervalId);
+            }
+          }, 1000);
         }
 				//ajoute button on load
         window.addEventListener('load', () => {
