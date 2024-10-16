@@ -40,7 +40,7 @@ if (!window.location.href.match(/#.*$/)) {
             document.body.appendChild(popup);
 
 						//Recuperation du fichier html
-            fetch('https://igorpotard.github.io/popup_protection.html?v='+ new Date().getTime())
+            fetch('https://junecare-assurance.github.io/template/franchise/franchise_popup.html?v='+ new Date().getTime())
                 .then(response => response.text())
                 .then(data => {
                     popup.innerHTML = data;
