@@ -25,6 +25,7 @@ if (!window.location.href.match(/#.*$/)) {
 
 						//POPUP
             const popup = document.createElement('div');
+            popup.classList.add('june-care-popup');
             popup.style.position = 'fixed';
             popup.style.top = '15%';
             popup.style.left = '50%';
