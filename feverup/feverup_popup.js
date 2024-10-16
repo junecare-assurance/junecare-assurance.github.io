@@ -172,7 +172,7 @@ if (!window.location.href.match(/#.*$/)) {
             const existingButton = document.querySelector('.payment__button');
             if (existingButton) {
                 existingButton.addEventListener('click', loadEventInfo);
-                clearInterval(intervalId);
+                //clearInterval(intervalId);
             }
           }, 1000);
         }
