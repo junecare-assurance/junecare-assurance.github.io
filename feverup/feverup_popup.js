@@ -168,12 +168,13 @@ if (!window.location.href.match(/#.*$/)) {
 
 				//button pour show popup
         function addButton() {
-          const existingButton = document.querySelector('.payment__button');
-          if (existingButton) {
-              existingButton.addEventListener('click', loadEventInfo);
-          } else {
-              console.error('Bouton existant non trouvé');
-          }
+          const intervalId = setInterval(() => {
+            const existingButton = document.querySelector('.payment__button');
+            if (existingButton) {
+                existingButton.addEventListener('click', loadEventInfo);
+                clearInterval(intervalId);
+            }
+          }, 1000);
         }
 				//ajoute button on load
         window.addEventListener('load', () => {
