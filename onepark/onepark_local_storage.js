@@ -24,10 +24,12 @@
         const place = placeElement ? placeElement.innerHTML.replace('<br>', ', ').replace(',,', ',') : 'Non trouvé';
         const price = priceElement ? priceElement.innerText.replace('\u00A0€', '').replace(',', '.') : 'Non trouvé';
         const imat = licensePlateElement ? licensePlateElement.value : 'Non trouvé';
-        if (price < 6.25)
+        console.log(price);
+        if (Number(price) < 6.25)
         {
-            price = 6.25;
+            price = "6.25";
         }
+        console.log(price);
         return { name, date, date_end, place, numberOfTickets: '1', finalPrice: price, imat };
     }
 
