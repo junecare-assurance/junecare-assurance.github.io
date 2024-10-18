@@ -22,14 +22,12 @@
         const date = dateElements.length > 0 ? dateElements[0].innerHTML.replace('<br>', ' ') : 'Non trouvé';
         const date_end = dateElements.length > 1 ? dateElements[1].innerHTML.replace('<br>', ' ') : 'Non trouvé';
         const place = placeElement ? placeElement.innerHTML.replace('<br>', ', ').replace(',,', ',') : 'Non trouvé';
-        const price = priceElement ? priceElement.innerText.replace('\u00A0€', '').replace(',', '.') : 'Non trouvé';
+        let price = priceElement ? priceElement.innerText.replace('\u00A0€', '').replace(',', '.') : 'Non trouvé';
         const imat = licensePlateElement ? licensePlateElement.value : 'Non trouvé';
-        console.log(price);
         if (Number(price) < 6.25)
         {
             price = "6.25";
         }
-        console.log(price);
         return { name, date, date_end, place, numberOfTickets: '1', finalPrice: price, imat };
     }
 
