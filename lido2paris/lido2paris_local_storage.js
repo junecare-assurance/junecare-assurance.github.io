@@ -33,7 +33,7 @@
             email: "non trouve"  // Placeholder, as no email is provided
         };
     
-        localStorage.setItem('cartInfo', JSON.stringify(localStorageData));
+        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
         console.log('Cart info saved:', localStorageData);
     }
     
