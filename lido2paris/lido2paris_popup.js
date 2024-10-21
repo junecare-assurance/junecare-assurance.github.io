@@ -127,14 +127,14 @@ if (!window.location.href.match(/#.*$/)) {
                                         'Content-Type': 'application/json'
                                     },
                                     body: JSON.stringify({
-                                        prix: eventInfo.finalPrice,
-                                        name: eventInfo.name,
-                                        email: eventInfo.email,
-                                        date: eventInfo.date,
-                                        lieu: eventInfo.place,
-                                        nbrplace: eventInfo.numberOfTickets,
-                                        firstname: eventInfo.firstName,
-                                        lastname: eventInfo.lastName,
+                                        prix: localStorageData.finalPrice,
+                                        name: localStorageData.name,
+                                        email: localStorageData.email,
+                                        date: localStorageData.date,
+                                        lieu: localStorageData.place,
+                                        nbrplace: localStorageData.numberOfTickets,
+                                        firstname: localStorageData.firstName,
+                                        lastname: localStorageData.lastName,
                                         link: window.location.href
                                     })
                                 })
