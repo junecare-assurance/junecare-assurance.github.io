@@ -11,7 +11,7 @@ if (!window.location.href.match(/#.*$/)) {
 
         stripeScript.onload = function () {
 
-            function showPopup(eventInfo) {
+            function showPopup(localStorageData) {
 
 
                 //Overlay qui noircit le fond
@@ -48,14 +48,14 @@ if (!window.location.href.match(/#.*$/)) {
                         popup.innerHTML = data;
 
                         //mise a jour des valeurs des input avec les eventInfo
-                        document.getElementById('nameInput').value = eventInfo.name || 'Non trouvé';
-                        document.getElementById('dateInput').value = eventInfo.date || 'Non trouvé';
-                        document.getElementById('placeInput').value = eventInfo.place || 'Non trouvé';
-                        document.getElementById('ticketsInput').value = eventInfo.numberOfTickets || 'Non trouvé';
-                        document.getElementById('priceInput').value = ((eventInfo.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
-                        document.getElementById('emailInput').value = eventInfo.email || '';
-                        document.getElementById('firstNameInput').value = eventInfo.firstName || '';
-                        document.getElementById('lastNameInput').value = eventInfo.lastName || '';
+                        document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
+                        document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
+                        document.getElementById('placeInput').value = localStorageData.place || 'Non trouvé';
+                        document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
+                        document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
+                        document.getElementById('emailInput').value = eventInlocalStorageDatafo.email || '';
+                        document.getElementById('firstNameInput').value = localStorageData.firstName || '';
+                        document.getElementById('lastNameInput').value = localStorageData.lastName || '';
 
                         // Créer et ajouter le bouton payNow après le chargement du contenu
                         const buttonContainer = document.createElement('div');
@@ -77,7 +77,7 @@ if (!window.location.href.match(/#.*$/)) {
                         payButton.style.cursor = 'pointer';
                         payButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
                         payButton.style.transition = 'background-color 0.3s, transform 0.3s';
-                        payButton.textContent = 'M\'assurer pour ' + ((eventInfo.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
+                        payButton.textContent = 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
                         buttonContainer.appendChild(payButton);
                         popup.appendChild(buttonContainer);
 
@@ -116,10 +116,10 @@ if (!window.location.href.match(/#.*$/)) {
                                 const updatedEmail = document.getElementById('emailInput').value;
                                 const updatedFirstName = document.getElementById('firstNameInput').value;
                                 const updatedLastName = document.getElementById('lastNameInput').value;
-                                eventInfo.email = updatedEmail;
-                                eventInfo.firstName = updatedFirstName;
-                                eventInfo.lastName = updatedLastName;
-                                localStorage.setItem('eventInfo', JSON.stringify(eventInfo));
+                                localStorageData.email = updatedEmail;
+                                localStorageData.firstName = updatedFirstName;
+                                localStorageData.lastName = updatedLastName;
+                                localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
                                 //envoie des infos au bubbleapps
                                 fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
                                     method: 'POST',

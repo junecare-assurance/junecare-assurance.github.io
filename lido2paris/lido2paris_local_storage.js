@@ -39,7 +39,7 @@
             place: "Lido2Paris",
             numberOfTickets: cartInfo.ecommerce.items.reduce((total, item) => total + item.quantity, 0),
             finalPrice: cartInfo.ecommerce.value,
-            email: "non trouve",  // Placeholder, as no email is provided
+            email: "",  // Placeholder, as no email is provided
             location
         };
     
