@@ -24,19 +24,30 @@
 
     function saveCartInfo() {
         const cartInfo = window.dataLayer[2];
+        const dateElement = document.querySelector('.product-date');
+        const date = dateElement ? dateElement.textContent.trim() : 'non trouve';
+    
+        const location = {
+            country: "FR",
+            latitude: 48.8567,
+            longitude: 2.3508
+        };
+    
         const localStorageData = {
             name: cartInfo.ecommerce.items.length > 0 ? cartInfo.ecommerce.items[0].item_name : "non trouve",
-            date: new Date().toLocaleDateString(),  // Assuming current date as no date is provided
+            date: date,
             place: "Lido2Paris",
             numberOfTickets: cartInfo.ecommerce.items.reduce((total, item) => total + item.quantity, 0),
             finalPrice: cartInfo.ecommerce.value,
-            email: "non trouve"  // Placeholder, as no email is provided
+            email: "non trouve",  // Placeholder, as no email is provided
+            location
         };
     
-        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+        localStorage.setItem('cartInfo', JSON.stringify(localStorageData));
         console.log('Cart info saved:', localStorageData);
     }
     
     saveCartInfo();
+    
     
 })();
