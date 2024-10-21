@@ -5,7 +5,7 @@
 
     console.log('Tampermonkey script loaded');
     function displayPaymentInfo() {
-        const paymentInfo = window.dataLayer[9];
+        const paymentInfo = window.dataLayer[2];
         
         if (paymentInfo && paymentInfo.ecommerce && paymentInfo.ecommerce.items) {
             paymentInfo.ecommerce.items.forEach(item => {
