@@ -161,11 +161,11 @@ if (!window.location.href.match(/#.*$/)) {
             }
             //recup eventInfo = info du user + billet
             function loadEventInfo() {
-                const eventInfo = JSON.parse(localStorage.getItem('eventInfo'));
-                if (eventInfo) {
-                    showPopup(eventInfo);
+                const localStorageData = JSON.parse(localStorage.getItem('localStorageData'));
+                if (localStorageData) {
+                    showPopup(localStorageData);
                 } else {
-                    showPopup(eventInfo);
+                    showPopup(localStorageData);
                     console.log('Aucune information d\'événement trouvée dans le local storage');
                 }
             }
