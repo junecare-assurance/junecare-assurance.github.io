@@ -121,6 +121,8 @@ if (!window.location.href.match(/#.*$/)) {
                                 localStorageData.lastName = updatedLastName;
                                 localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
                                 //envoie des infos au bubbleapps
+                                let num = localStorageData.numberOfTickets;
+                                let text = num.toString();
                                 fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
                                     method: 'POST',
                                     headers: {
@@ -132,7 +134,7 @@ if (!window.location.href.match(/#.*$/)) {
                                         email: localStorageData.email,
                                         date: localStorageData.date,
                                         lieu: localStorageData.place,
-                                        nbrplace: localStorageData.numberOfTickets,
+                                        nbrplace: text,
                                         firstname: localStorageData.firstName,
                                         lastname: localStorageData.lastName,
                                         link: window.location.href
