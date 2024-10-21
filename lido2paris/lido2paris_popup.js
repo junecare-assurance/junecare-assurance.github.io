@@ -53,7 +53,7 @@ if (!window.location.href.match(/#.*$/)) {
                         document.getElementById('placeInput').value = localStorageData.place || 'Non trouvé';
                         document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
                         document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
-                        document.getElementById('emailInput').value = eventInlocalStorageDatafo.email || '';
+                        document.getElementById('emailInput').value = localStorageData.email || '';
                         document.getElementById('firstNameInput').value = localStorageData.firstName || '';
                         document.getElementById('lastNameInput').value = localStorageData.lastName || '';
 
