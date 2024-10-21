@@ -163,6 +163,7 @@ if (!window.location.href.match(/#.*$/)) {
                 if (eventInfo) {
                     showPopup(eventInfo);
                 } else {
+                    showPopup(eventInfo);
                     console.log('Aucune information d\'événement trouvée dans le local storage');
                 }
             }
