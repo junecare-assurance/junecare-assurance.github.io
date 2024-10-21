@@ -43,7 +43,7 @@
             location
         };
     
-        localStorage.setItem('cartInfo', JSON.stringify(localStorageData));
+        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
         console.log('Cart info saved:', localStorageData);
     }
     
