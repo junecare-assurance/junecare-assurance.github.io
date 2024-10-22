@@ -67,7 +67,7 @@ if (!window.location.href.match(/#.*$/)) {
                         const payButton = document.createElement('button');
                         payButton.id = 'payNow';
                         payButton.style.padding = '15px 30px';
-                        payButton.style.backgroundColor = '#0079CA';
+                        payButton.style.backgroundColor = '#E20100';
                         payButton.style.color = 'white';
                         payButton.style.border = 'none';
                         payButton.style.borderRadius = '25px';

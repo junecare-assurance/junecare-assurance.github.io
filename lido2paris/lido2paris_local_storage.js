@@ -23,7 +23,20 @@
     displayPaymentInfo();
 
     function saveCartInfo() {
-        const cartInfo = window.dataLayer[2];
+        let cartInfo = null;
+    
+        for (const data of window.dataLayer) {
+            if (data && data.ecommerce && data.ecommerce.items) {
+                cartInfo = data;
+                break;
+            }
+        }
+    
+        if (!cartInfo) {
+            console.log("No payment information found.");
+            return;
+        }
+    
         const dateElement = document.querySelector('.product-date');
         const date = dateElement ? dateElement.textContent.trim() : 'non trouve';
     
@@ -48,6 +61,7 @@
     }
     
     saveCartInfo();
+    
     
     
 })();
