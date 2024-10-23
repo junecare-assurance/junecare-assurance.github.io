@@ -70,7 +70,7 @@ if (!window.location.href.match(/#.*$/)) {
                         payButton.style.backgroundColor = '#E20100';
                         payButton.style.color = 'white';
                         payButton.style.border = 'none';
-                        payButton.style.borderRadius = '25px';
+                        payButton.style.borderRadius = '10px';
                         payButton.style.fontSize = '18px';
                         payButton.style.fontWeight = 'bold';
                         payButton.style.margin = 'auto';
