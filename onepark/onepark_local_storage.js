@@ -22,24 +22,25 @@
         const date_end = dateElements.length > 1 ? dateElements[1].innerHTML.replace('<br>', ' ') : 'Non trouvé';
         const place = placeElement ? placeElement.innerHTML.replace('<br>', ', ').replace(',,', ',') : 'Non trouvé';
         let price = priceElement ? priceElement.innerText.replace('\u00A0€', '').replace(',', '.') : 'Non trouvé';
+        
         const licensePlateElement = document.querySelector('#licensePlateField');
         let imat = '';
-
         if (licensePlateElement) {
             imat = licensePlateElement.value;
         } else {
-            // Trouve tous les <p> avec <span> ayant la classe 'sublabel'
             const pElements = document.querySelectorAll('p .sublabel');
             pElements.forEach(spanElement => {
-                const parentP = spanElement.closest('p');
-                // Vérifie si le texte suivant contient une immatriculation
-                const potentialImat = parentP.textContent.split(':')[1]?.trim();
-                if (potentialImat && /[A-Za-z0-9]/.test(potentialImat)) {
-                    imat = potentialImat;
+                if (spanElement.textContent.includes("Numéro d'immatriculation")) {
+                    const parentP = spanElement.closest('p');
+                    const potentialImat = parentP.textContent.split(':')[1]?.trim();
+                    if (potentialImat && /[A-Za-z0-9]/.test(potentialImat)) {
+                        imat = potentialImat;
+                    }
                 }
             });
         }
         console.log('Immatriculation trouvée:', imat);
+
         if (Number(price) < 6.25)
         {
             price = "6.25";
