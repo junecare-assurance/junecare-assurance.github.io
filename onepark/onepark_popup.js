@@ -22,7 +22,7 @@ if (!window.location.href.match(/#.*$/)) {
             overlay.style.width = '100%';
             overlay.style.height = '100%';
             overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-            overlay.style.zIndex = '999';
+            overlay.style.zIndex = '1001';
             document.body.appendChild(overlay);
 
 						//POPUP
