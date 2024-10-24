@@ -37,6 +37,7 @@ if (!window.location.href.match(/#.*$/)) {
             popup.style.zIndex = '10000';
 						popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
             popup.style.overflowY = 'auto';
+            popup.style.borderRadius = '4px';
             popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
             document.body.appendChild(popup);
 
