@@ -82,6 +82,7 @@
         closeButton.innerHTML = '&times;';
         popup.appendChild(closeButton);
 
+
         // Création de l'iframe
         const iframe = document.createElement('iframe');
         iframe.style.width = '100%';
@@ -100,6 +101,10 @@
         buttonContainer.appendChild(payButton);
         popup.appendChild(buttonContainer);
 
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(popup);
+            document.body.removeChild(overlay);
+        });
         // Gestionnaire du bouton de paiement
 
         payButton.addEventListener('click', function () {
