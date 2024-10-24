@@ -1,24 +1,61 @@
 (function() {
     'use strict';
-    function ajouterEncartAssurance() {
-        const parentDiv = document.getElementById('details-tarifs-et-disponibilites');
-        if (parentDiv) {
-            const hrElement = document.createElement('hr');
-            hrElement.className = 'hr-big hr-yellow no-margin-bottom';
-            
-            const encartAssurance = document.createElement('div');
-            encartAssurance.id = 'encart-assurance';
-            encartAssurance.className = 'bg-grey-1 padding-30 margin-bottom-30';
+    function ajouterBoutonPopup() {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .force-margin-top {
+                margin-top: -5.5px !important;
+            }
+            .sticky-active.force-margin-top {
+                margin-top: 375px !important;
+            }
+            .btn-full-width {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+                text-align: center;
+            }
+        `;
+        document.head.appendChild(style);
     
-            encartAssurance.innerHTML = `
-                <h3>Assurance</h3>
-                <p>Ajoutez une assurance pour une meilleure couverture.</p>
-            `;
-            parentDiv.insertAdjacentElement('afterend', encartAssurance);
-            parentDiv.insertAdjacentElement('afterend', hrElement);
+        const sidebarDiv = document.querySelector('.sidebar');
+        if (sidebarDiv) {
+            const encart = document.createElement('div');
+            encart.className = 'bg-grey-1 padding-20 margin-top-30 margin-bottom-40 sticky force-margin-top';
+            encart.style.width = '300px';
+    
+            const lienPopup = document.createElement('a');
+            lienPopup.className = 'btn btn-teal btn-full-width';
+            lienPopup.textContent = 'Ouvrir la Popup';
+            lienPopup.href = '#';
+            lienPopup.onclick = function(event) {
+                event.preventDefault();
+                alert('Voici la popup!');
+            };
+    
+            encart.appendChild(lienPopup);
+            sidebarDiv.appendChild(encart);
+    
+            // MutationObserver pour surveiller les changements de classe
+            const observer = new MutationObserver((mutationsList) => {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (encart.classList.contains('sticky-active')) {
+                            const currentMarginTop = parseFloat(encart.style.marginTop || 0); // Prend la valeur de element.style
+                            encart.style.setProperty('margin-top', `${currentMarginTop - 39}px`, 'important');
+                        }
+                    }
+                }
+            });
+    
+            observer.observe(encart, {
+                attributes: true
+            });
         } else {
-            console.error('Div avec id "details-tarifs-et-disponibilites" non trouvée.');
+            console.error('Div avec class "sidebar" non trouvée.');
         }
     }
-    ajouterEncartAssurance();      
+    ajouterBoutonPopup();
+        
 })();
