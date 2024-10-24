@@ -75,6 +75,7 @@ if (!window.location.href.match(/#.*$/)) {
                     payButton.style.fontWeight = 'bold';
                     payButton.style.margin = 'auto';
                     payButton.style.cursor = 'pointer';
+                    payButton.style.borderRadius = '4px';
                     payButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
                     payButton.style.transition = 'background-color 0.3s, transform 0.3s';
                     payButton.textContent = 'M\'assurer pour ' + ((eventInfo.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
