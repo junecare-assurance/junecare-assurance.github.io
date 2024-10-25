@@ -46,6 +46,7 @@
                 font-weight: bold;
                 margin: auto;
                 cursor: pointer;
+                border-radius: 4px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 transition: background-color 0.3s, transform 0.3s;
             }
@@ -54,6 +55,7 @@
     }
 
     function showPopup() {
+        // Overlay qui noircit le fond
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
@@ -62,7 +64,9 @@
         overlay.style.height = '100%';
         overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
         overlay.style.zIndex = '9999';
+        document.body.appendChild(overlay);
 
+        // POPUP
         const popup = document.createElement('div');
         popup.classList.add('june-care-popup');
         popup.style.position = 'fixed';
@@ -74,48 +78,100 @@
         popup.style.zIndex = '10000';
         popup.style.maxHeight = '90%';
         popup.style.overflowY = 'auto';
+        popup.style.borderRadius = '4px';
         popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-
-        // Ajout du bouton de fermeture
-        const closeButton = document.createElement('button');
-        closeButton.className = 'popup-close';
-        closeButton.innerHTML = '&times;';
-        popup.appendChild(closeButton);
-
-
-        // Création de l'iframe
-        const iframe = document.createElement('iframe');
-        iframe.style.width = '100%';
-        iframe.style.height = '600px';
-        iframe.style.border = 'none';
-        iframe.src = 'https://junecare-assurance.github.io/papvacances/papvacances_encart.html?v=' + new Date().getTime();
-        popup.appendChild(iframe);
-
-        // Création du bouton de paiement
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'button-container';
-
-        const payButton = document.createElement('button');
-        payButton.id = 'payNow';
-        payButton.textContent = 'M\'assurer';
-        buttonContainer.appendChild(payButton);
-        popup.appendChild(buttonContainer);
-
-        closeButton.addEventListener('click', () => {
-            document.body.removeChild(popup);
-            document.body.removeChild(overlay);
-        });
-        // Gestionnaire du bouton de paiement
-
-        payButton.addEventListener('click', function () {
-            window.open('https://junecare.fr', '_blank');
-        });
-
-        document.body.appendChild(overlay);
         document.body.appendChild(popup);
 
-        // Mise à jour des champs une fois l'iframe chargée
+        // Récupération du fichier html
+        fetch('https://junecare-assurance.github.io/papvacances/papvacances_encart.html?v=' + new Date().getTime())
+            .then(response => response.text())
+            .then(data => {
+                popup.innerHTML = data;
 
+                // Création du bouton de paiement
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.display = 'flex';
+                buttonContainer.style.justifyContent = 'space-between';
+                buttonContainer.style.alignItems = 'center';
+                buttonContainer.style.marginTop = '20px';
+
+                const payButton = document.createElement('button');
+                payButton.id = 'payNow';
+                payButton.textContent = 'M\'assurer';
+                buttonContainer.appendChild(payButton);
+                popup.appendChild(buttonContainer);
+
+                // Variable d'état pour suivre le nombre de clics
+                let isFirstClick = true;
+
+                // Gestion de la fermeture
+                const closePopupButton = document.getElementById('closePopup');
+                if (closePopupButton) {
+                    closePopupButton.addEventListener('click', () => {
+                        document.body.removeChild(popup);
+                        document.body.removeChild(overlay);
+                    });
+                }
+
+                // Gestion du bouton de paiement
+                payButton.addEventListener('click', (event) => {
+                    const coverageDetails = document.getElementById('coverageDetails');
+                    const eventDetails = document.getElementById('eventDetails');
+
+                    // Si premier click masque les avantages et montre les input
+                    if (isFirstClick) {
+                        coverageDetails.style.display = 'none';
+                        eventDetails.style.display = 'block';
+                        payButton.textContent = 'Continuer';
+                        isFirstClick = false;
+                    }
+                    // Si 2eme click fait la verif des champs et passe au paiement
+                    else {
+                        if (!validateForm()) {
+                            alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                            return;
+                        }
+
+                        // Récupération des données du formulaire
+                        const email = document.getElementById('emailInput').value;
+                        const firstName = document.getElementById('firstNameInput').value;
+                        const lastName = document.getElementById('lastNameInput').value;
+
+                        // Envoi des infos au bubbleapps
+                        fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                email: email,
+                                firstname: firstName,
+                                lastname: lastName,
+                                link: window.location.href
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Redirection vers bubbleapps
+                            window.location.href = data.response.link + "test/" + data.response.id;
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de l\'envoi des données:', error);
+                            alert('Une erreur est survenue lors de la transmission des données.');
+                        });
+                    }
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
+    }
+
+    function validateForm() {
+        const checkbox = document.getElementById('assurance').checked;
+        const email = document.getElementById('emailInput').value.trim();
+        const firstName = document.getElementById('firstNameInput').value.trim();
+        const lastName = document.getElementById('lastNameInput').value.trim();
+
+        return checkbox && email && firstName && lastName;
     }
 
     function ajouterBoutonPopup() {
@@ -131,6 +187,7 @@
             lienPopup.href = '#';
 
             lienPopup.onclick = function (event) {
+                event.preventDefault();
                 showPopup();
             };
 
