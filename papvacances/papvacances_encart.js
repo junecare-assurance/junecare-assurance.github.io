@@ -230,10 +230,8 @@
             radio.addEventListener('change', function () {
                 console.log('Radio changed:', this.value); // Pour le debugging
                 if (this.value === 'unsure') {
-                    if (decisionHelp) decisionHelp.style.display = 'block';
                     if (additionalDetails) additionalDetails.style.display = 'none';
                 } else {
-                    if (decisionHelp) decisionHelp.style.display = 'none';
                     if (additionalDetails) additionalDetails.style.display = 'block';
                 }
             });
