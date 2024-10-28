@@ -238,16 +238,94 @@
         });
     }
 
+    function showConfirmationMessage(isSure) {
+        // Fermer d'abord la popup principale
+        const mainPopup = document.querySelector('.june-care-popup');
+        const overlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
+        
+        // Créer le modal de confirmation s'il n'existe pas
+        let modal = document.getElementById('confirmationModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'confirmationModal';
+            modal.style.cssText = `
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                z-index: 10001;
+                min-width: 300px;
+                max-width: 80%;
+            `;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Fermer';
+            closeBtn.style.cssText = `
+                padding: 8px 16px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 15px;
+                width: 100%;
+            `;
+            closeBtn.onclick = closeConfirmationModal;
+            
+            modal.innerHTML = `
+                <h3 style="margin-bottom: 15px;"></h3>
+                <p style="margin-bottom: 20px;"></p>
+            `;
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+    
+        const title = modal.querySelector('h3');
+        const message = modal.querySelector('p');
+    
+        if (isSure) {
+            title.textContent = 'Confirmation de souscription';
+            message.textContent = 'Merci pour votre souscription ! Vous allez recevoir un email de confirmation avec les prochaines étapes à suivre.';
+        } else {
+            title.textContent = 'Demande d\'informations';
+            message.textContent = 'Nous comprenons votre hésitation. Vous allez recevoir un email avec plus d\'informations pour vous aider dans votre décision.';
+        }
+    
+        // Fermer la popup principale avant d'afficher le message de confirmation
+        if (mainPopup && overlay) {
+            document.body.removeChild(mainPopup);
+            document.body.removeChild(overlay);
+        }
+    
+        // Afficher le modal de confirmation
+        modal.style.display = 'block';
+    }
+    
+    function closeConfirmationModal() {
+        const modal = document.getElementById('confirmationModal');
+        if (modal) {
+            modal.style.display = 'none';
+            // Optionnel : supprimer complètement le modal du DOM
+            document.body.removeChild(modal);
+        }
+    }
+    
+    // Modifier la fonction validateForm pour utiliser la nouvelle logique
     function validateForm() {
         const checkbox = document.getElementById('assurance').checked;
         const email = document.getElementById('emailInput').value.trim();
         const firstName = document.getElementById('firstNameInput').value.trim();
         const lastName = document.getElementById('lastNameInput').value.trim();
         const decisionRadios = document.getElementsByName('decision');
-
+        
         let decisionMade = false;
         let isUnsure = false;
-
+        
         for (const radio of decisionRadios) {
             if (radio.checked) {
                 decisionMade = true;
@@ -258,35 +336,32 @@
                 }
             }
         }
-
-        // Validation supplémentaire pour les champs additionnels si l'utilisateur est sûr
+    
         if (!isUnsure) {
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const totalCost = document.getElementById('totalCost').value;
             const participantsCount = document.getElementById('participantsCount').value;
-
+    
             if (!startDate || !endDate || !totalCost || !participantsCount) {
                 alert('Veuillez remplir tous les champs additionnels.');
                 return false;
             }
-
-            // Vérification que la date de fin est après la date de début
+    
             if (new Date(endDate) <= new Date(startDate)) {
                 alert('La date de fin doit être après la date de début.');
                 return false;
             }
         }
-
+    
         if (checkbox && email && firstName && lastName && decisionMade) {
             showConfirmationMessage(true);
             return true;
         }
-
+    
         alert('Veuillez remplir tous les champs et accepter les conditions.');
         return false;
     }
-
 
     // Gestion de l'affichage des champs supplémentaires
     document.addEventListener('DOMContentLoaded', function () {
