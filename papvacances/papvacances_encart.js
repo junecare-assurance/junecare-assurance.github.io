@@ -257,9 +257,7 @@
                     console.log('Additional details element:', this.elements.additionalDetails);
                     console.log('Decision help element:', this.elements.decisionHelp);
                     const isUnsure = radio.value === 'unsure';
-                    if (this.elements.additionalDetails) {
-                        this.elements.additionalDetails.style.display = isUnsure ? 'block' : 'none';
-                    }
+                    if (additionalDetails) additionalDetails.style.display = 'block';
                 });
             });
         },
