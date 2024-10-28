@@ -112,6 +112,26 @@
             .then(response => response.text())
             .then(data => {
                 popup.innerHTML = data;
+                // Récupère l'élément <h1> avec la classe 'item-title' et itemprop 'name'
+                const titleElement = document.querySelector('h1.item-title[itemprop="name"]');
+
+                // Vérifie si l'élément est trouvé avant de continuer
+                if (titleElement) {
+                    // Récupère le texte à l'intérieur de l'élément <h1>
+                    let titleText = titleElement.textContent || titleElement.innerText;
+
+                    // Stocke ce texte dans l'élément avec l'ID 'nameInput'
+                    const nameInput = document.getElementById('nameInput');
+                    if (nameInput) {
+                        nameInput.value = titleText;
+                    } else {
+                        console.error("Élément avec l'ID 'nameInput' non trouvé.");
+                    }
+                } else {
+                    console.error("Élément <h1> avec la classe 'item-title' et itemprop 'name' non trouvé.");
+                }
+
+                console.log('Immatriculation trouvée:', nameInput.value);
 
                 // Ajout des informations de l'événement dans des champs cachés
                 if (eventDetails) {
@@ -243,7 +263,7 @@
         });
     });
 
-    
+
 
     function ajouterBoutonPopup() {
         const sidebarDiv = document.querySelector('.sidebar');
