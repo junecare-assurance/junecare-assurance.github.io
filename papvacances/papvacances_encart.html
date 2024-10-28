@@ -97,9 +97,27 @@
             value="" class="june-care-input"></p>
     <p class="june-care-input-container"><strong>Nom de famille</strong> <input type="text" id="lastNameInput"
             value="" class="june-care-input"></p>
+    
+    <div class="decision-container" style="margin: 20px 0; padding: 15px; border-radius: 8px; background-color: #f5f5f5;">
+        <p style="margin-bottom: 10px; font-weight: bold;">Êtes-vous sûr(e) de votre choix ?</p>
+        <div style="display: flex; gap: 20px;">
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="radio" name="decision" value="sure" style="margin-right: 8px;">
+                Oui, je suis sûr(e) de mon choix
+            </label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="radio" name="decision" value="unsure" style="margin-right: 8px;">
+                Non, j'hésite encore
+            </label>
+        </div>
+        <p class="decision-help" style="margin-top: 10px; font-size: 0.9em; color: #666; display: none;" id="decisionHelp">
+            Si vous hésitez encore, nous vous conseillons de bien relire les conditions et de prendre le temps de réfléchir à votre décision.
+        </p>
+    </div>
+
     <p>
         <input type="checkbox" id="assurance" name="assurance" style="margin-right: 0px;">
-        En sélectionnant cette assurance, je confirme être résident de l’Union Européenne et déclare avoir pris
+        En sélectionnant cette assurance, je confirme être résident de l'Union Européenne et déclare avoir pris
         connaissance, puis accepter le
         <a href="https://junecare-assurance.github.io/conditions-generales.pdf"
             style="color: blue; text-decoration: underline;" target="_blank">conditions générales</a>

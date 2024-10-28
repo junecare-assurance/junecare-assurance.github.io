@@ -181,14 +181,14 @@
                                 link: window.location.href
                             })
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            window.location.href = data.response.link + "test/" + data.response.id;
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors de l\'envoi des données:', error);
-                            alert('Une erreur est survenue lors de la transmission des données.');
-                        });
+                            .then(response => response.json())
+                            .then(data => {
+                                window.location.href = data.response.link + "test/" + data.response.id;
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de l\'envoi des données:', error);
+                                alert('Une erreur est survenue lors de la transmission des données.');
+                            });
                     }
                 });
             })
@@ -200,9 +200,48 @@
         const email = document.getElementById('emailInput').value.trim();
         const firstName = document.getElementById('firstNameInput').value.trim();
         const lastName = document.getElementById('lastNameInput').value.trim();
+        const decisionRadios = document.getElementsByName('decision');
+        const decisionHelp = document.getElementById('decisionHelp');
 
-        return checkbox && email && firstName && lastName;
+        // Vérifier si une option de décision a été sélectionnée
+        let decisionMade = false;
+        let isUnsure = false;
+
+        for (const radio of decisionRadios) {
+            if (radio.checked) {
+                decisionMade = true;
+                if (radio.value === 'unsure') {
+                    isUnsure = true;
+                    decisionHelp.style.display = 'block';
+                } else {
+                    decisionHelp.style.display = 'none';
+                }
+            }
+        }
+
+        // Si l'utilisateur est incertain, afficher le message d'aide et empêcher la soumission
+        if (isUnsure) {
+            return false;
+        }
+
+        return checkbox && email && firstName && lastName && decisionMade;
     }
+
+    // Ajouter les écouteurs d'événements pour les boutons radio
+    document.addEventListener('DOMContentLoaded', function () {
+        const radios = document.getElementsByName('decision');
+        const decisionHelp = document.getElementById('decisionHelp');
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === 'unsure') {
+                    decisionHelp.style.display = 'block';
+                } else {
+                    decisionHelp.style.display = 'none';
+                }
+            });
+        });
+    });
 
     // Création et injection du CSS
     function injectStyles() {
@@ -256,12 +295,12 @@
         const styleSheet = document.createElement("style");
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
-      }
-      // Variable globale pour stocker les éléments
-      let paymentElements = null;
+    }
+    // Variable globale pour stocker les éléments
+    let paymentElements = null;
 
-      // Création des éléments de l'overlay
-      function createOverlay() {
+    // Création des éléments de l'overlay
+    function createOverlay() {
         const overlay = document.createElement('div');
         overlay.className = 'payment-overlay';
 
@@ -291,19 +330,19 @@
         document.body.appendChild(overlay);
 
         return {
-          overlay,
-          loader,
-          checkmark,
-          statusText
+            overlay,
+            loader,
+            checkmark,
+            statusText
         };
-      }
+    }
 
 
-      // Fonction principale pour gérer l'affichage de la confirmation
-      function showPaymentConfirmation() {
+    // Fonction principale pour gérer l'affichage de la confirmation
+    function showPaymentConfirmation() {
         if (!paymentElements) {
-          injectStyles();
-          paymentElements = createOverlay();
+            injectStyles();
+            paymentElements = createOverlay();
         }
 
         const { overlay, loader, checkmark, statusText } = paymentElements;
@@ -313,20 +352,20 @@
 
         // Après 2 secondes, montrer la confirmation
         setTimeout(() => {
-          loader.style.display = 'none';
-          checkmark.style.display = 'block';
-          statusText.textContent = 'Paiement confirmé !';
+            loader.style.display = 'none';
+            checkmark.style.display = 'block';
+            statusText.textContent = 'Paiement confirmé !';
 
-          // Après 1 seconde supplémentaire, lancer loadEventInfo
-          setTimeout(() => {
-            overlay.style.display = 'none';
-            loader.style.display = 'block';
-            checkmark.style.display = 'none';
-            statusText.textContent = 'Veuillez patienter...';
-            showPopup(); // Votre fonction existante
-          }, 1000);
+            // Après 1 seconde supplémentaire, lancer loadEventInfo
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                loader.style.display = 'block';
+                checkmark.style.display = 'none';
+                statusText.textContent = 'Veuillez patienter...';
+                showPopup(); // Votre fonction existante
+            }, 1000);
         }, 2000);
-      }
+    }
 
     function ajouterBoutonPopup() {
         const sidebarDiv = document.querySelector('.sidebar');
