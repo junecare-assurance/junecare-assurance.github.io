@@ -1,5 +1,31 @@
+// @ts-nocheck
+
 (function () {
     'use strict';
+
+    function getEventDetails() {
+        const titleElement = document.querySelector('.item-title');
+        if (titleElement) {
+            // Extraction du titre (sans le prix)
+            const fullTitle = titleElement.childNodes[0].textContent.trim();
+
+            // Extraction des informations
+            const location = fullTitle.replace('Location', '').replace('Maison', '').trim();
+
+            // Extraction du prix
+            const priceElement = titleElement.querySelector('strong');
+            const price = priceElement ? priceElement.textContent.trim()
+                .replace('dès', '')
+                .replace('€ par semaine', '')
+                .trim() : '';
+
+            return {
+                location,
+                price
+            };
+        }
+        return null;
+    }
 
     function ajouterStyles() {
         const style = document.createElement('style');
@@ -55,7 +81,8 @@
     }
 
     function showPopup() {
-        // Overlay qui noircit le fond
+        const eventDetails = getEventDetails();
+
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
@@ -66,7 +93,6 @@
         overlay.style.zIndex = '9999';
         document.body.appendChild(overlay);
 
-        // POPUP
         const popup = document.createElement('div');
         popup.classList.add('june-care-popup');
         popup.style.position = 'fixed';
@@ -82,13 +108,22 @@
         popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
         document.body.appendChild(popup);
 
-        // Récupération du fichier html
         fetch('https://junecare-assurance.github.io/papvacances/papvacances_encart.html?v=' + new Date().getTime())
             .then(response => response.text())
             .then(data => {
                 popup.innerHTML = data;
 
-                // Création du bouton de paiement
+                // Ajout des informations de l'événement dans des champs cachés
+                if (eventDetails) {
+                    const hiddenFields = document.createElement('div');
+                    hiddenFields.style.display = 'none';
+                    hiddenFields.innerHTML = `
+                        <input type="hidden" id="eventLocation" value="${eventDetails.location}">
+                        <input type="hidden" id="eventPrice" value="${eventDetails.price}">
+                    `;
+                    popup.appendChild(hiddenFields);
+                }
+
                 const buttonContainer = document.createElement('div');
                 buttonContainer.style.display = 'flex';
                 buttonContainer.style.justifyContent = 'space-between';
@@ -101,10 +136,8 @@
                 buttonContainer.appendChild(payButton);
                 popup.appendChild(buttonContainer);
 
-                // Variable d'état pour suivre le nombre de clics
                 let isFirstClick = true;
 
-                // Gestion de la fermeture
                 const closePopupButton = document.getElementById('closePopup');
                 if (closePopupButton) {
                     closePopupButton.addEventListener('click', () => {
@@ -113,46 +146,43 @@
                     });
                 }
 
-                // Gestion du bouton de paiement
                 payButton.addEventListener('click', (event) => {
                     const coverageDetails = document.getElementById('coverageDetails');
                     const eventDetails = document.getElementById('eventDetails');
 
-                    // Si premier click masque les avantages et montre les input
                     if (isFirstClick) {
                         coverageDetails.style.display = 'none';
                         eventDetails.style.display = 'block';
                         payButton.textContent = 'Continuer';
                         isFirstClick = false;
-                    }
-                    // Si 2eme click fait la verif des champs et passe au paiement
-                    else {
+                    } else {
                         if (!validateForm()) {
                             alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
                             return;
                         }
 
-                        // Récupération des données du formulaire
                         const email = document.getElementById('emailInput').value;
                         const firstName = document.getElementById('firstNameInput').value;
                         const lastName = document.getElementById('lastNameInput').value;
+                        const location = document.getElementById('eventLocation').value;
+                        const price = document.getElementById('eventPrice').value;
 
-                        // Envoi des infos au bubbleapps
                         fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({
-                                email: email,
+                                email,
                                 firstname: firstName,
                                 lastname: lastName,
+                                location,
+                                price,
                                 link: window.location.href
                             })
                         })
                         .then(response => response.json())
                         .then(data => {
-                            // Redirection vers bubbleapps
                             window.location.href = data.response.link + "test/" + data.response.id;
                         })
                         .catch(error => {
@@ -174,6 +204,130 @@
         return checkbox && email && firstName && lastName;
     }
 
+    // Création et injection du CSS
+    function injectStyles() {
+        const styles = `
+          .payment-overlay {
+              display: none;
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.8);
+              z-index: 9999;
+          }
+
+          .confirmation-box {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              background-color: white;
+              padding: 30px;
+              border-radius: 10px;
+              text-align: center;
+              min-width: 300px;
+          }
+
+          .loader {
+              border: 5px solid #f3f3f3;
+              border-radius: 50%;
+              border-top: 5px solid #3498db;
+              width: 50px;
+              height: 50px;
+              animation: spin 1s linear infinite;
+              margin: 20px auto;
+          }
+
+          @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+          }
+
+          .checkmark {
+              display: none;
+              color: #2ecc71;
+              font-size: 50px;
+              margin: 20px 0;
+          }
+      `;
+
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+      }
+      // Variable globale pour stocker les éléments
+      let paymentElements = null;
+
+      // Création des éléments de l'overlay
+      function createOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'payment-overlay';
+
+        const confirmationBox = document.createElement('div');
+        confirmationBox.className = 'confirmation-box';
+
+        const title = document.createElement('h2');
+        title.textContent = 'Traitement du paiement';
+
+        const loader = document.createElement('div');
+        loader.className = 'loader';
+
+        const checkmark = document.createElement('div');
+        checkmark.className = 'checkmark';
+        checkmark.textContent = '✓';
+
+        const statusText = document.createElement('p');
+        statusText.className = 'status-text';
+        statusText.textContent = 'Veuillez patienter...';
+
+        confirmationBox.appendChild(title);
+        confirmationBox.appendChild(loader);
+        confirmationBox.appendChild(checkmark);
+        confirmationBox.appendChild(statusText);
+        overlay.appendChild(confirmationBox);
+
+        document.body.appendChild(overlay);
+
+        return {
+          overlay,
+          loader,
+          checkmark,
+          statusText
+        };
+      }
+
+
+      // Fonction principale pour gérer l'affichage de la confirmation
+      function showPaymentConfirmation() {
+        if (!paymentElements) {
+          injectStyles();
+          paymentElements = createOverlay();
+        }
+
+        const { overlay, loader, checkmark, statusText } = paymentElements;
+
+        // Afficher l'overlay
+        overlay.style.display = 'block';
+
+        // Après 2 secondes, montrer la confirmation
+        setTimeout(() => {
+          loader.style.display = 'none';
+          checkmark.style.display = 'block';
+          statusText.textContent = 'Paiement confirmé !';
+
+          // Après 1 seconde supplémentaire, lancer loadEventInfo
+          setTimeout(() => {
+            overlay.style.display = 'none';
+            loader.style.display = 'block';
+            checkmark.style.display = 'none';
+            statusText.textContent = 'Veuillez patienter...';
+            showPopup(); // Votre fonction existante
+          }, 1000);
+        }, 2000);
+      }
+
     function ajouterBoutonPopup() {
         const sidebarDiv = document.querySelector('.sidebar');
         if (sidebarDiv) {
@@ -188,13 +342,12 @@
 
             lienPopup.onclick = function (event) {
                 event.preventDefault();
-                showPopup();
+                showPaymentConfirmation();
             };
 
             encart.appendChild(lienPopup);
             sidebarDiv.appendChild(encart);
 
-            // MutationObserver pour le sticky
             const observer = new MutationObserver((mutationsList) => {
                 for (const mutation of mutationsList) {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -212,7 +365,6 @@
         }
     }
 
-    // Initialisation
     ajouterStyles();
     ajouterBoutonPopup();
 })();
