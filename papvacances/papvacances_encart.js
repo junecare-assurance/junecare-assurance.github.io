@@ -367,8 +367,8 @@
 
         // Afficher le message de confirmation
         showConfirmationMessage(isSure) {
-            if (this.elements.popup) this.elements.popup.style.display = 'none';
-            if (this.elements.overlay) this.elements.overlay.style.display = 'none';
+            document.body.removeChild(popup);
+            document.body.removeChild(overlay);
 
             const title = this.elements.modal.querySelector('h3');
             const message = this.elements.modal.querySelector('p');
