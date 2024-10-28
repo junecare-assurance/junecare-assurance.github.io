@@ -225,7 +225,9 @@
             popup: null,
             overlay: null,
             modal: null,
-            form: null
+            form: null,
+            additionalDetails: null,
+            decisionHelp: null
         },
 
         // Initialisation
@@ -233,6 +235,7 @@
             this.initializeElements();
             this.initializeRadioListeners();
             this.createConfirmationModal();
+            this.initializeSidebarButton();
         },
 
         // Initialiser les références aux éléments du DOM
@@ -241,11 +244,29 @@
             this.elements.overlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
             this.elements.form = document.getElementById('insuranceForm');
             this.elements.additionalDetails = document.getElementById('additionalDetails');
+            this.elements.decisionHelp = document.getElementById('decisionHelp');
+        },
+
+        // Initialiser les écouteurs des boutons radio
+        initializeRadioListeners() {
+            const radios = document.getElementsByName('decision');
+            if (!radios.length) return;
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const isUnsure = radio.value === 'unsure';
+                    if (this.elements.additionalDetails) {
+                        this.elements.additionalDetails.style.display = isUnsure ? 'none' : 'block';
+                    }
+                    if (this.elements.decisionHelp) {
+                        this.elements.decisionHelp.style.display = isUnsure ? 'block' : 'none';
+                    }
+                });
+            });
         },
 
         // Créer le modal de confirmation
         createConfirmationModal() {
-            // Vérifier si le modal existe déjà
             let modal = document.getElementById('confirmationModal');
             if (modal) {
                 this.elements.modal = modal;
@@ -287,70 +308,48 @@
             document.body.appendChild(modal);
             this.elements.modal = modal;
 
-            // Ajouter l'écouteur d'événement pour le bouton de fermeture
             document.getElementById('closeConfirmationBtn').addEventListener('click', () => {
                 this.closeAll();
             });
         },
 
-        // Initialiser les écouteurs pour les boutons radio
-        initializeRadioListeners() {
-            const radios = document.getElementsByName('decision');
-            const additionalDetails = document.getElementById('additionalDetails');
-            const decisionHelp = document.getElementById('decisionHelp');
-
-            if (!radios.length) return; // Protection si les éléments n'existent pas encore
-
-            radios.forEach(radio => {
-                radio.addEventListener('change', function () {
-                    if (this.value === 'unsure') {
-                        if (additionalDetails) additionalDetails.style.display = 'none';
-                        if (decisionHelp) decisionHelp.style.display = 'block';
-                    } else {
-                        if (additionalDetails) additionalDetails.style.display = 'block';
-                        if (decisionHelp) decisionHelp.style.display = 'none';
-                    }
-                });
-            });
-        },
-
-        // Valider le formulaire
+        // Validation du formulaire
         validateForm() {
             const formData = {
-                checkbox: document.getElementById('assurance').checked,
-                email: document.getElementById('emailInput').value.trim(),
-                firstName: document.getElementById('firstNameInput').value.trim(),
-                lastName: document.getElementById('lastNameInput').value.trim(),
+                checkbox: document.getElementById('assurance')?.checked,
+                email: document.getElementById('emailInput')?.value?.trim(),
+                firstName: document.getElementById('firstNameInput')?.value?.trim(),
+                lastName: document.getElementById('lastNameInput')?.value?.trim(),
                 decision: document.querySelector('input[name="decision"]:checked')?.value
             };
 
-            // Vérifier les champs requis de base
-            if (!formData.checkbox || !formData.email || !formData.firstName || !formData.lastName || !formData.decision) {
+            // Validation des champs de base
+            if (!formData.checkbox || !formData.email || !formData.firstName ||
+                !formData.lastName || !formData.decision) {
                 alert('Veuillez remplir tous les champs et accepter les conditions.');
                 return false;
             }
 
-            // Si l'utilisateur est sûr de son choix, vérifier les détails supplémentaires
+            // Validation des champs supplémentaires
             if (formData.decision !== 'unsure') {
                 const additionalData = {
-                    startDate: document.getElementById('startDate').value,
-                    endDate: document.getElementById('endDate').value,
-                    totalCost: document.getElementById('totalCost').value,
-                    participantsCount: document.getElementById('participantsCount').value
+                    startDate: document.getElementById('startDate')?.value,
+                    endDate: document.getElementById('endDate')?.value,
+                    totalCost: document.getElementById('totalCost')?.value,
+                    participantsCount: document.getElementById('participantsCount')?.value
                 };
 
-                if (!this.validateAdditionalDetails(additionalData)) {
+                if (!this.validateAdditionalData(additionalData)) {
                     return false;
                 }
             }
 
-            // Afficher le message de confirmation approprié
-            this.showConfirmation(formData.decision !== 'unsure');
-            return false; // Empêcher la soumission du formulaire
+            this.showConfirmationMessage(formData.decision !== 'unsure');
+            return false;
         },
 
-        // Valider les détails supplémentaires
-        validateAdditionalDetails(data) {
+        // Valider les données additionnelles
+        validateAdditionalData(data) {
             if (!data.startDate || !data.endDate || !data.totalCost || !data.participantsCount) {
                 alert('Veuillez remplir tous les champs additionnels.');
                 return false;
@@ -365,9 +364,9 @@
         },
 
         // Afficher le message de confirmation
-        showConfirmation(isSure) {
-            // S'assurer que le modal existe
-            this.createConfirmationModal();
+        showConfirmationMessage(isSure) {
+            if (this.elements.popup) this.elements.popup.style.display = 'none';
+            if (this.elements.overlay) this.elements.overlay.style.display = 'none';
 
             const title = this.elements.modal.querySelector('h3');
             const message = this.elements.modal.querySelector('p');
@@ -380,47 +379,60 @@
                 message.textContent = 'Nous comprenons votre hésitation. Vous allez recevoir un email avec plus d\'informations pour vous aider dans votre décision.';
             }
 
-            // Fermer la popup principale et afficher le modal
-            if (this.elements.popup && this.elements.overlay) {
-                this.elements.popup.style.display = 'none';
-                this.elements.overlay.style.display = 'none';
-            }
             this.elements.modal.style.display = 'block';
         },
 
-        // Fermer tous les éléments
+        // Fermer toutes les fenêtres modales
         closeAll() {
-            if (this.elements.modal) {
-                document.body.removeChild(this.elements.modal);
-                this.elements.modal = null;
-            }
-            if (this.elements.popup) {
-                document.body.removeChild(this.elements.popup);
-            }
-            if (this.elements.overlay) {
-                document.body.removeChild(this.elements.overlay);
-            }
+            if (this.elements.modal) this.elements.modal.style.display = 'none';
+            if (this.elements.popup) this.elements.popup.style.display = 'none';
+            if (this.elements.overlay) this.elements.overlay.style.display = 'none';
+        },
+
+        // Initialiser le bouton dans la sidebar
+        initializeSidebarButton() {
+            const sidebarDiv = document.querySelector('.sidebar');
+            if (!sidebarDiv) return;
+
+            const encart = document.createElement('div');
+            encart.className = 'bg-grey-1 padding-20 margin-top-30 margin-bottom-40 sticky force-margin-top';
+            encart.style.width = '300px';
+
+            const lienPopup = document.createElement('a');
+            lienPopup.className = 'btn btn-teal btn-full-width';
+            lienPopup.textContent = 'Souscrire à l\'assurance';
+            lienPopup.href = '#';
+            lienPopup.onclick = (event) => {
+                event.preventDefault();
+                this.showPopup();
+            };
+
+            encart.appendChild(lienPopup);
+            sidebarDiv.appendChild(encart);
+
+            this.observeStickyState(encart);
+        },
+
+        // Observer l'état sticky de l'encart
+        observeStickyState(encart) {
+            const observer = new MutationObserver((mutationsList) => {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (encart.classList.contains('sticky-active')) {
+                            const currentMarginTop = parseFloat(encart.style.marginTop || 0);
+                            encart.style.setProperty('margin-top', `${currentMarginTop - 39}px`, 'important');
+                        }
+                    }
+                }
+            });
+
+            observer.observe(encart, {
+                attributes: true
+            });
         }
     };
 
-    // Fonctions globales pour la compatibilité avec le code existant
-    function initializeRadioListeners() {
-        InsuranceFormHandler.initializeRadioListeners();
-    }
-
-    function validateForm() {
-        return InsuranceFormHandler.validateForm();
-    }
-
-    function showConfirmationMessage(isSure) {
-        InsuranceFormHandler.showConfirmation(isSure);
-    }
-
-    function closeConfirmationModal() {
-        InsuranceFormHandler.closeAll();
-    }
-
-    // Initialiser le gestionnaire au chargement de la page
+    // Initialisation au chargement de la page
     document.addEventListener('DOMContentLoaded', () => {
         InsuranceFormHandler.init();
     });
