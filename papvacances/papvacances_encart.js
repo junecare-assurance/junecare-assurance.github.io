@@ -437,6 +437,23 @@
         InsuranceFormHandler.init();
     });
 
+    // Fonctions globales pour la compatibilité avec le code existant
+    function initializeRadioListeners() {
+        InsuranceFormHandler.initializeRadioListeners();
+    }
+
+    function validateForm() {
+        return InsuranceFormHandler.validateForm();
+    }
+
+    function showConfirmationMessage(isSure) {
+        InsuranceFormHandler.showConfirmation(isSure);
+    }
+
+    function closeConfirmationModal() {
+        InsuranceFormHandler.closeAll();
+    }
+
     function ajouterBoutonPopup() {
         const sidebarDiv = document.querySelector('.sidebar');
         if (sidebarDiv) {
