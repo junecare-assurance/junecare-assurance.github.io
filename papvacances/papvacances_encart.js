@@ -247,7 +247,7 @@
             this.elements.decisionHelp = document.getElementById('decisionHelp');
         },
 
-        function initializeRadioListeners() {
+        initializeRadioListeners() {
             const radios = document.getElementsByName('decision');
             if (!radios.length) return;
         
