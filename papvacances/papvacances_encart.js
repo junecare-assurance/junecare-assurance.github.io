@@ -372,18 +372,11 @@
             document.body.removeChild(this.elements.popup);
             document.body.removeChild(this.elements.overlay);
 
-            const title = this.elements.modal.querySelector('h3');
-            const message = this.elements.modal.querySelector('p');
-
             if (isSure) {
-                title.textContent = 'Confirmation de souscription';
-                message.textContent = 'Merci pour votre souscription ! Vous allez recevoir un email de confirmation avec les prochaines étapes à suivre.';
+                alert("Merci de votre intérêt. Vous recevrez un e-mail pour finaliser l'enregistrement.");
             } else {
-                title.textContent = 'Demande d\'informations';
-                message.textContent = 'Nous comprenons votre hésitation. Vous allez recevoir un email avec plus d\'informations pour vous aider dans votre décision.';
+                alert("Merci de l'intérêt que vous nous portez. Nous vous enverrons un e-mail avec plus d'informations et un accès pour faire un devis personnalisé.");
             }
-
-            this.elements.modal.style.display = 'block';
         },
 
         // Fermer toutes les fenêtres modales
