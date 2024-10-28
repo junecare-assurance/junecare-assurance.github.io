@@ -180,7 +180,7 @@
                         isFirstClick = false;
                     } else {
                         if (!validateForm()) {
-                            alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                            //alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
                             return;
                         }
 
@@ -357,7 +357,7 @@
                 return false;
             }
 
-            if (new Date(data.endDate) <= new Date(data.startDate)) {
+            else if (new Date(data.endDate) <= new Date(data.startDate)) {
                 alert('La date de fin doit être après la date de début.');
                 return false;
             }
