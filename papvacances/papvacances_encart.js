@@ -250,14 +250,19 @@
         initializeRadioListeners() {
             const radios = document.getElementsByName('decision');
             if (!radios.length) return;
-        
+
             radios.forEach(radio => {
                 radio.addEventListener('change', () => {
                     console.log('Radio changed:', radio.value);
                     console.log('Additional details element:', additionalDetails);
                     console.log('Decision help element:', this.elements.decisionHelp);
                     const isUnsure = radio.value === 'unsure';
-                    if (additionalDetails) additionalDetails.style.display = 'block';
+                    if (!isUnsure) {
+                        if (additionalDetails) additionalDetails.style.display = 'block';
+                    }
+                    if (isUnsure) {
+                        if (additionalDetails) additionalDetails.style.display = 'none';
+                    }
                 });
             });
         },
