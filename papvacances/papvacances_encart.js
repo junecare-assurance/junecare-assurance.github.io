@@ -367,8 +367,10 @@
 
         // Afficher le message de confirmation
         showConfirmationMessage(isSure) {
-            document.body.removeChild(popup);
-            document.body.removeChild(overlay);
+            this.elements.popup = document.querySelector('.june-care-popup');
+            this.elements.overlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
+            document.body.removeChild(this.elements.popup);
+            document.body.removeChild(this.elements.overlay);
 
             const title = this.elements.modal.querySelector('h3');
             const message = this.elements.modal.querySelector('p');
