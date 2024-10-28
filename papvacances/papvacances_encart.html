@@ -110,10 +110,32 @@
                 Non, j'hésite encore
             </label>
         </div>
-        <p class="decision-help" style="margin-top: 10px; font-size: 0.9em; color: #666; display: none;" id="decisionHelp">
-            Si vous hésitez encore, nous vous conseillons de bien relire les conditions et de prendre le temps de réfléchir à votre décision.
+    </div>
+
+    <!-- Nouveaux champs qui apparaissent si "Oui" est sélectionné -->
+    <div id="additionalDetails" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <h3 style="margin-bottom: 15px;">Détails de l'événement</h3>
+        <p class="june-care-input-container">
+            <strong>Date de début</strong>
+            <input type="date" id="startDate" class="june-care-input">
+        </p>
+        <p class="june-care-input-container">
+            <strong>Date de fin</strong>
+            <input type="date" id="endDate" class="june-care-input">
+        </p>
+        <p class="june-care-input-container">
+            <strong>Coût total (€)</strong>
+            <input type="number" id="totalCost" class="june-care-input" min="0" step="0.01">
+        </p>
+        <p class="june-care-input-container">
+            <strong>Nombre de participants</strong>
+            <input type="number" id="participantsCount" class="june-care-input" min="1">
         </p>
     </div>
+
+    <p class="decision-help" style="margin-top: 10px; font-size: 0.9em; color: #666; display: none;" id="decisionHelp">
+        Si vous hésitez encore, nous vous conseillons de bien relire les conditions et de prendre le temps de réfléchir à votre décision.
+    </p>
 
     <p>
         <input type="checkbox" id="assurance" name="assurance" style="margin-right: 0px;">
@@ -125,6 +147,15 @@
         <a href="https://junecare-assurance.io/document-informations.pdf"
             style="color: blue; text-decoration: underline;" target="_blank">document d'information</a>.
     </p>
+</div>
+
+<!-- Modal de confirmation -->
+<div id="confirmationModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+    background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 10001;">
+    <h3 style="margin-bottom: 15px;"></h3>
+    <p style="margin-bottom: 20px;"></p>
+    <button onclick="closeConfirmationModal()" style="padding: 8px 16px; background-color: #007bff; color: white; 
+        border: none; border-radius: 4px; cursor: pointer;">Fermer</button>
 </div>
 <style>
     .june-care-input-container {
