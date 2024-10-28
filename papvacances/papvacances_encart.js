@@ -119,6 +119,7 @@
                 if (titleElement) {
                     // Récupère le texte à l'intérieur de l'élément <h1>
                     let titleText = titleElement.textContent || titleElement.innerText;
+                    titleText = titleText.trimStart();
 
                     // Stocke ce texte dans l'élément avec l'ID 'nameInput'
                     const nameInput = document.getElementById('nameInput');
