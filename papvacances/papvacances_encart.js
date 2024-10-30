@@ -65,7 +65,7 @@
             }
             #payNow {
                 padding: 15px 30px;
-                background-color: #0CB3E4;
+                background-color: #33ab9f;
                 color: white;
                 border: none;
                 font-size: 18px;
