@@ -32,7 +32,7 @@
             popup.style.transform = 'translate(-50%, -10%)';
             popup.style.padding = '1.5rem';
             popup.style.backgroundColor = '#FFFFFF';
-            popup.style.borderRadius = '0.5rem';
+            popup.style.borderRadius = '0rem';
             popup.style.zIndex = '10000';
             popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
             popup.style.overflowY = 'auto';
@@ -67,7 +67,7 @@
                     payButton.style.backgroundColor = '#293c7a';
                     payButton.style.color = 'white';
                     payButton.style.border = 'none';
-                    payButton.style.borderRadius = '10px';
+                    payButton.style.borderRadius = '0px';
                     payButton.style.fontSize = '18px';
                     payButton.style.fontWeight = 'bold';
                     payButton.style.margin = 'auto';
@@ -190,7 +190,7 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 0px;
             text-align: center;
             min-width: 300px;
         }
