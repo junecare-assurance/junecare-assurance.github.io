@@ -64,7 +64,7 @@
                     const payButton = document.createElement('button');
                     payButton.id = 'payNow';
                     payButton.style.padding = '15px 30px';
-                    payButton.style.backgroundColor = '#E20100';
+                    payButton.style.backgroundColor = '#293c7a';
                     payButton.style.color = 'white';
                     payButton.style.border = 'none';
                     payButton.style.borderRadius = '10px';
