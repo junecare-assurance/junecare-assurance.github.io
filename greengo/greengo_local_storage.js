@@ -1,67 +1,52 @@
 // @ts-nocheck
-
 (function() {
     'use strict';
-
     console.log('Tampermonkey script loaded');
-    function displayPaymentInfo() {
-        const paymentInfo = window.dataLayer[2];
-        
-        if (paymentInfo && paymentInfo.ecommerce && paymentInfo.ecommerce.items) {
-            paymentInfo.ecommerce.items.forEach(item => {
-                console.log(`Item Name: ${item.item_name}`);
-                console.log(`Brand: ${item.item_brand}`);
-                console.log(`Price: ${item.price} ${item.currency}`);
-                console.log(`Quantity: ${item.quantity}`);
-                console.log(`Total Value: ${paymentInfo.ecommerce.value} ${paymentInfo.ecommerce.currency}`);
-            });
-        } else {
-            console.log("No payment information found.");
-        }
-    }
-    
-    displayPaymentInfo();
 
     function saveCartInfo() {
-        let cartInfo = null;
-    
-        for (const data of window.dataLayer) {
-            if (data && data.ecommerce && data.ecommerce.items) {
-                cartInfo = data;
-                break;
+        const textElements = document.querySelectorAll('.text-neutral-700');
+        let name, dateStart, dateEnd, numberOfTickets, finalPrice;
+        let bin;
+
+        if (textElements.length > 0) {
+            name = textElements[0].textContent.trim();
+            for (let i = 0; i < textElements.length; i++) {
+                const text = textElements[i].textContent.trim();
+                console.log(text);
+
+                if (text.includes('Dates')) {
+                    [dateStart, dateEnd] = textElements[i + 1].textContent.trim().split(' - ');
+                } else if (text.includes('Total')) {
+                    [finalPrice, bin] = textElements[i + 1].textContent.trim().split('€');
+                    finalPrice = finalPrice.replace(',', '.');
+                    finalPrice = parseFloat(finalPrice.replace(/[\s\u202F\u00A0]/g, ''));
+                } else if (text.includes('voyageurs')) {
+                    numberOfTickets = parseInt(text.split(' ')[0]);
+                } else {
+                    //name = text;
+                }
             }
+
+
+            const localStorageData = {
+                name: name,
+                dateStart: dateStart,
+                dateEnd: dateEnd,
+                place: "Lido2Paris",
+                numberOfTickets: numberOfTickets,
+                finalPrice: finalPrice,
+                email: ""  // Placeholder, as no email is provided
+            };
+
+            localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+            console.log('Cart info saved:', localStorageData);
+        } else {
+            console.log('No text elements found. Trying again in 1 second...');
+            setTimeout(saveCartInfo, 1000);
         }
-    
-        if (!cartInfo) {
-            console.log("No payment information found.");
-            return;
-        }
-    
-        const dateElement = document.querySelector('.product-date');
-        const date = dateElement ? dateElement.textContent.trim() : 'non trouve';
-    
-        const location = {
-            country: "FR",
-            latitude: 48.8567,
-            longitude: 2.3508
-        };
-    
-        const localStorageData = {
-            name: cartInfo.ecommerce.items.length > 0 ? cartInfo.ecommerce.items[0].item_name : "non trouve",
-            date: date,
-            place: "Lido2Paris",
-            numberOfTickets: cartInfo.ecommerce.items.reduce((total, item) => total + item.quantity, 0),
-            finalPrice: cartInfo.ecommerce.value,
-            email: "",  // Placeholder, as no email is provided
-            location
-        };
-    
-        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
-        console.log('Cart info saved:', localStorageData);
     }
-    
-    saveCartInfo();
-    
-    
-    
+
+    window.addEventListener('load', () => {
+        saveCartInfo();
+    });
 })();
