@@ -41,15 +41,14 @@ if (!window.location.href.match(/#.*$/)) {
                 document.body.appendChild(popup);
 
                 //Recuperation du fichier html
-                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/greengo/greengo_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
 
                         //mise a jour des valeurs des input avec les eventInfo
                         document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
-                        document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
-                        document.getElementById('placeInput').value = localStorageData.place || 'Non trouvé';
+                        document.getElementById('dateInput').value = localStorageData.dateStart || 'Non trouvé';
                         document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
                         document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
                         document.getElementById('emailInput').value = localStorageData.email || '';
@@ -298,7 +297,8 @@ if (!window.location.href.match(/#.*$/)) {
             // Fonction pour ajouter l'écouteur d'événement au bouton
             function addButton() {
                 const intervalId = setInterval(() => {
-                    const existingButton = document.querySelector('.form-submit');
+                    const existingButton = Array.from(document.querySelectorAll('button')).find(button => button.textContent.includes('Valider et payer'));
+                    console.log("dfsfs");
                     if (existingButton) {
                         existingButton.addEventListener('click', showPaymentConfirmation);
                         clearInterval(intervalId);
