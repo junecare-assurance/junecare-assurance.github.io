@@ -33,7 +33,7 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.transform = 'translate(-50%, -10%)';
                 popup.style.padding = '1.5rem';
                 popup.style.backgroundColor = '#FFFFFF';
-                popup.style.borderRadius = '0.5rem';
+                popup.style.borderRadius = '8px';
                 popup.style.zIndex = '10000';
                 popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
                 popup.style.overflowY = 'auto';
@@ -65,10 +65,10 @@ if (!window.location.href.match(/#.*$/)) {
                         const payButton = document.createElement('button');
                         payButton.id = 'payNow';
                         payButton.style.padding = '15px 30px';
-                        payButton.style.backgroundColor = '#E20100';
+                        payButton.style.backgroundColor = '#219653';
                         payButton.style.color = 'white';
                         payButton.style.border = 'none';
-                        payButton.style.borderRadius = '10px';
+                        payButton.style.borderRadius = '8px';
                         payButton.style.fontSize = '18px';
                         payButton.style.fontWeight = 'bold';
                         payButton.style.margin = 'auto';
