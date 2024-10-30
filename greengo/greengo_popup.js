@@ -48,7 +48,7 @@ if (!window.location.href.match(/#.*$/)) {
 
                         //mise a jour des valeurs des input avec les eventInfo
                         document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
-                        document.getElementById('dateInput').value = localStorageData.dateStart || 'Non trouvé';
+                        document.getElementById('dateInput').value = localStorageData.dateStart + ' - ' + localStorageData.dateEnd || 'Non trouvé';
                         document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
                         document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
                         document.getElementById('emailInput').value = localStorageData.email || '';
