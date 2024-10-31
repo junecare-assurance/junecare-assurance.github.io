@@ -174,7 +174,7 @@
                     const eventDetails = document.getElementById('eventDetails');
 
                     if (isFirstClick) {
-                        coverageDetails.style.display = 'none';
+                        coverageDetails.style.display = 'block';
                         eventDetails.style.display = 'block';
                         payButton.textContent = 'Continuer';
                         isFirstClick = false;
