@@ -168,11 +168,13 @@
                         document.body.removeChild(overlay);
                     });
                 }
-
+                const eventDetails = document.getElementById('eventDetails');
+                eventDetails.style.display = 'block';
+                payButton.textContent = 'Continuer';
                 payButton.addEventListener('click', (event) => {
                     const coverageDetails = document.getElementById('coverageDetails');
                     const eventDetails = document.getElementById('eventDetails');
-
+                    isFirstClick = false;
                     if (isFirstClick) {
                         coverageDetails.style.display = 'block';
                         eventDetails.style.display = 'block';
