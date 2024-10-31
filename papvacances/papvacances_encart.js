@@ -423,7 +423,7 @@
             popup.style.zIndex = '10000';
             popup.style.borderRadius = '10px';
             popup.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
-            popup.style.animation = 'slideIn 0.3s ease-out';
+            popup.style.animation = 'slideIn 0.0s ease-out';
         
             // Styles d'animation
             const styleSheet = document.createElement('style');
@@ -480,17 +480,12 @@
             calculationArea.style.backgroundColor = '#f4f4f4';
             calculationArea.style.borderRadius = '5px';
         
-            const calculationText = document.createElement('p');
-            calculationText.textContent = 'Calcul en cours...';
-            calculationText.style.color = '#666';
-            calculationText.style.fontStyle = 'italic';
-        
             // Prix
             const priceContainer = document.createElement('div');
             priceContainer.style.marginBottom = '20px';
         
             const priceLabel = document.createElement('p');
-            priceLabel.textContent = 'Montant Estimé :';
+            priceLabel.textContent = 'Montant:';
             priceLabel.style.fontSize = '18px';
             priceLabel.style.color = '#333';
         
@@ -523,8 +518,6 @@
             // Simulation de calcul
             setTimeout(() => {
                 calculationArea.innerHTML = '';
-                calculationArea.appendChild(calculationText);
-                calculationText.textContent = 'Calcul terminé !';
                 
                 calculationArea.appendChild(priceLabel);
                 calculationArea.appendChild(price);
@@ -597,19 +590,6 @@
     const messageContent = document.createElement('div');
     messageContent.style.textAlign = 'center';
 
-    // Icône de succès
-    const successIcon = document.createElement('div');
-    successIcon.innerHTML = '✓';
-    successIcon.style.width = '60px';
-    successIcon.style.height = '60px';
-    successIcon.style.borderRadius = '50%';
-    successIcon.style.backgroundColor = '#4CAF50';
-    successIcon.style.color = 'white';
-    successIcon.style.fontSize = '35px';
-    successIcon.style.display = 'flex';
-    successIcon.style.justifyContent = 'center';
-    successIcon.style.alignItems = 'center';
-    successIcon.style.margin = '0 auto 20px';
 
     // Titre
     const title = document.createElement('h2');
@@ -656,7 +636,6 @@
     });
 
     // Assemblage des éléments
-    messageContent.appendChild(successIcon);
     messageContent.appendChild(title);
     messageContent.appendChild(message);
     messageContent.appendChild(closeButton);
