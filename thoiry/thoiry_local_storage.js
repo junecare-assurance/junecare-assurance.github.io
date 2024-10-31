@@ -12,7 +12,11 @@
         const endDate = date ? date[2] : 'non trouve';
 
         const totalPriceElement = document.querySelector('.recap_total.colPrix');
-        const totalPrice = totalPriceElement ? totalPriceElement.textContent.trim() : 'non trouve';
+        let totalPrice = totalPriceElement ? totalPriceElement.textContent.trim() : 'non trouve';
+        let bin;
+        [totalPrice, bin] = totalPrice.split('€');
+        totalPrice = totalPrice.replace(',', '.');
+        totalPrice = parseFloat(totalPrice.replace(/[\s\u202F\u00A0]/g, ''));
 
         const ticketElements = document.querySelectorAll('.colQte.ligneSeule');
         const numberOfTickets = Array.from(ticketElements).reduce((total, element) => {
@@ -22,6 +26,7 @@
 
         const localStorageData = {
             //name: cartInfo.ecommerce.items.length > 0 ? cartInfo.ecommerce.items[0].item_name : "non trouve",
+            name: "Wow Safari Thoiry",
             startDate: startDate,
             endDate: endDate,
             place: "Wow Safari Thoiry",
@@ -29,7 +34,10 @@
             finalPrice: totalPrice,
             email: ""
         };
-
+        if (endDate == 'non trouve')
+        {
+            return;
+        };
         localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
         console.log('Cart info saved:', localStorageData);
     }
