@@ -524,6 +524,7 @@
                         },
                         body: JSON.stringify({
                             price: totalc,
+                            email: 'igor@junecare.fr',
                             link: window.location.href
                         })
                     })
