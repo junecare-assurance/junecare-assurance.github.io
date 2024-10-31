@@ -517,10 +517,6 @@
         
             paymentButton.addEventListener('click', (event) => {
                 
-                    if (!validateForm()) {
-                        //alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
-                        return;
-                    }
                     fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
                         method: 'POST',
                         headers: {
