@@ -367,17 +367,124 @@
 
         // Afficher le message de confirmation
         showConfirmationMessage(isSure) {
-            this.elements.popup = document.querySelector('.june-care-popup');
-            this.elements.overlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
-            document.body.removeChild(this.elements.popup);
-            document.body.removeChild(this.elements.overlay);
+    this.elements.popup = document.querySelector('.june-care-popup');
+    this.elements.overlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
+    document.body.removeChild(this.elements.popup);
+    document.body.removeChild(this.elements.overlay);
 
-            if (isSure) {
-                alert("Merci de votre intérêt. Vous recevrez un e-mail pour finaliser l'enregistrement.");
-            } else {
-                alert("Merci de l'intérêt que vous nous portez. Nous vous enverrons un e-mail avec plus d'informations et un accès pour faire un devis personnalisé.");
+    // Création de l'overlay
+    const overlay_mail = document.createElement('div');
+    overlay_mail.style.position = 'fixed';
+    overlay_mail.style.top = '0';
+    overlay_mail.style.left = '0';
+    overlay_mail.style.width = '100%';
+    overlay_mail.style.height = '100%';
+    overlay_mail.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    overlay_mail.style.zIndex = '9999';
+    overlay_mail.style.display = 'flex';
+    overlay_mail.style.justifyContent = 'center';
+    overlay_mail.style.alignItems = 'center';
+    document.body.appendChild(overlay_mail);
+
+    // Création de la popup
+    const popup_mail = document.createElement('div');
+    popup_mail.classList.add('june-care-popup');
+    popup_mail.style.position = 'relative';
+    popup_mail.style.width = '90%';
+    popup_mail.style.maxWidth = '450px';
+    popup_mail.style.padding = '30px';
+    popup_mail.style.backgroundColor = '#FFFFFF';
+    popup_mail.style.zIndex = '10000';
+    popup_mail.style.borderRadius = '12px';
+    popup_mail.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+    popup_mail.style.animation = 'slideIn 0.3s ease-out';
+
+    // Ajout des styles d'animation
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
             }
-        },
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Création du contenu de la popup
+    const messageContent = document.createElement('div');
+    messageContent.style.textAlign = 'center';
+
+    // Icône de succès
+    const successIcon = document.createElement('div');
+    successIcon.innerHTML = '✓';
+    successIcon.style.width = '60px';
+    successIcon.style.height = '60px';
+    successIcon.style.borderRadius = '50%';
+    successIcon.style.backgroundColor = '#4CAF50';
+    successIcon.style.color = 'white';
+    successIcon.style.fontSize = '35px';
+    successIcon.style.display = 'flex';
+    successIcon.style.justifyContent = 'center';
+    successIcon.style.alignItems = 'center';
+    successIcon.style.margin = '0 auto 20px';
+
+    // Titre
+    const title = document.createElement('h2');
+    title.style.color = '#333';
+    title.style.marginBottom = '15px';
+    title.style.fontSize = '24px';
+    title.textContent = 'Merci !';
+
+    // Message
+    const message = document.createElement('p');
+    message.style.color = '#666';
+    message.style.fontSize = '16px';
+    message.style.lineHeight = '1.5';
+    message.style.marginBottom = '25px';
+
+    if (isSure) {
+        message.textContent = "Merci de votre intérêt. Vous recevrez un e-mail pour finaliser l'enregistrement.";
+    } else {
+        message.textContent = "Merci de l'intérêt que vous nous portez. Nous vous enverrons un e-mail avec plus d'informations et un accès pour faire un devis personnalisé.";
+    }
+
+    // Bouton de fermeture
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Fermer';
+    closeButton.style.padding = '12px 30px';
+    closeButton.style.backgroundColor = '#4CAF50';
+    closeButton.style.color = 'white';
+    closeButton.style.border = 'none';
+    closeButton.style.borderRadius = '6px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '16px';
+    closeButton.style.transition = 'background-color 0.2s';
+
+    closeButton.addEventListener('mouseover', () => {
+        closeButton.style.backgroundColor = '#45a049';
+    });
+
+    closeButton.addEventListener('mouseout', () => {
+        closeButton.style.backgroundColor = '#4CAF50';
+    });
+
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(overlay_mail);
+    });
+
+    // Assemblage des éléments
+    messageContent.appendChild(successIcon);
+    messageContent.appendChild(title);
+    messageContent.appendChild(message);
+    messageContent.appendChild(closeButton);
+    popup_mail.appendChild(messageContent);
+    overlay_mail.appendChild(popup_mail);
+},
 
         // Fermer toutes les fenêtres modales
         closeAll() {
@@ -417,6 +524,10 @@
             };
 
             encart.appendChild(lienPopup);
+
+            encart.appendChild(text);
+
+
             sidebarDiv.appendChild(encart);
 
             this.observeStickyState(encart);
@@ -465,24 +576,36 @@
 
     function ajouterBoutonPopup() {
         const sidebarDiv = document.querySelector('.sidebar');
-        if (sidebarDiv) {
+            if (!sidebarDiv) return;
+
             const encart = document.createElement('div');
             encart.className = 'bg-grey-1 padding-20 margin-top-30 margin-bottom-40 sticky force-margin-top';
             encart.style.width = '300px';
 
+            const titre = document.createElement('p');
+            titre.className = 'h4';
+            titre.textContent = 'Parter en toute tranquilité';
+
+            encart.appendChild(titre);
+
+            const text = document.createElement('p');
+            text.className = 'margin-bottom-10';
+            text.textContent = 'Souscriver à une assurance annulation';
+
+            encart.appendChild(text);
+
             const lienPopup = document.createElement('a');
             lienPopup.className = 'btn btn-teal btn-full-width';
-            lienPopup.textContent = 'Souscrire à l\'assurance';
+            lienPopup.textContent = 'Demander un devis';
             lienPopup.href = '#';
-
-            lienPopup.onclick = function (event) {
+            lienPopup.onclick = (event) => {
                 event.preventDefault();
                 showPopup();
             };
 
             encart.appendChild(lienPopup);
-            sidebarDiv.appendChild(encart);
 
+            sidebarDiv.appendChild(encart);
             const observer = new MutationObserver((mutationsList) => {
                 for (const mutation of mutationsList) {
                     if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -497,7 +620,7 @@
             observer.observe(encart, {
                 attributes: true
             });
-        }
+
     }
 
     ajouterStyles();
