@@ -65,7 +65,7 @@
             }
             #payNow {
                 padding: 15px 30px;
-                background-color: #33ab9f;
+                background-color: #FF7319;
                 color: white;
                 border: none;
                 font-size: 18px;
@@ -517,6 +517,7 @@
             const lienPopup = document.createElement('a');
             lienPopup.className = 'btn btn-teal btn-full-width';
             lienPopup.textContent = 'Demander un devis';
+            lienPopup.style.backgroundColor = '#FF7319';
             lienPopup.href = '#';
             lienPopup.onclick = (event) => {
                 event.preventDefault();
