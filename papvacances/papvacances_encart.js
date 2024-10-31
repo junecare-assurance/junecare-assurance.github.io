@@ -598,7 +598,7 @@
             const lienPopup = document.createElement('a');
             lienPopup.className = 'btn btn-teal btn-full-width';
             lienPopup.textContent = 'Demander un devis';
-            lienPopup.href = '#';
+            lienPopup.style.backgroundColor = '#FF7319';
             lienPopup.onclick = (event) => {
                 event.preventDefault();
                 showPopup();
