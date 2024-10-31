@@ -172,16 +172,18 @@
                 eventd.style.display = 'block';
                 payButton.textContent = 'Continuer';
                 const ensavoirplus = document.getElementById('ensavoirplus');
-
+                let togg = true;
                 ensavoirplus.addEventListener('click', (event) =>
                 {
                     const cover = document.getElementById('coverageDetails');
-                    if (coverageDetails.style.display == 'none'){
+                    if (togg){
                         coverageDetails.style.display = 'block';
+                        togg = false;
                     }
                     else
                     {
                         coverageDetails.style.display = 'block';
+                        togg = true;
                     }
                 }
                 )
