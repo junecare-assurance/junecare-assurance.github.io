@@ -485,7 +485,7 @@
             priceContainer.style.marginBottom = '20px';
         
             const priceLabel = document.createElement('p');
-            priceLabel.textContent = 'Montant:';
+            priceLabel.textContent = 'Couvrez votre séjour pour seulement:';
             priceLabel.style.fontSize = '18px';
             priceLabel.style.color = '#333';
         
@@ -525,7 +525,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            price: t,
+                            price: t.toString(),
                             email: 'igor@junecare.fr',
                             link: window.location.href
                         })
