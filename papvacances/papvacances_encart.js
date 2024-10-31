@@ -2,7 +2,7 @@
 
 (function () {
     'use strict';
-
+    let totalc = 0;
     function getEventDetails() {
         const titleElement = document.querySelector('.item-title');
         if (titleElement) {
@@ -363,7 +363,7 @@
                     totalCost: document.getElementById('totalCost')?.value,
                     participantsCount: document.getElementById('participantsCount')?.value
                 };
-
+                totalc = additionalData.totalCost;
                 if (!this.validateAdditionalData(additionalData)) {
                     return false;
                 }
@@ -490,7 +490,7 @@
             priceLabel.style.color = '#333';
         
             const price = document.createElement('h3');
-            price.textContent = '0 €';
+            price.textContent = (totalc * 0.08).toString + ' €';
             price.style.fontSize = '36px';
             price.style.color = '#4CAF50';
             price.style.margin = '10px 0';
