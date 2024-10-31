@@ -171,6 +171,20 @@
                 const eventd = document.getElementById('eventDetails');
                 eventd.style.display = 'block';
                 payButton.textContent = 'Continuer';
+                const ensavoirplus = document.getElementById('ensavoirplus');
+
+                ensavoirplus.addEventListener('click', (event) =>
+                {
+                    const cover = document.getElementById('coverageDetails');
+                    if (coverageDetails.style.display == 'none'){
+                        coverageDetails.style.display = 'block';
+                    }
+                    else
+                    {
+                        coverageDetails.style.display = 'block';
+                    }
+                }
+                )
 
                 payButton.addEventListener('click', (event) => {
                     const coverageDetails = document.getElementById('coverageDetails');
