@@ -179,11 +179,13 @@
                     if (togg){
                         coverageDetails.style.display = 'block';
                         togg = false;
+                        ensavoirplus.textContent = 'Voir moins';
                     }
                     else
                     {
                         coverageDetails.style.display = 'none';
                         togg = true;
+                        ensavoirplus.textContent = 'En savoir plus';
                     }
                     console.log(togg);
                     console.log(coverageDetails.style.display);
