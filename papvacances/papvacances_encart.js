@@ -527,19 +527,19 @@
 
             const titre = document.createElement('p');
             titre.className = 'h4';
-            titre.textContent = 'Parter en toute tranquilité';
+            titre.textContent = 'Partez en toute tranquillité';
 
             encart.appendChild(titre);
 
             const text = document.createElement('p');
             text.className = 'margin-bottom-10';
-            text.textContent = 'Souscriver à une assurance annulation';
+            text.textContent = 'Protégez-vous contre les imprévus avec notre assurance annulation';
 
             encart.appendChild(text);
 
             const lienPopup = document.createElement('a');
             lienPopup.className = 'btn btn-teal btn-full-width';
-            lienPopup.textContent = 'Demander un devis';
+            lienPopup.textContent = 'Obtenir un devis';
             lienPopup.style.backgroundColor = '#FF7319';
             lienPopup.href = '#';
             lienPopup.onclick = (event) => {
