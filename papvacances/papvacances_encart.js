@@ -81,7 +81,7 @@
     }
 
     function showPopup() {
-        let eventDetails = getEventDetails();
+        const eventDetails = getEventDetails();
 
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
@@ -168,15 +168,16 @@
                         document.body.removeChild(overlay);
                     });
                 }
-                let eventDetails = document.getElementById('eventDetails');
-                eventDetails.style.display = 'block';
+                const eventd = document.getElementById('eventDetails');
+                eventd.style.display = 'block';
                 payButton.textContent = 'Continuer';
+
                 payButton.addEventListener('click', (event) => {
-                    let coverageDetails = document.getElementById('coverageDetails');
-                    let eventDetails = document.getElementById('eventDetails');
-                    isFirstClick = false;
+                    const coverageDetails = document.getElementById('coverageDetails');
+                    const eventDetails = document.getElementById('eventDetails');
+
                     if (isFirstClick) {
-                        coverageDetails.style.display = 'block';
+                        coverageDetails.style.display = 'none';
                         eventDetails.style.display = 'block';
                         payButton.textContent = 'Continuer';
                         isFirstClick = false;
