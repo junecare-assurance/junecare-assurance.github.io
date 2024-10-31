@@ -81,7 +81,7 @@
     }
 
     function showPopup() {
-        const eventDetails = getEventDetails();
+        let eventDetails = getEventDetails();
 
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
