@@ -490,7 +490,7 @@
             priceLabel.style.color = '#333';
         
             const price = document.createElement('h3');
-            price.textContent = (totalc * 0.08).toString + ' €';
+            price.textContent = `${(totalc * 0.08)} €`;
             price.style.fontSize = '36px';
             price.style.color = '#4CAF50';
             price.style.margin = '10px 0';
