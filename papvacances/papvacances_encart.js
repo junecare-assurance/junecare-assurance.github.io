@@ -395,9 +395,21 @@
             encart.className = 'bg-grey-1 padding-20 margin-top-30 margin-bottom-40 sticky force-margin-top';
             encart.style.width = '300px';
 
+            const titre = document.createElement('p');
+            titre.className = 'h4';
+            titre.textContent = 'Parter en toute tranquilité';
+
+            encart.appendChild(titre);
+
+            const text = document.createElement('p');
+            text.className = 'margin-bottom-10';
+            text.textContent = 'Souscriver à une assurance annulation';
+
+            encart.appendChild(text);
+
             const lienPopup = document.createElement('a');
             lienPopup.className = 'btn btn-teal btn-full-width';
-            lienPopup.textContent = 'Souscrire à l\'assurance';
+            lienPopup.textContent = 'Demander un devis';
             lienPopup.href = '#';
             lienPopup.onclick = (event) => {
                 event.preventDefault();
