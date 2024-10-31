@@ -525,6 +525,8 @@
         
             popup.appendChild(content);
             overlay.appendChild(popup);
+            calculationArea.appendChild(priceLabel);
+            calculationArea.appendChild(price);
         },
 
 
