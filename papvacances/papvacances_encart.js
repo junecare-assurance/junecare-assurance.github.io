@@ -515,13 +515,7 @@
                 paymentButton.style.backgroundColor = '#4CAF50';
             });
         
-            // Simulation de calcul
-            setTimeout(() => {
-                calculationArea.innerHTML = '';
-                
-                calculationArea.appendChild(priceLabel);
-                calculationArea.appendChild(price);
-            }, 2000);
+            
         
             // Assemblage
             content.appendChild(closeButton);
