@@ -395,7 +395,7 @@
     popup_mail.style.padding = '30px';
     popup_mail.style.backgroundColor = '#FFFFFF';
     popup_mail.style.zIndex = '10000';
-    popup_mail.style.borderRadius = '12px';
+    popup_mail.style.borderRadius = '0px';
     popup_mail.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
     popup_mail.style.animation = 'slideIn 0.3s ease-out';
 
@@ -460,7 +460,7 @@
     closeButton.style.backgroundColor = '#4CAF50';
     closeButton.style.color = 'white';
     closeButton.style.border = 'none';
-    closeButton.style.borderRadius = '6px';
+    closeButton.style.borderRadius = '0px';
     closeButton.style.cursor = 'pointer';
     closeButton.style.fontSize = '16px';
     closeButton.style.transition = 'background-color 0.2s';
