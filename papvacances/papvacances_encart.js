@@ -388,6 +388,161 @@
             return true;
         },
 
+
+
+
+        showDevisPopup() {
+            // Supprimer toute popup existante
+            const existingPopup = document.querySelector('.june-care-popup');
+            const existingOverlay = document.querySelector('[style*="background-color: rgba(0, 0, 0, 0.8)"]');
+            if (existingPopup) document.body.removeChild(existingPopup);
+            if (existingOverlay) document.body.removeChild(existingOverlay);
+        
+            // Création de l'overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            overlay.style.zIndex = '9999';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            document.body.appendChild(overlay);
+        
+            // Création de la popup
+            const popup = document.createElement('div');
+            popup.classList.add('june-care-popup');
+            popup.style.position = 'relative';
+            popup.style.width = '90%';
+            popup.style.maxWidth = '500px';
+            popup.style.padding = '30px';
+            popup.style.backgroundColor = '#FFFFFF';
+            popup.style.zIndex = '10000';
+            popup.style.borderRadius = '10px';
+            popup.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+            popup.style.animation = 'slideIn 0.3s ease-out';
+        
+            // Styles d'animation
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateY(-20px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+                @keyframes calculate {
+                    0% { content: "Calcul en cours."; }
+                    33% { content: "Calcul en cours.."; }
+                    66% { content: "Calcul en cours..."; }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        
+            // Bouton de fermeture (croix)
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '&times;';
+            closeButton.style.position = 'absolute';
+            closeButton.style.top = '10px';
+            closeButton.style.right = '10px';
+            closeButton.style.background = 'none';
+            closeButton.style.border = 'none';
+            closeButton.style.fontSize = '30px';
+            closeButton.style.color = '#888';
+            closeButton.style.cursor = 'pointer';
+            closeButton.style.outline = 'none';
+        
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+        
+            // Conteneur principal
+            const content = document.createElement('div');
+            content.style.textAlign = 'center';
+        
+            // Titre
+            const title = document.createElement('h2');
+            title.textContent = 'Votre Devis Personnalisé';
+            title.style.marginBottom = '20px';
+            title.style.color = '#333';
+        
+            // Zone de calcul simulé
+            const calculationArea = document.createElement('div');
+            calculationArea.style.marginBottom = '20px';
+            calculationArea.style.padding = '15px';
+            calculationArea.style.backgroundColor = '#f4f4f4';
+            calculationArea.style.borderRadius = '5px';
+        
+            const calculationText = document.createElement('p');
+            calculationText.textContent = 'Calcul en cours...';
+            calculationText.style.color = '#666';
+            calculationText.style.fontStyle = 'italic';
+        
+            // Prix
+            const priceContainer = document.createElement('div');
+            priceContainer.style.marginBottom = '20px';
+        
+            const priceLabel = document.createElement('p');
+            priceLabel.textContent = 'Montant Estimé :';
+            priceLabel.style.fontSize = '18px';
+            priceLabel.style.color = '#333';
+        
+            const price = document.createElement('h3');
+            price.textContent = '0 €';
+            price.style.fontSize = '36px';
+            price.style.color = '#4CAF50';
+            price.style.margin = '10px 0';
+        
+            // Bouton de paiement
+            const paymentButton = document.createElement('button');
+            paymentButton.textContent = 'Procéder au Paiement';
+            paymentButton.style.padding = '12px 30px';
+            paymentButton.style.backgroundColor = '#4CAF50';
+            paymentButton.style.color = 'white';
+            paymentButton.style.border = 'none';
+            paymentButton.style.borderRadius = '5px';
+            paymentButton.style.fontSize = '16px';
+            paymentButton.style.cursor = 'pointer';
+            paymentButton.style.transition = 'background-color 0.2s';
+        
+            paymentButton.addEventListener('mouseover', () => {
+                paymentButton.style.backgroundColor = '#45a049';
+            });
+        
+            paymentButton.addEventListener('mouseout', () => {
+                paymentButton.style.backgroundColor = '#4CAF50';
+            });
+        
+            // Simulation de calcul
+            setTimeout(() => {
+                calculationArea.innerHTML = '';
+                calculationArea.appendChild(calculationText);
+                calculationText.textContent = 'Calcul terminé !';
+                
+                calculationArea.appendChild(priceLabel);
+                calculationArea.appendChild(price);
+            }, 2000);
+        
+            // Assemblage
+            content.appendChild(closeButton);
+            content.appendChild(title);
+            content.appendChild(calculationArea);
+            content.appendChild(paymentButton);
+        
+            popup.appendChild(content);
+            overlay.appendChild(popup);
+        },
+
+
+
+
         // Afficher le message de confirmation
         showConfirmationMessage(isSure) {
     this.elements.popup = document.querySelector('.june-care-popup');
@@ -471,7 +626,7 @@
     message.style.marginBottom = '25px';
 
     if (isSure) {
-        message.textContent = "Merci de votre intérêt. Vous recevrez un e-mail pour finaliser l'enregistrement.";
+        this.showDevisPopup();
     } else {
         message.textContent = "Merci de l'intérêt que vous nous portez. Nous vous enverrons un e-mail avec plus d'informations et un accès pour faire un devis personnalisé.";
     }
