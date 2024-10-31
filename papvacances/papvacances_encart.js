@@ -185,7 +185,7 @@
                     {
                         coverageDetails.style.display = 'none';
                         togg = true;
-                        ensavoirplus.textContent = 'En savoir plus';
+                        ensavoirplus.textContent = '...en savoir plus';
                     }
                     console.log(togg);
                     console.log(coverageDetails.style.display);
