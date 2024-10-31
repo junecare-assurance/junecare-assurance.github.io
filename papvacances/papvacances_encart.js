@@ -525,7 +525,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            price: totalc,
+                            price: Number(totalc),
                             email: 'igor@junecare.fr',
                             link: window.location.href
                         })
