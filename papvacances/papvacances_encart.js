@@ -516,7 +516,7 @@
             });
         
             paymentButton.addEventListener('click', (event) => {
-                    let t = totalc;
+                    let t = Number(totalc);
                     console.log(t);
                     console.log(t === 100);
                     fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
@@ -525,7 +525,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            price: Number(totalc),
+                            price: t,
                             email: 'igor@junecare.fr',
                             link: window.location.href
                         })
