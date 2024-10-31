@@ -185,6 +185,8 @@
                         coverageDetails.style.display = 'block';
                         togg = true;
                     }
+                    console.log(togg);
+                    console.log(coverageDetails.style.display);
                 }
                 )
 
