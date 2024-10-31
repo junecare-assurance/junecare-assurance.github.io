@@ -516,15 +516,7 @@
             });
         
             paymentButton.addEventListener('click', (event) => {
-                const coverageDetails = document.getElementById('coverageDetails');
-                const eventDetails = document.getElementById('eventDetails');
-
-                if (isFirstClick) {
-                    coverageDetails.style.display = 'none';
-                    eventDetails.style.display = 'block';
-                    payButton.textContent = 'Continuer';
-                    isFirstClick = false;
-                } else {
+                
                     if (!validateForm()) {
                         //alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
                         return;
@@ -547,7 +539,6 @@
                             console.error('Erreur lors de l\'envoi des données:', error);
                             alert('Une erreur est survenue lors de la transmission des données.');
                         });
-                }
             });
         
         
