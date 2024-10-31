@@ -516,7 +516,9 @@
             });
         
             paymentButton.addEventListener('click', (event) => {
-                
+                    let t = totalc;
+                    console.log(t);
+                    console.log(t === 100);
                     fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
                         method: 'POST',
                         headers: {
