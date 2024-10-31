@@ -182,7 +182,7 @@
                     }
                     else
                     {
-                        coverageDetails.style.display = 'block';
+                        coverageDetails.style.display = 'none';
                         togg = true;
                     }
                     console.log(togg);
