@@ -492,14 +492,14 @@
             const price = document.createElement('h3');
             price.textContent = `${(totalc * 0.08)} €`;
             price.style.fontSize = '36px';
-            price.style.color = '#4CAF50';
+            price.style.color = '#086ffc;';
             price.style.margin = '10px 0';
         
             // Bouton de paiement
             const paymentButton = document.createElement('button');
             paymentButton.textContent = 'Procéder au Paiement';
             paymentButton.style.padding = '12px 30px';
-            paymentButton.style.backgroundColor = '#4CAF50';
+            paymentButton.style.backgroundColor = '#086ffc';
             paymentButton.style.color = 'white';
             paymentButton.style.border = 'none';
             paymentButton.style.borderRadius = '5px';
@@ -508,11 +508,11 @@
             paymentButton.style.transition = 'background-color 0.2s';
         
             paymentButton.addEventListener('mouseover', () => {
-                paymentButton.style.backgroundColor = '#45a049';
+                paymentButton.style.backgroundColor = '#086ffc';
             });
         
             paymentButton.addEventListener('mouseout', () => {
-                paymentButton.style.backgroundColor = '#4CAF50';
+                paymentButton.style.backgroundColor = '#086ffc';
             });
         
             paymentButton.addEventListener('click', (event) => {
@@ -635,7 +635,7 @@
     const closeButton = document.createElement('button');
     closeButton.textContent = 'Fermer';
     closeButton.style.padding = '12px 30px';
-    closeButton.style.backgroundColor = '#4CAF50';
+    closeButton.style.backgroundColor = '#086ffc';
     closeButton.style.color = 'white';
     closeButton.style.border = 'none';
     closeButton.style.borderRadius = '0px';
@@ -644,11 +644,11 @@
     closeButton.style.transition = 'background-color 0.2s';
 
     closeButton.addEventListener('mouseover', () => {
-        closeButton.style.backgroundColor = '#45a049';
+        closeButton.style.backgroundColor = '#086ffc';
     });
 
     closeButton.addEventListener('mouseout', () => {
-        closeButton.style.backgroundColor = '#4CAF50';
+        closeButton.style.backgroundColor = '#086ffc';
     });
 
     closeButton.addEventListener('click', () => {
