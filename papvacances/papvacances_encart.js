@@ -595,7 +595,7 @@
     if (isSure) {
         this.showDevisPopup();
     } else {
-        message.textContent = "L’assurance annulation couvre le logement dans lequel vous allez séjourner. Par conséquent, vous avez besoin d’avoir déjà réservé avant de pouvoir obtenir un devis. Nous venons de vous envoyer un e-mail afin que vous puissiez obtenir le devis dès la confirmation de réservation reçue.";
+        message.textContent = "L’assurance annulation couvre uniquement le logement que vous avez réservé. Vous devez donc avoir finalisé votre réservation pour obtenir un devis. Nous venons de vous envoyer un e-mail avec les instructions pour obtenir votre devis dès que votre réservation est confirmée.";
     }
 
     // Bouton de fermeture
