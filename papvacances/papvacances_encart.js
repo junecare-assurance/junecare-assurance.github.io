@@ -12,7 +12,7 @@
 
             // Extraction des informations
             const location = fullTitle.replace('Location', '').replace('Maison', '').trim();
-            nameI=location;
+            nameI=fullTitle;
             console.log(nameI);
             // Extraction du prix
             const priceElement = titleElement.querySelector('strong');
