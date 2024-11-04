@@ -193,52 +193,6 @@
                     console.log(coverageDetails.style.display);
                 }
                 )
-
-                payButton.addEventListener('click', (event) => {
-                    const coverageDetails = document.getElementById('coverageDetails');
-                    const eventDetails = document.getElementById('eventDetails');
-
-                    if (isFirstClick) {
-                        coverageDetails.style.display = 'none';
-                        eventDetails.style.display = 'block';
-                        payButton.textContent = 'Continuer';
-                        isFirstClick = false;
-                    } else {
-                        if (!validateForm()) {
-                            //alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
-                            return;
-                        }
-
-                        const email = document.getElementById('emailInput').value;
-                        const firstName = document.getElementById('firstNameInput').value;
-                        const lastName = document.getElementById('lastNameInput').value;
-                        const location = document.getElementById('eventLocation').value;
-                        const price = document.getElementById('eventPrice').value;
-
-                        fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                email,
-                                firstname: firstName,
-                                lastname: lastName,
-                                location,
-                                price,
-                                link: window.location.href
-                            })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                window.location.href = data.response.link + "test/" + data.response.id;
-                            })
-                            .catch(error => {
-                                console.error('Erreur lors de l\'envoi des données:', error);
-                                alert('Une erreur est survenue lors de la transmission des données.');
-                            });
-                    }
-                });
             })
             .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
     }
