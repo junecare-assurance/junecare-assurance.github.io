@@ -469,7 +469,7 @@
             paymentButton.style.backgroundColor = '#086ffc';
             paymentButton.style.color = 'white';
             paymentButton.style.border = 'none';
-            paymentButton.style.borderRadius = '5px';
+            paymentButton.style.borderRadius = '0px';
             paymentButton.style.fontSize = '16px';
             paymentButton.style.cursor = 'pointer';
             paymentButton.style.transition = 'background-color 0.2s';
