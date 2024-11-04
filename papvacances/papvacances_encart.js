@@ -514,6 +514,13 @@
             paymentButton.addEventListener('mouseout', () => {
                 paymentButton.style.backgroundColor = '#086ffc';
             });
+
+            let nameI = document.getElementById('nameInput');
+            if (nameI) {
+                nameI.value = titleText;
+            } else {
+                console.error("Élément avec l'ID 'nameInput' non trouvé.");
+            }
         
             paymentButton.addEventListener('click', (event) => {
                     let t = Number(totalc);
@@ -526,6 +533,7 @@
                         },
                         body: JSON.stringify({
                             email: 'igor@junecare.fr',
+                            name: nameI,
                             prix: t.toString(),
                             link: window.location.href
                         })
