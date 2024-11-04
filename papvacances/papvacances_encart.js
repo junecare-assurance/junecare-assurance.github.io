@@ -458,7 +458,7 @@
             priceContainer.style.marginBottom = '20px';
         
             const priceLabel = document.createElement('p');
-            priceLabel.textContent = 'Couvrez votre séjour pour seulement:';
+            priceLabel.textContent = 'Couvrez votre séjour pour seulement';
             priceLabel.style.fontSize = '18px';
             priceLabel.style.color = '#333';
         
