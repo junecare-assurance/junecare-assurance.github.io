@@ -74,7 +74,7 @@
                 font-weight: bold;
                 margin: auto;
                 cursor: pointer;
-                border-radius: 4px;
+                border-radius: 0px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 transition: background-color 0.3s, transform 0.3s;
             }
@@ -281,7 +281,7 @@
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 0px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 10001;
             min-width: 300px;
@@ -296,7 +296,7 @@
                 background-color: #007bff;
                 color: white;
                 border: none;
-                border-radius: 4px;
+                border-radius: 0px;
                 cursor: pointer;
                 margin-top: 15px;
                 width: 100%;
@@ -394,7 +394,7 @@
             popup.style.padding = '30px';
             popup.style.backgroundColor = '#FFFFFF';
             popup.style.zIndex = '10000';
-            popup.style.borderRadius = '10px';
+            popup.style.borderRadius = '0px';
             popup.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
             popup.style.animation = 'slideIn 0.0s ease-out';
         
@@ -440,18 +440,12 @@
             const content = document.createElement('div');
             content.style.textAlign = 'center';
         
-            // Titre
-            const title = document.createElement('h2');
-            title.textContent = 'Votre Devis Personnalisé';
-            title.style.marginBottom = '20px';
-            title.style.color = '#333';
-        
             // Zone de calcul simulé
             const calculationArea = document.createElement('div');
             calculationArea.style.marginBottom = '20px';
             calculationArea.style.padding = '15px';
-            calculationArea.style.backgroundColor = '#f4f4f4';
-            calculationArea.style.borderRadius = '5px';
+            calculationArea.style.backgroundColor = '#ffffff';
+            calculationArea.style.borderRadius = '0px';
         
             // Prix
             const priceContainer = document.createElement('div');
@@ -517,7 +511,6 @@
         
             // Assemblage
             content.appendChild(closeButton);
-            content.appendChild(title);
             content.appendChild(calculationArea);
             content.appendChild(paymentButton);
         
