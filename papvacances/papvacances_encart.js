@@ -3,6 +3,7 @@
 (function () {
     'use strict';
     let totalc = 0;
+    let nameI = "";
     function getEventDetails() {
         const titleElement = document.querySelector('.item-title');
         if (titleElement) {
@@ -11,7 +12,8 @@
 
             // Extraction des informations
             const location = fullTitle.replace('Location', '').replace('Maison', '').trim();
-
+            nameI=location;
+            console.log(nameI);
             // Extraction du prix
             const priceElement = titleElement.querySelector('strong');
             const price = priceElement ? priceElement.textContent.trim()
@@ -514,13 +516,6 @@
             paymentButton.addEventListener('mouseout', () => {
                 paymentButton.style.backgroundColor = '#086ffc';
             });
-
-            let nameI = document.getElementById('nameInput');
-            if (nameI) {
-                nameI.value = titleText;
-            } else {
-                console.error("Élément avec l'ID 'nameInput' non trouvé.");
-            }
         
             paymentButton.addEventListener('click', (event) => {
                     let t = Number(totalc);
