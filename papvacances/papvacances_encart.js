@@ -161,7 +161,7 @@
                 buttonContainer.appendChild(payButton);
                 popup.appendChild(buttonContainer);
 
-                let isFirstClick = true;
+                let isFirstClick = false;
 
                 const closePopupButton = document.getElementById('closePopup');
                 if (closePopupButton) {
@@ -193,6 +193,23 @@
                     console.log(coverageDetails.style.display);
                 }
                 )
+
+                payButton.addEventListener('click', (event) => {
+                    const coverageDetails = document.getElementById('coverageDetails');
+                    const eventDetails = document.getElementById('eventDetails');
+
+                    if (isFirstClick) {
+                        coverageDetails.style.display = 'none';
+                        eventDetails.style.display = 'block';
+                        payButton.textContent = 'Continuer';
+                        isFirstClick = false;
+                    } else {
+                        if (!validateForm()) {
+                            //alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                            return;
+                        }
+                    }
+                });
             })
             .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
     }
