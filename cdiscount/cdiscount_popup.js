@@ -44,7 +44,7 @@ if (!window.location.href.match(/#.*$/)) {
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
-                        console.log(data);
+                        console.log('Popup content loaded:', data);
 
                         //mise a jour des valeurs des input avec les eventInfo
                         document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
@@ -55,7 +55,18 @@ if (!window.location.href.match(/#.*$/)) {
                         document.getElementById('emailInput').value = localStorageData.email || '';
                         document.getElementById('firstNameInput').value = localStorageData.firstName || '';
                         document.getElementById('lastNameInput').value = localStorageData.lastName || '';
+                        // Vérifier les éléments après avoir mis à jour les valeurs des champs d'entrée
+                        console.log('Name Input:', document.getElementById('nameInput'));
+                        console.log('Date Input:', document.getElementById('dateInput'));
+                        console.log('Place Input:', document.getElementById('placeInput'));
+                        console.log('Tickets Input:', document.getElementById('ticketsInput'));
+                        console.log('Price Input:', document.getElementById('priceInput'));
+                        console.log('Email Input:', document.getElementById('emailInput'));
+                        console.log('First Name Input:', document.getElementById('firstNameInput'));
+                        console.log('Last Name Input:', document.getElementById('lastNameInput'));
 
+                        // Vérifier le bouton de fermeture
+                        console.log('Close Popup Button:', document.getElementById('closePopup'));
                         // Créer et ajouter le bouton payNow après le chargement du contenu
                         const buttonContainer = document.createElement('div');
                         buttonContainer.style.display = 'flex';
