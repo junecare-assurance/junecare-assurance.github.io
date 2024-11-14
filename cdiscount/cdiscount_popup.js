@@ -46,118 +46,129 @@ if (!window.location.href.match(/#.*$/)) {
                         popup.innerHTML = data;
                         console.log('Popup content loaded:', data);
 
-                        //mise a jour des valeurs des input avec les eventInfo
-                        document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
-                        document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
-                        document.getElementById('placeInput').value = localStorageData.place || 'Non trouvé';
-                        document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
-                        document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
-                        document.getElementById('emailInput').value = localStorageData.email || '';
-                        document.getElementById('firstNameInput').value = localStorageData.firstName || '';
-                        document.getElementById('lastNameInput').value = localStorageData.lastName || '';
-                        // Vérifier les éléments après avoir mis à jour les valeurs des champs d'entrée
-                        console.log('Name Input:', document.getElementById('nameInput'));
-                        console.log('Date Input:', document.getElementById('dateInput'));
-                        console.log('Place Input:', document.getElementById('placeInput'));
-                        console.log('Tickets Input:', document.getElementById('ticketsInput'));
-                        console.log('Price Input:', document.getElementById('priceInput'));
-                        console.log('Email Input:', document.getElementById('emailInput'));
-                        console.log('First Name Input:', document.getElementById('firstNameInput'));
-                        console.log('Last Name Input:', document.getElementById('lastNameInput'));
+                        // Attendre un court délai pour s'assurer que le DOM est complètement chargé
+                        setTimeout(() => {
+                            //mise a jour des valeurs des input avec les eventInfo
+                            const nameInput = document.getElementById('nameInput');
+                            const dateInput = document.getElementById('dateInput');
+                            const placeInput = document.getElementById('placeInput');
+                            const ticketsInput = document.getElementById('ticketsInput');
+                            const priceInput = document.getElementById('priceInput');
+                            const emailInput = document.getElementById('emailInput');
+                            const firstNameInput = document.getElementById('firstNameInput');
+                            const lastNameInput = document.getElementById('lastNameInput');
 
-                        // Vérifier le bouton de fermeture
-                        console.log('Close Popup Button:', document.getElementById('closePopup'));
-                        // Créer et ajouter le bouton payNow après le chargement du contenu
-                        const buttonContainer = document.createElement('div');
-                        buttonContainer.style.display = 'flex';
-                        buttonContainer.style.justifyContent = 'space-between';
-                        buttonContainer.style.alignItems = 'center';
-                        buttonContainer.style.marginTop = '20px';
+                            console.log('Name Input:', nameInput);
+                            console.log('Date Input:', dateInput);
+                            console.log('Place Input:', placeInput);
+                            console.log('Tickets Input:', ticketsInput);
+                            console.log('Price Input:', priceInput);
+                            console.log('Email Input:', emailInput);
+                            console.log('First Name Input:', firstNameInput);
+                            console.log('Last Name Input:', lastNameInput);
 
-                        const payButton = document.createElement('button');
-                        payButton.id = 'payNow';
-                        payButton.style.padding = '15px 30px';
-                        payButton.style.backgroundColor = '#E20100';
-                        payButton.style.color = 'white';
-                        payButton.style.border = 'none';
-                        payButton.style.borderRadius = '10px';
-                        payButton.style.fontSize = '18px';
-                        payButton.style.fontWeight = 'bold';
-                        payButton.style.margin = 'auto';
-                        payButton.style.cursor = 'pointer';
-                        payButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-                        payButton.style.transition = 'background-color 0.3s, transform 0.3s';
-                        payButton.textContent = 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
-                        buttonContainer.appendChild(payButton);
-                        popup.appendChild(buttonContainer);
+                            if (nameInput) nameInput.value = localStorageData.name || 'Non trouvé';
+                            if (dateInput) dateInput.value = localStorageData.date || 'Non trouvé';
+                            if (placeInput) placeInput.value = localStorageData.place || 'Non trouvé';
+                            if (ticketsInput) ticketsInput.value = localStorageData.numberOfTickets || 'Non trouvé';
+                            if (priceInput) priceInput.value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
+                            if (emailInput) emailInput.value = localStorageData.email || '';
+                            if (firstNameInput) firstNameInput.value = localStorageData.firstName || '';
+                            if (lastNameInput) lastNameInput.value = localStorageData.lastName || '';
 
-                        // Variable d'état pour suivre le nombre de clics
-                        let isFirstClick = true;
+                            // Créer et ajouter le bouton payNow après le chargement du contenu
+                            const buttonContainer = document.createElement('div');
+                            buttonContainer.style.display = 'flex';
+                            buttonContainer.style.justifyContent = 'space-between';
+                            buttonContainer.style.alignItems = 'center';
+                            buttonContainer.style.marginTop = '20px';
 
-                        // Attacher les événements après avoir inséré le contenu et créé le bouton
-                        const closePopupButton = document.getElementById('closePopup');
-                        if (closePopupButton) {
-                            closePopupButton.addEventListener('click', () => {
-                                document.body.removeChild(popup);
-                                document.body.removeChild(overlay);
-                            });
-                        } else {
-                            console.error('closePopup button not found');
-                        }
+                            const payButton = document.createElement('button');
+                            payButton.id = 'payNow';
+                            payButton.style.padding = '15px 30px';
+                            payButton.style.backgroundColor = '#E20100';
+                            payButton.style.color = 'white';
+                            payButton.style.border = 'none';
+                            payButton.style.borderRadius = '10px';
+                            payButton.style.fontSize = '18px';
+                            payButton.style.fontWeight = 'bold';
+                            payButton.style.margin = 'auto';
+                            payButton.style.cursor = 'pointer';
+                            payButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                            payButton.style.transition = 'background-color 0.3s, transform 0.3s';
+                            payButton.textContent = 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
+                            buttonContainer.appendChild(payButton);
+                            popup.appendChild(buttonContainer);
 
-                        //Quand le bouton est presse
-                        payButton.addEventListener('click', (event) => {
-                            const coverageDetails = document.getElementById('coverageDetails');
-                            const eventDetails = document.getElementById('eventDetails');
-                            //Si premier click masque les avantages et montre les input
-                            if (isFirstClick) {
-                                coverageDetails.style.display = 'none';
-                                eventDetails.style.display = 'block';
-                                payButton.textContent = 'Continuer';
-                                isFirstClick = false;
+                            // Variable d'état pour suivre le nombre de clics
+                            let isFirstClick = true;
+
+                            // Attacher les événements après avoir inséré le contenu et créé le bouton
+                            const closePopupButton = document.getElementById('closePopup');
+                            if (closePopupButton) {
+                                closePopupButton.addEventListener('click', () => {
+                                    document.body.removeChild(popup);
+                                    document.body.removeChild(overlay);
+                                });
+                            } else {
+                                console.error('closePopup button not found');
                             }
-                            //Si 2eme click fait la verif des champs et passe et payement
-                            else {
-                                if (!validateForm()) {
-                                    alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
-                                    return;
+
+                            //Quand le bouton est presse
+                            payButton.addEventListener('click', (event) => {
+                                const coverageDetails = document.getElementById('coverageDetails');
+                                const eventDetails = document.getElementById('eventDetails');
+                                //Si premier click masque les avantages et montre les input
+                                if (isFirstClick) {
+                                    coverageDetails.style.display = 'none';
+                                    eventDetails.style.display = 'block';
+                                    payButton.textContent = 'Continuer';
+                                    isFirstClick = false;
                                 }
-                                //Save les nouvelles infos
-                                const updatedEmail = document.getElementById('emailInput').value;
-                                const updatedFirstName = document.getElementById('firstNameInput').value;
-                                const updatedLastName = document.getElementById('lastNameInput').value;
-                                localStorageData.email = updatedEmail;
-                                localStorageData.firstName = updatedFirstName;
-                                localStorageData.lastName = updatedLastName;
-                                localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
-                                //envoie des infos au bubbleapps
-                                let num = localStorageData.numberOfTickets;
-                                let text = num.toString();
-                                fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({
-                                        prix: localStorageData.finalPrice,
-                                        name: localStorageData.name,
-                                        email: localStorageData.email,
-                                        date: localStorageData.date,
-                                        lieu: localStorageData.place,
-                                        nbrplace: text,
-                                        firstname: localStorageData.firstName,
-                                        lastname: localStorageData.lastName,
-                                        link: window.location.href
+                                //Si 2eme click fait la verif des champs et passe et payement
+                                else {
+                                    if (!validateForm()) {
+                                        alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                                        return;
+                                    }
+                                    //Save les nouvelles infos
+                                    const updatedEmail = document.getElementById('emailInput').value;
+                                    const updatedFirstName = document.getElementById('firstNameInput').value;
+                                    const updatedLastName = document.getElementById('lastNameInput').value;
+                                    localStorageData.email = updatedEmail;
+                                    localStorageData.firstName = updatedFirstName;
+                                    localStorageData.lastName = updatedLastName;
+                                    localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+                                    //envoie des infos au bubbleapps
+                                    let num = localStorageData.numberOfTickets;
+                                    let text = num.toString();
+                                    fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            prix: localStorageData.finalPrice,
+                                            name: localStorageData.name,
+                                            email: localStorageData.email,
+                                            date: localStorageData.date,
+                                            lieu: localStorageData.place,
+                                            nbrplace: text,
+                                            firstname: localStorageData.firstName,
+                                            lastname: localStorageData.lastName,
+                                            link: window.location.href
+                                        })
                                     })
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        //vas au bubbleapps
-                                        console.log(data.response);
-                                        window.location.href = data.response.link + "test/" + data.response.id;
-                                    });
-                            }
-                        });
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            //vas au bubbleapps
+                                            console.log(data.response);
+                                            window.location.href = data.response.link + "test/" + data.response.id;
+                                        });
+                                }
+                            });
+
+                        }, 100); // Attendre 100 ms pour s'assurer que le DOM est complètement chargé
 
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
