@@ -15,7 +15,7 @@
         totalPrice = parseFloat(totalPrice.replace(/[\s\u202F\u00A0]/g, ''));
     
         // Récupérer le nombre d'articles
-        const articleElements = document.querySelectorAll('table.table-summary tbody tr');
+        const articleElements = document.querySelectorAll('table[data-testid="productSummary"] tbody tr td[data-testid]');
         const numberOfArticles = articleElements.length;
     
         const localStorageData = {
