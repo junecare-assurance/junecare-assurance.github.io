@@ -45,7 +45,7 @@ if (!window.location.href.match(/#.*$/)) {
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
-
+                        console.log(data);
                         //mise a jour des valeurs des input avec les eventInfo
                         document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
                         document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
