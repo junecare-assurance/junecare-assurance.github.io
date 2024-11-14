@@ -14,9 +14,25 @@
         totalPrice = totalPrice.replace(',', '.');
         totalPrice = parseFloat(totalPrice.replace(/[\s\u202F\u00A0]/g, ''));
     
-        // Récupérer le nombre d'articles
+        // Récupérer le nombre d'articles en tenant compte des quantités
         const articleElements = document.querySelectorAll('table[data-testid="productSummary"] tbody tr td[data-testid]');
-        const numberOfArticles = articleElements.length;
+        let numberOfArticles = 0;
+
+        articleElements.forEach(element => {
+            const quantitySpan = element.querySelector('span');
+            if (quantitySpan) {
+                const quantityText = quantitySpan.textContent.trim();
+                const quantityMatch = quantityText.match(/X(\d+)/);
+                if (quantityMatch) {
+                    const quantity = parseInt(quantityMatch[1], 10);
+                    numberOfArticles += isNaN(quantity) ? 1 : quantity;
+                } else {
+                    numberOfArticles += 1;
+                }
+            } else {
+                numberOfArticles += 1;
+            }
+        });
     
         const localStorageData = {
             name: "Nouveau Nom du Site",
