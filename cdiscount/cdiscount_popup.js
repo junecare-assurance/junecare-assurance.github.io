@@ -41,7 +41,7 @@ if (!window.location.href.match(/#.*$/)) {
                 document.body.appendChild(popup);
 
                 //Recuperation du fichier html
-                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
@@ -298,7 +298,7 @@ if (!window.location.href.match(/#.*$/)) {
             // Fonction pour ajouter l'écouteur d'événement au bouton
             function addButton() {
                 const intervalId = setInterval(() => {
-                    const existingButton = document.querySelector('.form-submit');
+                    const existingButton = document.querySelector('button[data-testid="paymentChoiceValidationButtonDefault"]');
                     if (existingButton) {
                         existingButton.addEventListener('click', showPaymentConfirmation);
                         clearInterval(intervalId);
