@@ -12,7 +12,6 @@ if (!window.location.href.match(/#.*$/)) {
 
             function showPopup(localStorageData) {
 
-
                 //Overlay qui noircit le fond
                 const overlay = document.createElement('div');
                 overlay.style.position = 'fixed';
@@ -46,6 +45,7 @@ if (!window.location.href.match(/#.*$/)) {
                     .then(data => {
                         popup.innerHTML = data;
                         console.log(data);
+
                         //mise a jour des valeurs des input avec les eventInfo
                         document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
                         document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
@@ -312,7 +312,6 @@ if (!window.location.href.match(/#.*$/)) {
                 addButton();
             });
         };
-
 
     })()
 };
