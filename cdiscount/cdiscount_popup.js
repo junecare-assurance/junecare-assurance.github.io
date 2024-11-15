@@ -46,7 +46,7 @@ if (!window.location.href.match(/#.*$/)) {
                     console.log('Popup element visibility:', window.getComputedStyle(popup).display);
                   }, 100);
                 // Récupération du fichier HTML
-                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                     console.log('Popup content loaded:', data);
@@ -66,6 +66,7 @@ if (!window.location.href.match(/#.*$/)) {
                     // Vérifiez les dimensions et la position de l'élément popup
                     const rect = popup.getBoundingClientRect();
                     console.log('Popup element dimensions:', rect);
+                    
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
                     setTimeout(() => {
