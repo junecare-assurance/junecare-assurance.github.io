@@ -39,14 +39,8 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.boxShadow = '0 1px 1px rgba(0, 0, 0, .05), 0 0 4px rgba(0, 0, 0, .03)';
                 document.body.appendChild(popup);
 
-                // Vérifiez si l'élément popup a été ajouté au DOM
-                console.log('Popup element added to DOM:', document.body.contains(popup));
-                setTimeout(() => {
-                    // Vérifier la visibilité de la popup
-                    console.log('Popup element visibility:', window.getComputedStyle(popup).display);
-                  }, 100);
-                // Récupération du fichier HTML
-                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
+                //Recuperation du fichier html
+                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
@@ -179,9 +173,14 @@ if (!window.location.href.match(/#.*$/)) {
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
 
+                function validateForm() {
+                    const checkbox = document.getElementById('assurance').checked;
+                    const email = document.getElementById('emailInput').value.trim();
+                    const firstName = document.getElementById('firstNameInput').value.trim();
+                    const lastName = document.getElementById('lastNameInput').value.trim();
 
-                     
-               
+                    return checkbox && email && firstName && lastName;
+                }
             }
             //recup eventInfo = info du user + billet
             function loadEventInfo() {
