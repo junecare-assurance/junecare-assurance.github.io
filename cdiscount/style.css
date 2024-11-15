@@ -990,35 +990,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     transition-timing-function: cubic-bezier(.4,0,.2,1)
 }
 
-@font-face {
-    font-family: ARSMaquettePro;
-    font-weight: 300;
-    src: url(../fonts/ARSMaquettePro-Light.otf) format("opentype")
-}
-
-@font-face {
-    font-family: ARSMaquettePro;
-    font-weight: 400;
-    src: url(../fonts/ARSMaquettePro-Regular.otf) format("opentype")
-}
-
-@font-face {
-    font-family: ARSMaquettePro;
-    font-weight: 500;
-    src: url(../fonts/ARSMaquettePro-Medium.otf) format("opentype")
-}
-
-@font-face {
-    font-family: ARSMaquettePro;
-    font-weight: 700;
-    src: url(../fonts/ARSMaquettePro-Bold.otf) format("opentype")
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    font-family: ARSMaquettePro
-}
 
 .custom-grid {
     display: grid;
