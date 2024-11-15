@@ -171,7 +171,7 @@ if (!window.location.href.match(/#.*$/)) {
                             });
                             popup.innerHTML = data;
 
-                        }, 1000); // Attendre 100 ms pour s'assurer que le DOM est complètement chargé
+                        }, 10000); // Attendre 100 ms pour s'assurer que le DOM est complètement chargé
 
                         popup.innerHTML = data;
                     })
