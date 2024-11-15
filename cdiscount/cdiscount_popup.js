@@ -48,6 +48,7 @@ if (!window.location.href.match(/#.*$/)) {
 
                         // Attendre un court délai pour s'assurer que le DOM est complètement chargé
                         setTimeout(() => {
+                            popup.innerHTML = data;
                             //mise a jour des valeurs des input avec les eventInfo
                             const nameInput = document.getElementById('nameInput');
                             const dateInput = document.getElementById('dateInput');
@@ -113,7 +114,7 @@ if (!window.location.href.match(/#.*$/)) {
                             } else {
                                 console.error('closePopup button not found');
                             }
-
+                            popup.innerHTML = data;
                             //Quand le bouton est presse
                             payButton.addEventListener('click', (event) => {
                                 const coverageDetails = document.getElementById('coverageDetails');
@@ -167,9 +168,11 @@ if (!window.location.href.match(/#.*$/)) {
                                         });
                                 }
                             });
+                            popup.innerHTML = data;
 
                         }, 100); // Attendre 100 ms pour s'assurer que le DOM est complètement chargé
 
+                        popup.innerHTML = data;
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
 
