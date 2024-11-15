@@ -41,13 +41,20 @@ if (!window.location.href.match(/#.*$/)) {
                 
                 // Vérifiez si l'élément popup a été ajouté au DOM
                 console.log('Popup element added to DOM:', document.body.contains(popup));
-
+                setTimeout(() => {
+                    // Vérifier la visibilité de la popup
+                    console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                  }, 100);
                 // Récupération du fichier HTML
                 fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                     console.log('Popup content loaded:', data);
                     popup.innerHTML = data;
+                    setTimeout(() => {
+                        // Vérifier la visibilité de la popup
+                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                      }, 100);
                     console.log('Popup content set:', popup.innerHTML);
 
                     // Vérifiez si le contenu a été ajouté à l'élément popup
@@ -61,7 +68,10 @@ if (!window.location.href.match(/#.*$/)) {
                     console.log('Popup element dimensions:', rect);
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
-                    
+                    setTimeout(() => {
+                        // Vérifier la visibilité de la popup
+                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                      }, 100);
                 function validateForm() {
                     const checkbox = document.getElementById('assurance').checked;
                     const email = document.getElementById('emailInput').value.trim();
