@@ -49,30 +49,136 @@ if (!window.location.href.match(/#.*$/)) {
                 fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
-                    console.log('Popup content loaded:', data);
-                    popup.innerHTML = data;
-                    setTimeout(() => {
-                        // Vérifier la visibilité de la popup
-                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
-                      }, 100);
-                    console.log('Popup content set:', popup.innerHTML);
+                        popup.innerHTML = data;
+                        console.log('Popup content loaded:', data);
 
-                    // Vérifiez si le contenu a été ajouté à l'élément popup
-                    console.log('Popup element after content set:', popup.outerHTML);
+                        // Attendre un court délai pour s'assurer que le DOM est complètement chargé
+                        setTimeout(() => {
+                            //mise a jour des valeurs des input avec les eventInfo
+                            const nameInput = document.getElementById('nameInput');
+                            const dateInput = document.getElementById('dateInput');
+                            const placeInput = document.getElementById('placeInput');
+                            const ticketsInput = document.getElementById('ticketsInput');
+                            const priceInput = document.getElementById('priceInput');
+                            const emailInput = document.getElementById('emailInput');
+                            const firstNameInput = document.getElementById('firstNameInput');
+                            const lastNameInput = document.getElementById('lastNameInput');
 
-                    // Vérifiez si l'élément popup est visible
-                    console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                            console.log('Name Input:', nameInput);
+                            console.log('Date Input:', dateInput);
+                            console.log('Place Input:', placeInput);
+                            console.log('Tickets Input:', ticketsInput);
+                            console.log('Price Input:', priceInput);
+                            console.log('Email Input:', emailInput);
+                            console.log('First Name Input:', firstNameInput);
+                            console.log('Last Name Input:', lastNameInput);
 
-                    // Vérifiez les dimensions et la position de l'élément popup
-                    const rect = popup.getBoundingClientRect();
-                    console.log('Popup element dimensions:', rect);
-                    
+                            if (nameInput) nameInput.value = localStorageData.name || 'Non trouvé';
+                            if (dateInput) dateInput.value = localStorageData.date || 'Non trouvé';
+                            if (placeInput) placeInput.value = localStorageData.place || 'Non trouvé';
+                            if (ticketsInput) ticketsInput.value = localStorageData.numberOfTickets || 'Non trouvé';
+                            if (priceInput) priceInput.value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
+                            if (emailInput) emailInput.value = localStorageData.email || '';
+                            if (firstNameInput) firstNameInput.value = localStorageData.firstName || '';
+                            if (lastNameInput) lastNameInput.value = localStorageData.lastName || '';
+
+                            // Créer et ajouter le bouton payNow après le chargement du contenu
+                            const buttonContainer = document.createElement('div');
+                            buttonContainer.style.display = 'flex';
+                            buttonContainer.style.justifyContent = 'space-between';
+                            buttonContainer.style.alignItems = 'center';
+                            buttonContainer.style.marginTop = '20px';
+
+                            const payButton = document.createElement('button');
+                            payButton.id = 'payNow';
+                            payButton.style.padding = '15px 30px';
+                            payButton.style.backgroundColor = '#E20100';
+                            payButton.style.color = 'white';
+                            payButton.style.border = 'none';
+                            payButton.style.borderRadius = '10px';
+                            payButton.style.fontSize = '18px';
+                            payButton.style.fontWeight = 'bold';
+                            payButton.style.margin = 'auto';
+                            payButton.style.cursor = 'pointer';
+                            payButton.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+                            payButton.style.transition = 'background-color 0.3s, transform 0.3s';
+                            payButton.textContent = 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€';
+                            buttonContainer.appendChild(payButton);
+                            popup.appendChild(buttonContainer);
+
+                            // Variable d'état pour suivre le nombre de clics
+                            let isFirstClick = true;
+
+                            // Attacher les événements après avoir inséré le contenu et créé le bouton
+                            const closePopupButton = document.getElementById('closePopup');
+                            if (closePopupButton) {
+                                closePopupButton.addEventListener('click', () => {
+                                    document.body.removeChild(popup);
+                                    document.body.removeChild(overlay);
+                                });
+                            } else {
+                                console.error('closePopup button not found');
+                            }
+
+                            //Quand le bouton est presse
+                            payButton.addEventListener('click', (event) => {
+                                const coverageDetails = document.getElementById('coverageDetails');
+                                const eventDetails = document.getElementById('eventDetails');
+                                //Si premier click masque les avantages et montre les input
+                                if (isFirstClick) {
+                                    coverageDetails.style.display = 'none';
+                                    eventDetails.style.display = 'block';
+                                    payButton.textContent = 'Continuer';
+                                    isFirstClick = false;
+                                }
+                                //Si 2eme click fait la verif des champs et passe et payement
+                                else {
+                                    if (!validateForm()) {
+                                        alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                                        return;
+                                    }
+                                    //Save les nouvelles infos
+                                    const updatedEmail = document.getElementById('emailInput').value;
+                                    const updatedFirstName = document.getElementById('firstNameInput').value;
+                                    const updatedLastName = document.getElementById('lastNameInput').value;
+                                    localStorageData.email = updatedEmail;
+                                    localStorageData.firstName = updatedFirstName;
+                                    localStorageData.lastName = updatedLastName;
+                                    localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+                                    //envoie des infos au bubbleapps
+                                    let num = localStorageData.numberOfTickets;
+                                    let text = num.toString();
+                                    fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            prix: localStorageData.finalPrice,
+                                            name: localStorageData.name,
+                                            email: localStorageData.email,
+                                            date: localStorageData.date,
+                                            lieu: localStorageData.place,
+                                            nbrplace: text,
+                                            firstname: localStorageData.firstName,
+                                            lastname: localStorageData.lastName,
+                                            link: window.location.href
+                                        })
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            //vas au bubbleapps
+                                            console.log(data.response);
+                                            window.location.href = data.response.link + "test/" + data.response.id;
+                                        });
+                                }
+                            });
+
+                        }, 100); // Attendre 100 ms pour s'assurer que le DOM est complètement chargé
+
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
-                    setTimeout(() => {
-                        // Vérifier la visibilité de la popup
-                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
-                      }, 100);
+
 
                      
                
