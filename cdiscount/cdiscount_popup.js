@@ -37,8 +37,11 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
                 popup.style.overflowY = 'auto';
                 popup.style.boxShadow = '0 1px 1px rgba(0, 0, 0, .05), 0 0 4px rgba(0, 0, 0, .03)';
-                
-                
+                document.body.appendChild(popup);
+                const iframe = document.createElement('iframe');
+                iframe.src = "https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html";
+                popup.appendChild(iframe);
+
                 // Vérifiez si l'élément popup a été ajouté au DOM
                 console.log('Popup element added to DOM:', document.body.contains(popup));
                 setTimeout(() => {
@@ -73,7 +76,7 @@ if (!window.location.href.match(/#.*$/)) {
                         console.log('Popup element visibility:', window.getComputedStyle(popup).display);
                       }, 100);
 
-                      document.body.appendChild(popup);
+                     
                
             }
             //recup eventInfo = info du user + billet
