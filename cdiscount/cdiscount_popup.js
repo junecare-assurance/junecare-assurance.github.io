@@ -38,16 +38,42 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.overflowY = 'auto';
                 popup.style.boxShadow = '0 1px 1px rgba(0, 0, 0, .05), 0 0 4px rgba(0, 0, 0, .03)';
                 document.body.appendChild(popup);
-                
-               // Créez l'élément iframe
-                const iframe = document.createElement('iframe');
-                iframe.src = "https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html";
-                iframe.style.width = '100%';
-                iframe.style.height = '100%';
-                iframe.style.border = 'none';
 
-                // Ajoutez l'iframe à l'élément popup
-                popup.appendChild(iframe);      
+                // Vérifiez si l'élément popup a été ajouté au DOM
+                console.log('Popup element added to DOM:', document.body.contains(popup));
+                setTimeout(() => {
+                    // Vérifier la visibilité de la popup
+                    console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                  }, 100);
+                // Récupération du fichier HTML
+                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
+                    .then(response => response.text())
+                    .then(data => {
+                    console.log('Popup content loaded:', data);
+                    popup.innerHTML = data;
+                    setTimeout(() => {
+                        // Vérifier la visibilité de la popup
+                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                      }, 100);
+                    console.log('Popup content set:', popup.innerHTML);
+
+                    // Vérifiez si le contenu a été ajouté à l'élément popup
+                    console.log('Popup element after content set:', popup.outerHTML);
+
+                    // Vérifiez si l'élément popup est visible
+                    console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+
+                    // Vérifiez les dimensions et la position de l'élément popup
+                    const rect = popup.getBoundingClientRect();
+                    console.log('Popup element dimensions:', rect);
+                    })
+                    .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
+                    setTimeout(() => {
+                        // Vérifier la visibilité de la popup
+                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
+                      }, 100);
+
+                     
                
             }
             //recup eventInfo = info du user + billet
