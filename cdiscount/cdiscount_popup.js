@@ -37,7 +37,7 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
                 popup.style.overflowY = 'auto';
                 popup.style.boxShadow = '0 1px 1px rgba(0, 0, 0, .05), 0 0 4px rgba(0, 0, 0, .03)';
-                document.body.appendChild(popup);
+                
                 
                 // Vérifiez si l'élément popup a été ajouté au DOM
                 console.log('Popup element added to DOM:', document.body.contains(popup));
@@ -72,14 +72,9 @@ if (!window.location.href.match(/#.*$/)) {
                         // Vérifier la visibilité de la popup
                         console.log('Popup element visibility:', window.getComputedStyle(popup).display);
                       }, 100);
-                function validateForm() {
-                    const checkbox = document.getElementById('assurance').checked;
-                    const email = document.getElementById('emailInput').value.trim();
-                    const firstName = document.getElementById('firstNameInput').value.trim();
-                    const lastName = document.getElementById('lastNameInput').value.trim();
 
-                    return checkbox && email && firstName && lastName;
-                }
+                      document.body.appendChild(popup);
+               
             }
             //recup eventInfo = info du user + billet
             function loadEventInfo() {
