@@ -237,8 +237,6 @@ if (!window.location.href.match(/#.*$/)) {
     
   </div>
 
-  <script src="https://junecare-assurance.github.io/cdiscount/script-min.js" ></script>
-  <script src="./boulanger/public/js/iframeSizer.contentWindow.min.js" defer=""></script>
 
 
 </body></html>`;
