@@ -43,11 +43,12 @@ if (!window.location.href.match(/#.*$/)) {
                 fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
+                        setTimeout(() => {
                         popup.innerHTML = data;
                         console.log('Popup content loaded:', data);
 
                         // Attendre un court délai pour s'assurer que le DOM est complètement chargé
-                        setTimeout(() => {
+                        
                             popup.innerHTML = data;
                             //mise a jour des valeurs des input avec les eventInfo
                             const nameInput = document.getElementById('nameInput');
