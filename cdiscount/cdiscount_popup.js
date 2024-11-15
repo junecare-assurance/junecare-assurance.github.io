@@ -43,6 +43,7 @@ if (!window.location.href.match(/#.*$/)) {
                 fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
+                        console.log('Popup content loaded:', data);
                         popup.innerHTML = data;
                         console.log('Popup content loaded:', data);
 
