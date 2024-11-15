@@ -40,7 +40,7 @@ if (!window.location.href.match(/#.*$/)) {
                 document.body.appendChild(popup);
                 console.log('Popup element added to DOM:', document.body.contains(popup));
                 //Recuperation du fichier html
-                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html')
                     .then(response => response.text())
                     .then(data => {
                         console.log('Popup content loaded:', data);
