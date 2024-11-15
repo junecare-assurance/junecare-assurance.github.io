@@ -46,6 +46,8 @@ if (!window.location.href.match(/#.*$/)) {
                         console.log('Popup content loaded:', data);
                         popup.innerHTML = data;
                         console.log('Popup content set:', popup.innerHTML);
+                        console.log('Popup element after content set:', popup.outerHTML);
+                        console.log('Popup element visibility:', window.getComputedStyle(popup).display);
 
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
