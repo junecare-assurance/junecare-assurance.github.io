@@ -49,7 +49,7 @@ if (!window.location.href.match(/#.*$/)) {
 
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
-
+                    document.body.appendChild(popup);
                 function validateForm() {
                     const checkbox = document.getElementById('assurance').checked;
                     const email = document.getElementById('emailInput').value.trim();
