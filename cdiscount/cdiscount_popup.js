@@ -38,18 +38,18 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.overflowY = 'auto';
                 popup.style.boxShadow = '0 1px 1px rgba(0, 0, 0, .05), 0 0 4px rgba(0, 0, 0, .03)';
                 document.body.appendChild(popup);
-
+                console.log('Popup element added to DOM:', document.body.contains(popup));
                 //Recuperation du fichier html
                 fetch('https://junecare-assurance.github.io/cdiscount/cdiscount_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         console.log('Popup content loaded:', data);
                         popup.innerHTML = data;
-                        console.log('Popup content loaded:', data);
+                        console.log('Popup content set:', popup.innerHTML);
 
                     })
                     .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
-                    document.body.appendChild(popup);
+
                 function validateForm() {
                     const checkbox = document.getElementById('assurance').checked;
                     const email = document.getElementById('emailInput').value.trim();
