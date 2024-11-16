@@ -67,7 +67,7 @@ if (!window.location.href.match(/#.*$/)) {
                         </g>
                     </g>
                 </g>
-            </svg><span>Réparation gratuite en cas de panne.</span></li>
+            </svg><span>Réparation gratuite en cas de panne</span></li>
         <li><svg style="width: auto; height: 1em;" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -81,7 +81,7 @@ if (!window.location.href.match(/#.*$/)) {
                         </g>
                     </g>
                 </g>
-            </svg><span>Bon d’achat offert si l’appareil est irréparable.</span></li>
+            </svg><span>Bon d’achat offert si l’appareil est irréparable</span></li>
         <li><svg style="width: auto; height: 1em;" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -95,7 +95,7 @@ if (!window.location.href.match(/#.*$/)) {
                         </g>
                     </g>
                 </g>
-            </svg><span>Prise en charge rapide, sous 48h.</span></li>
+            </svg><span>Prise en charge rapide, sous 48h</span></li>
         <li><svg style="width: auto; height: 1em;" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -109,7 +109,7 @@ if (!window.location.href.match(/#.*$/)) {
                         </g>
                     </g>
                 </g>
-            </svg><span>Livraison offerte sur tous vos achats.</span></li>
+            </svg><span>Livraison offerte sur tous vos achats</span></li>
     </ul>
 </div>
 <div id="eventDetails" style="display: none; margin-bottom: 12px;">
@@ -129,7 +129,7 @@ if (!window.location.href.match(/#.*$/)) {
             style="color: blue; text-decoration: underline;" target="_blank">conditions générales</a>
         et le
         <a
-            style="color: blue; text-decoration: underline;" target="_blank">document d'information</a>.
+            style="color: blue; text-decoration: underline;" target="_blank" style="margin-left:23px;">document d'information</a>.
     </p>
 </div>
 <style>
