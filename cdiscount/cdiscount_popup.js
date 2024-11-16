@@ -129,7 +129,7 @@ if (!window.location.href.match(/#.*$/)) {
             style="color: blue; text-decoration: underline;" target="_blank">conditions générales</a>
         et le
         <a
-            style="color: blue; text-decoration: underline;" target="_blank" style="margin-left:23px;">document d'information</a>.
+            style="color: blue; text-decoration: underline; margin-left:23px;" target="_blank">document d'information</a>.
     </p>
 </div>
 <style>
@@ -158,6 +158,7 @@ if (!window.location.href.match(/#.*$/)) {
     .june-care-benefits {
         list-style-type: none;
         padding-inline-start: 0px;
+        margin-left: 120px;
     }
 
     .june-care-benefits>li {
