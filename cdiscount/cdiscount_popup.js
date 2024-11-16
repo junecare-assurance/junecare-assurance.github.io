@@ -52,7 +52,7 @@ if (!window.location.href.match(/#.*$/)) {
     <button id="closePopup" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
 </h2>
 <div id="coverageDetails" style="margin-bottom:8px;">
-    <h4 style="font-size:14px; font-weight:600">Avec notre abonnement, protégez tous vos appareils d’un même univers, sans limite :</h4>
+    <h4 style="font-size:14px; font-weight:400">Avec notre abonnement, protégez tous vos appareils d’un même univers, sans limite :</h4>
     <ul class="june-care-benefits">
         <li><svg style="width: auto; height: 1em;" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#000000">
