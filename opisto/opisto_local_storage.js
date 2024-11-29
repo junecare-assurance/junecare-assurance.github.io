@@ -35,9 +35,7 @@
         });
     
         const localStorageData = {
-            name: "Nouveau Nom du Site",
-            startDate: "non trouve", // Plus besoin de la date
-            endDate: "non trouve", // Plus besoin de la date
+            name: "Opisto.fr",
             place: "Nouveau Lieu",
             numberOfTickets: numberOfArticles,
             finalPrice: totalPrice,
