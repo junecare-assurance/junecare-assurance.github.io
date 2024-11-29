@@ -1,54 +1,51 @@
-// @ts-nocheck
-
 (function() {
     'use strict';
 
     console.log('Tampermonkey script loaded');
 
-    function saveCartInfo() {
-        // Récupérer le prix total
-        const totalPriceElement = document.querySelector('strong[data-testid="summaryTotal"] .text-price');
-        let totalPrice = totalPriceElement ? totalPriceElement.textContent.trim() : 'non trouve';
-        let bin;
-        [totalPrice, bin] = totalPrice.split('€');
-        totalPrice = totalPrice.replace(',', '.');
-        totalPrice = parseFloat(totalPrice.replace(/[\s\u202F\u00A0]/g, ''));
-    
-        // Récupérer le nombre d'articles en tenant compte des quantités
-        const articleElements = document.querySelectorAll('table[data-testid="productSummary"] tbody tr td[data-testid]');
-        let numberOfArticles = 0;
+    function getCartInfoFromDataLayer() {
+        // Assurez-vous que le dataLayer est défini
+        if (typeof dataLayer !== 'undefined' && Array.isArray(dataLayer)) {
+            let cartAmount = null;
+            let itemNumbersOnCart = null;
 
-        articleElements.forEach(element => {
-            const quantitySpan = element.querySelector('span');
-            if (quantitySpan) {
-                const quantityText = quantitySpan.textContent.trim();
-                const quantityMatch = quantityText.match(/X(\d+)/);
-                if (quantityMatch) {
-                    const quantity = parseInt(quantityMatch[1], 10);
-                    numberOfArticles += isNaN(quantity) ? 1 : quantity;
-                } else {
-                    numberOfArticles += 1;
+            // Parcourir le dataLayer pour trouver les informations nécessaires
+            dataLayer.forEach(layer => {
+                if (layer.customVariables) {
+                    if (layer.customVariables.cartAmount) {
+                        cartAmount = layer.customVariables.cartAmount.value;
+                    }
+                    if (layer.customVariables.itemNumbersOnCart) {
+                        itemNumbersOnCart = layer.customVariables.itemNumbersOnCart.value;
+                    }
                 }
+            });
+
+            // Afficher les informations dans la console
+            if (cartAmount !== null && itemNumbersOnCart !== null) {
+                console.log(`Cart Amount: ${cartAmount}`);
+                console.log(`Number of Items on Cart: ${itemNumbersOnCart}`);
             } else {
-                numberOfArticles += 1;
+                console.log('Cart information not found in dataLayer.');
             }
-        });
-    
-        const localStorageData = {
-            name: "Opisto.fr",
-            place: "Nouveau Lieu",
-            numberOfTickets: numberOfArticles,
-            finalPrice: totalPrice,
-            email: ""
-        };
-    
-        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
-        console.log('Cart info saved:', localStorageData);
+            const localStorageData = {
+                name: "Opisto.fr",
+                startDate: "non trouve", // Plus besoin de la date
+                endDate: "non trouve", // Plus besoin de la date
+                place: "Nouveau Lieu",
+                numberOfTickets: itemNumbersOnCart,
+                finalPrice: cartAmount.replace(',', '.'),
+                email: ""
+            };
+
+            localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+            console.log('Cart info saved:', localStorageData);
+        } else {
+            getCartInfoFromDataLayer();
+        }
     }
-    
-    
-    saveCartInfo();
-    
-    
-    
+
+    // Appeler la fonction pour tester
+    getCartInfoFromDataLayer();
+
 })();

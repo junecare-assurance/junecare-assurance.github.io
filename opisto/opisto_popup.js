@@ -33,7 +33,7 @@ if (!window.location.href.match(/#.*$/)) {
                 popup.style.transform = 'translate(-50%, -10%)';
                 popup.style.padding = '1.5rem';
                 popup.style.backgroundColor = '#FFFFFF';
-                popup.style.borderRadius = '0.5rem';
+                popup.style.borderRadius = '6px';
                 popup.style.zIndex = '10000';
                 popup.style.maxHeight = '90%'; // Limite la hauteur de la popup
                 popup.style.overflowY = 'auto';
@@ -41,15 +41,12 @@ if (!window.location.href.match(/#.*$/)) {
                 document.body.appendChild(popup);
 
                 //Recuperation du fichier html
-                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/opisto/opisto_popup.html?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
 
                         //mise a jour des valeurs des input avec les eventInfo
-                        document.getElementById('nameInput').value = localStorageData.name || 'Non trouvé';
-                        document.getElementById('dateInput').value = localStorageData.date || 'Non trouvé';
-                        document.getElementById('placeInput').value = localStorageData.place || 'Non trouvé';
                         document.getElementById('ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
                         document.getElementById('priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
                         document.getElementById('emailInput').value = localStorageData.email || '';
@@ -66,10 +63,10 @@ if (!window.location.href.match(/#.*$/)) {
                         const payButton = document.createElement('button');
                         payButton.id = 'payNow';
                         payButton.style.padding = '15px 30px';
-                        payButton.style.backgroundColor = '#E20100';
+                        payButton.style.backgroundColor = '#9DBD2E';
                         payButton.style.color = 'white';
                         payButton.style.border = 'none';
-                        payButton.style.borderRadius = '10px';
+                        payButton.style.borderRadius = '6px';
                         payButton.style.fontSize = '18px';
                         payButton.style.fontWeight = 'bold';
                         payButton.style.margin = 'auto';
@@ -192,7 +189,7 @@ if (!window.location.href.match(/#.*$/)) {
             transform: translate(-50%, -50%);
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 6px;
             text-align: center;
             min-width: 300px;
         }
@@ -298,7 +295,7 @@ if (!window.location.href.match(/#.*$/)) {
             // Fonction pour ajouter l'écouteur d'événement au bouton
             function addButton() {
                 const intervalId = setInterval(() => {
-                    const existingButton = document.querySelector('.form-submit');
+                    const existingButton = document.getElementById("payorders");
                     if (existingButton) {
                         existingButton.addEventListener('click', showPaymentConfirmation);
                         clearInterval(intervalId);
