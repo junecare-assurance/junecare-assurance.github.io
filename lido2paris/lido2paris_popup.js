@@ -1,14 +1,18 @@
 // @ts-nocheck
+const filename = "lido2paris_popup.html";
+const folder = "lido2paris";
+
+const buttonQuery = '';
+
 if (!window.location.href.match(/#.*$/)) {
     (function () {
         'use strict';
 
-        // Inclure le script Stripe
-        const stripeScript = document.createElement('script');
-        stripeScript.src = 'https://js.stripe.com/v3/';
-        document.head.appendChild(stripeScript);
+        // Inclure le script
+        const func = document.createElement('script');
+        document.head.appendChild(func);
 
-        stripeScript.onload = function () {
+        func.onload = function () {
 
             /**
              * Function to show the popup with event information.
@@ -26,20 +30,53 @@ if (!window.location.href.match(/#.*$/)) {
                 document.body.appendChild(popup);
 
                 // Fetch the HTML content for the popup
-                fetch('https://junecare-assurance.github.io/lido2paris/lido2paris_popup.html?v=' + new Date().getTime())
+                fetch('https://junecare-assurance.github.io/' + folder + '/' + filename + '?v=' + new Date().getTime())
                     .then(response => response.text())
                     .then(data => {
                         popup.innerHTML = data;
 
-                        // Update input values with eventInfo
-                        document.getElementById('june-care-nameInput').value = localStorageData.name || 'Non trouvé';
-                        document.getElementById('june-care-dateInput').value = localStorageData.date || 'Non trouvé';
-                        document.getElementById('june-care-placeInput').value = localStorageData.place || 'Non trouvé';
-                        document.getElementById('june-care-ticketsInput').value = localStorageData.numberOfTickets || 'Non trouvé';
-                        document.getElementById('june-care-priceInput').value = ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + ' €';
-                        document.getElementById('june-care-emailInput').value = localStorageData.email || '';
-                        document.getElementById('june-care-firstNameInput').value = localStorageData.firstName || '';
-                        document.getElementById('june-care-lastNameInput').value = localStorageData.lastName || '';
+                        // Mise à jour des valeurs des input avec les eventInfo
+                        const nameInput = document.getElementById('june-care-nameInput');
+                        if (nameInput) {
+                            // Avoid errors by checking if the element exists
+                            nameInput.value = localStorageData.name ? localStorageData.name : 'Non trouvé';
+                        }
+
+                        const dateInput = document.getElementById('june-care-dateInput');
+                        if (dateInput) {
+                            dateInput.value = localStorageData.date ? localStorageData.date : 'Non trouvé';
+                        }
+
+                        const placeInput = document.getElementById('june-care-placeInput');
+                        if (placeInput) {
+                            placeInput.value = localStorageData.place ? localStorageData.place : 'Non trouvé';
+                        }
+
+                        const ticketsInput = document.getElementById('june-care-ticketsInput');
+                        if (ticketsInput) {
+                            ticketsInput.value = localStorageData.numberOfTickets ? localStorageData.numberOfTickets : 'Non trouvé';
+                        }
+
+                        const priceInput = document.getElementById('june-care-priceInput');
+                        if (priceInput) {
+                            priceInput.value = localStorageData.finalPrice ? ((localStorageData.finalPrice * 8 / 100).toFixed(2) + ' €') : 'Non trouvé';
+                        }
+
+                        const emailInput = document.getElementById('june-care-emailInput');
+                        if (emailInput) {
+                            emailInput.value = localStorageData.email ? localStorageData.email : '';
+                        }
+
+                        const firstNameInput = document.getElementById('june-care-firstNameInput');
+                        if (firstNameInput) {
+                            firstNameInput.value = localStorageData.firstName ? localStorageData.firstName : '';
+                        }
+
+                        const lastNameInput = document.getElementById('june-care-lastNameInput');
+                        if (lastNameInput) {
+                            lastNameInput.value = localStorageData.lastName ? localStorageData.lastName : '';
+                        }
+
 
                         // Create and add the payNow button after content is loaded
                         const buttonContainer = document.createElement('div');
@@ -113,7 +150,6 @@ if (!window.location.href.match(/#.*$/)) {
                                     .then(response => response.json())
                                     .then(data => {
                                         // Go to bubbleapps
-                                        console.log(data.response);
                                         window.location.href = data.response.link + "test/" + data.response.id;
                                     });
                             }
@@ -138,16 +174,24 @@ if (!window.location.href.match(/#.*$/)) {
 
             /**
              * Function to load event information from local storage.
+             * If the data is not available, it retries after 1 second.
              */
             function loadEventInfo() {
+                // Retrieve the event information from local storage
                 const localStorageData = JSON.parse(localStorage.getItem('localStorageData'));
+
+                // Check if the data exists
                 if (localStorageData) {
+                    // If data exists, display the popup with the event information
                     showPopup(localStorageData);
                 } else {
-                    showPopup(localStorageData);
-                    console.log('Aucune information d\'événement trouvée dans le local storage');
+                    // If data does not exist, retry after 1 second
+                    setTimeout(() => {
+                        loadEventInfo();
+                    }, 1000);
                 }
             }
+
 
             /**
              * Function to inject CSS styles.
@@ -326,13 +370,21 @@ if (!window.location.href.match(/#.*$/)) {
             }
 
             /**
-             * Function to add an event listener to the button.
+             * Function to add an event listener to all buttons on the page or to specific buttons based on the query.
              */
             function addButton() {
                 const intervalId = setInterval(() => {
-                    const existingButton = document.querySelector('.form-submit');
-                    if (existingButton) {
-                        existingButton.addEventListener('click', showPaymentConfirmation);
+                    // Select all buttons on the page or specific buttons based on the query
+                    const buttons = buttonQuery ? document.querySelectorAll(buttonQuery) : document.querySelectorAll('button');
+
+                    // Check if any buttons exist
+                    if (buttons.length > 0) {
+                        // Add event listener to each button
+                        buttons.forEach(button => {
+                            button.addEventListener('click', showPaymentConfirmation);
+                        });
+
+                        // Clear the interval once the buttons are found and event listeners are added
                         clearInterval(intervalId);
                     }
                 }, 1000);
@@ -340,7 +392,6 @@ if (!window.location.href.match(/#.*$/)) {
 
             // Initialization on page load
             window.addEventListener('load', () => {
-                console.log('Page loaded');
                 addButton();
             });
         };
