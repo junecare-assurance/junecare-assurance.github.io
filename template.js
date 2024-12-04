@@ -3,164 +3,157 @@
 
     const filename = "lido2paris_popup.html";
     const folder = "lido2paris";
-    const buttonQuery = '';
 
-    // Inclure le script
+    // Inclure le script Stripe
     const stripeScript = document.createElement('script');
     stripeScript.src = 'https://js.stripe.com/v3/';
     document.head.appendChild(stripeScript);
 
     stripeScript.onload = function () {
         /**
-         * Function to show the popup with event information.
-         * @param {Object} localStorageData - The data to be displayed in the popup.
+         * Affiche la popup avec les informations de l'événement.
+         * @param {Object} localStorageData - Les données à afficher dans la popup.
          */
         function showPopup(localStorageData) {
-            console.log("vache");
+            console.log("Affichage de la popup");
 
-            // Create overlay to darken the background
-            const overlay = document.createElement('div');
-            overlay.classList.add('june-care-overlay');
+            // Créer l'overlay pour assombrir l'arrière-plan
+            const overlay = createOverlay();
             document.body.appendChild(overlay);
 
-            // Create popup
-            const popup = document.createElement('div');
-            popup.classList.add('june-care-popup');
+            // Créer la popup
+            const popup = createPopup();
             document.body.appendChild(popup);
 
-            // Fetch the HTML content for the popup
+            // Récupérer le contenu HTML pour la popup
+            fetchPopupContent(popup, localStorageData);
+        }
+
+        /**
+         * Crée et retourne l'overlay.
+         * @returns {HTMLDivElement} - L'élément overlay créé.
+         */
+        function createOverlay() {
+            const overlay = document.createElement('div');
+            overlay.classList.add('june-care-overlay');
+            return overlay;
+        }
+
+        /**
+         * Crée et retourne la popup.
+         * @returns {HTMLDivElement} - L'élément popup créé.
+         */
+        function createPopup() {
+            const popup = document.createElement('div');
+            popup.classList.add('june-care-popup');
+            return popup;
+        }
+
+        /**
+         * Récupère le contenu HTML pour la popup et met à jour les champs avec les données localStorage.
+         * @param {HTMLDivElement} popup - L'élément popup.
+         * @param {Object} localStorageData - Les données à afficher dans la popup.
+         */
+        function fetchPopupContent(popup, localStorageData) {
             fetch('https://junecare-assurance.github.io/' + folder + '/' + filename + '?v=' + new Date().getTime())
                 .then(response => response.text())
                 .then(data => {
                     popup.innerHTML = data;
-
-                    if (localStorageData) {
-                        // Mise à jour des valeurs des input avec les eventInfo
-                        const nameInput = document.getElementById('june-care-nameInput');
-                        if (nameInput) {
-                            nameInput.value = localStorageData.name ? localStorageData.name : 'Non trouvé';
-                        }
-
-                        const dateInput = document.getElementById('june-care-dateInput');
-                        if (dateInput) {
-                            dateInput.value = localStorageData.date ? localStorageData.date : 'Non trouvé';
-                        }
-
-                        const placeInput = document.getElementById('june-care-placeInput');
-                        if (placeInput) {
-                            placeInput.value = localStorageData.place ? localStorageData.place : 'Non trouvé';
-                        }
-
-                        const ticketsInput = document.getElementById('june-care-ticketsInput');
-                        if (ticketsInput) {
-                            ticketsInput.value = localStorageData.numberOfTickets ? localStorageData.numberOfTickets : 'Non trouvé';
-                        }
-
-                        const priceInput = document.getElementById('june-care-priceInput');
-                        if (priceInput) {
-                            priceInput.value = localStorageData.finalPrice ? ((localStorageData.finalPrice * 8 / 100).toFixed(2) + ' €') : 'Non trouvé';
-                        }
-
-                        const emailInput = document.getElementById('june-care-emailInput');
-                        if (emailInput) {
-                            emailInput.value = localStorageData.email ? localStorageData.email : '';
-                        }
-
-                        const firstNameInput = document.getElementById('june-care-firstNameInput');
-                        if (firstNameInput) {
-                            firstNameInput.value = localStorageData.firstName ? localStorageData.firstName : '';
-                        }
-
-                        const lastNameInput = document.getElementById('june-care-lastNameInput');
-                        if (lastNameInput) {
-                            lastNameInput.value = localStorageData.lastName ? localStorageData.lastName : '';
-                        }
-                    }
-
-                    // Create and add the payNow button after content is loaded
-                    const buttonContainer = document.createElement('div');
-                    buttonContainer.classList.add('june-care-button-container');
-
-                    const payButton = document.createElement('button');
-                    payButton.id = 'june-care-payNow';
-                    payButton.textContent = localStorageData ? 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€' : 'M\'assurer pour 0€';
-                    buttonContainer.appendChild(payButton);
-                    popup.appendChild(buttonContainer);
-
-                    // State variable to track the number of clicks
-                    let isFirstClick = true;
-
-                    // Attach events after inserting content and creating the button
-                    const closePopupButton = document.getElementById('june-care-closePopup');
-                    if (closePopupButton) {
-                        closePopupButton.addEventListener('click', () => {
-                            document.body.removeChild(popup);
-                            document.body.removeChild(overlay);
-                        });
-                    } else {
-                        console.error('closePopup button not found');
-                    }
-
-                    // When the payNow button is pressed
-                    payButton.addEventListener('click', (event) => {
-                        const coverageDetails = document.getElementById('june-care-coverageDetails');
-                        const eventDetails = document.getElementById('june-care-eventDetails');
-                        // If first click, hide benefits and show input fields
-                        if (isFirstClick) {
-                            coverageDetails.style.display = 'none';
-                            eventDetails.style.display = 'block';
-                            payButton.textContent = 'Continuer';
-                            isFirstClick = false;
-                        }
-                        // If second click, validate fields and proceed to payment
-                        else {
-                            if (!validateForm()) {
-                                alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
-                                return;
-                            }
-                            // Save updated information
-                            const updatedEmail = document.getElementById('june-care-emailInput').value;
-                            const updatedFirstName = document.getElementById('june-care-firstNameInput').value;
-                            const updatedLastName = document.getElementById('june-care-lastNameInput').value;
-                            localStorageData.email = updatedEmail;
-                            localStorageData.firstName = updatedFirstName;
-                            localStorageData.lastName = updatedLastName;
-                            localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
-                            // Send information to bubbleapps
-                            let num = localStorageData.numberOfTickets;
-                            let text = num.toString();
-                            fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    prix: localStorageData.finalPrice,
-                                    name: localStorageData.name,
-                                    email: localStorageData.email,
-                                    date: localStorageData.date,
-                                    lieu: localStorageData.place,
-                                    nbrplace: text,
-                                    firstname: localStorageData.firstName,
-                                    lastname: localStorageData.lastName,
-                                    link: window.location.href
-                                })
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    // Go to bubbleapps
-                                    window.location.href = data.response.link + "test/" + data.response.id;
-                                });
-                        }
-                    });
-
+                    updatePopupFields(localStorageData);
+                    addPopupEventListeners(localStorageData);
                 })
                 .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
         }
 
         /**
-         * Function to validate the form.
-         * @returns {boolean} - Returns true if all fields are valid, otherwise false.
+         * Met à jour les champs de la popup avec les données localStorage.
+         * @param {Object} localStorageData - Les données à afficher dans la popup.
+         */
+        function updatePopupFields(localStorageData) {
+            if (localStorageData) {
+                updateInputField('june-care-nameInput', localStorageData.name, 'Non trouvé');
+                updateInputField('june-care-dateInput', localStorageData.date, 'Non trouvé');
+                updateInputField('june-care-placeInput', localStorageData.place, 'Non trouvé');
+                updateInputField('june-care-ticketsInput', localStorageData.numberOfTickets, 'Non trouvé');
+                updateInputField('june-care-priceInput', (localStorageData.finalPrice * 8 / 100).toFixed(2) + ' €', 'Non trouvé');
+                updateInputField('june-care-emailInput', localStorageData.email, '');
+                updateInputField('june-care-firstNameInput', localStorageData.firstName, '');
+                updateInputField('june-care-lastNameInput', localStorageData.lastName, '');
+            }
+        }
+
+        /**
+         * Met à jour un champ d'entrée avec une valeur donnée.
+         * @param {string} id - L'ID du champ d'entrée.
+         * @param {string} value - La valeur à définir.
+         * @param {string} defaultValue - La valeur par défaut si la valeur n'est pas définie.
+         */
+        function updateInputField(id, value, defaultValue) {
+            const input = document.getElementById(id);
+            if (input) {
+                input.value = value ? value : defaultValue;
+            }
+        }
+
+        /**
+         * Ajoute les écouteurs d'événements à la popup.
+         * @param {Object} localStorageData - Les données à afficher dans la popup.
+         */
+        function addPopupEventListeners(localStorageData) {
+            const closePopupButton = document.getElementById('june-care-closePopup');
+            if (closePopupButton) {
+                closePopupButton.addEventListener('click', closePopup);
+            } else {
+                console.error('Bouton de fermeture de la popup non trouvé');
+            }
+
+            const payButton = createPayButton(localStorageData);
+            payButton.addEventListener('click', handlePayButtonClick);
+        }
+
+        /**
+         * Crée et retourne le bouton de paiement.
+         * @param {Object} localStorageData - Les données à afficher dans la popup.
+         * @returns {HTMLButtonElement} - Le bouton de paiement créé.
+         */
+        function createPayButton(localStorageData) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('june-care-button-container');
+
+            const payButton = document.createElement('button');
+            payButton.id = 'june-care-payNow';
+            payButton.textContent = localStorageData ? 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€' : 'M\'assurer pour 0€';
+            buttonContainer.appendChild(payButton);
+            document.querySelector('.june-care-popup').appendChild(buttonContainer);
+
+            return payButton;
+        }
+
+        /**
+         * Gère le clic sur le bouton de paiement.
+         */
+        function handlePayButtonClick() {
+            const coverageDetails = document.getElementById('june-care-coverageDetails');
+            const eventDetails = document.getElementById('june-care-eventDetails');
+            const payButton = document.getElementById('june-care-payNow');
+
+            if (isFirstClick) {
+                coverageDetails.style.display = 'none';
+                eventDetails.style.display = 'block';
+                payButton.textContent = 'Continuer';
+                isFirstClick = false;
+            } else {
+                if (!validateForm()) {
+                    alert('Veuillez remplir tous les champs et accepter les conditions générales et le document d\'information.');
+                    return;
+                }
+                processPayment();
+            }
+        }
+
+        /**
+         * Valide le formulaire.
+         * @returns {boolean} - Retourne vrai si tous les champs sont valides, sinon faux.
          */
         function validateForm() {
             const checkbox = document.getElementById('june-care-assurance').checked;
@@ -172,25 +165,56 @@
         }
 
         /**
-         * Function to load event information from local storage.
-         * If the data is not available, it retries after 1 second.
+         * Traite le paiement.
          */
-        function loadEventInfo() {
-            // Retrieve the event information from local storage
+        function processPayment() {
             const localStorageData = JSON.parse(localStorage.getItem('localStorageData'));
+            localStorageData.email = document.getElementById('june-care-emailInput').value;
+            localStorageData.firstName = document.getElementById('june-care-firstNameInput').value;
+            localStorageData.lastName = document.getElementById('june-care-lastNameInput').value;
+            localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
 
-            // Check if the data exists
-            if (localStorageData) {
-                // If data exists, display the popup with the event information
-                showPopup(localStorageData);
-            } else {
-                // If data does not exist, retry after 1 second
-                showPopup(localStorageData);
-            }
+            fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prix: localStorageData.finalPrice,
+                    name: localStorageData.name,
+                    email: localStorageData.email,
+                    date: localStorageData.date,
+                    lieu: localStorageData.place,
+                    nbrplace: localStorageData.numberOfTickets.toString(),
+                    firstname: localStorageData.firstName,
+                    lastname: localStorageData.lastName,
+                    link: window.location.href
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = data.response.link + "test/" + data.response.id;
+            });
         }
 
         /**
-         * Function to inject CSS styles.
+         * Ferme la popup.
+         */
+        function closePopup() {
+            document.body.removeChild(document.querySelector('.june-care-popup'));
+            document.body.removeChild(document.querySelector('.june-care-overlay'));
+        }
+
+        /**
+         * Charge les informations de l'événement depuis le localStorage.
+         */
+        function loadEventInfo() {
+            const localStorageData = JSON.parse(localStorage.getItem('localStorageData'));
+            showPopup(localStorageData);
+        }
+
+        /**
+         * Injecte les styles CSS.
          */
         function injectStyles() {
             const styles = `
@@ -290,14 +314,11 @@
             document.head.appendChild(styleSheet);
         }
 
-        // Global variable to store the elements
-        let paymentElements = null;
-
         /**
-         * Function to create the overlay elements.
-         * @returns {Object} - Returns the created overlay elements.
+         * Crée et retourne les éléments de l'overlay de paiement.
+         * @returns {Object} - Les éléments de l'overlay de paiement créés.
          */
-        function createOverlay() {
+        function createPaymentOverlay() {
             const overlay = document.createElement('div');
             overlay.className = 'payment-overlay';
 
@@ -335,62 +356,66 @@
         }
 
         /**
-         * Function to handle the display of payment confirmation.
+         * Affiche la confirmation de paiement.
          */
         function showPaymentConfirmation() {
             if (!paymentElements) {
                 injectStyles();
-                paymentElements = createOverlay();
+                paymentElements = createPaymentOverlay();
             }
 
             const { overlay, loader, checkmark, statusText } = paymentElements;
 
-            // Display the overlay
+            // Afficher l'overlay
             overlay.style.display = 'block';
 
-            // After 2 seconds, show the confirmation
+            // Après 2 secondes, afficher la confirmation
             setTimeout(() => {
                 loader.style.display = 'none';
                 checkmark.style.display = 'block';
                 statusText.textContent = 'Paiement confirmé !';
 
-                // After 1 additional second, call loadEventInfo
+                // Après 1 seconde supplémentaire, appeler loadEventInfo
                 setTimeout(() => {
                     overlay.style.display = 'none';
                     loader.style.display = 'block';
                     checkmark.style.display = 'none';
                     statusText.textContent = 'Veuillez patienter...';
-                    loadEventInfo(); // Your existing function
+                    loadEventInfo();
                 }, 1000);
             }, 2000);
         }
 
         /**
-         * Function to add an event listener to all buttons on the page or to specific buttons based on the query.
+         * Ajoute un écouteur d'événements à tous les boutons de la page ou à des boutons spécifiques en fonction de la requête.
          */
-        function addButton() {
+        function addButtonEventListeners() {
             const intervalId = setInterval(() => {
                 const buttons = document.querySelectorAll('input');
 
-                // Check if any buttons exist
+                // Vérifier si des boutons existent
                 if (buttons.length > 0) {
-                    // Add event listener to each button
+                    // Ajouter un écouteur d'événements à chaque bouton
                     buttons.forEach(button => {
-                        console.log("1");
+                        console.log("Ajout d'un écouteur d'événements au bouton");
                         button.addEventListener('click', showPaymentConfirmation);
                     });
 
-                    // Clear the interval once the buttons are found and event listeners are added
+                    // Effacer l'intervalle une fois les boutons trouvés et les écouteurs d'événements ajoutés
                     clearInterval(intervalId);
                 }
             }, 1000);
         }
 
-        // Initialization on page load
+        // Initialisation au chargement de la page
         window.addEventListener('load', () => {
             injectStyles();
-            addButton();
+            addButtonEventListeners();
         });
+
+        // Variables globales
+        let paymentElements = null;
+        let isFirstClick = true;
     };
 
 })();
