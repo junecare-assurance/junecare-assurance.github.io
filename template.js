@@ -3,6 +3,7 @@
 
     const filename = "popup.html";
     const folder = "lido2paris";
+    const buttonQuery = '';
 
     // Inclure le script Stripe
     const stripeScript = document.createElement('script');
