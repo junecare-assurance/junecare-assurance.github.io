@@ -1,9 +1,4 @@
 // @ts-nocheck
-const filename = "lido2paris_popup.html";
-const folder = "lido2paris";
-
-const buttonQuery = '';
-
 if (!window.location.href.match(/#.*$/)) {
     (function () {
         'use strict';
@@ -14,6 +9,11 @@ if (!window.location.href.match(/#.*$/)) {
 
         func.onload = function () {
 
+        const filename = "lido2paris_popup.html";
+
+        const folder = "lido2paris";
+
+        const buttonQuery = '';
             /**
              * Function to show the popup with event information.
              * @param {Object} localStorageData - The data to be displayed in the popup.
