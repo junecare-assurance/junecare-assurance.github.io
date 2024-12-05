@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    const filename = "lido2paris_popup.html";
+    const filename = "popup.html";
     const folder = "lido2paris";
 
     // Inclure le script Stripe
@@ -26,7 +26,7 @@
             document.body.appendChild(popup);
 
             // Récupérer le contenu HTML pour la popup
-            fetchPopupContent(popup, localStorageData);
+            fetchPopupContent(popup, localStorageData, overlay);
         }
 
         /**
@@ -53,16 +53,42 @@
          * Récupère le contenu HTML pour la popup et met à jour les champs avec les données localStorage.
          * @param {HTMLDivElement} popup - L'élément popup.
          * @param {Object} localStorageData - Les données à afficher dans la popup.
+         * @param {HTMLDivElement} overlay - L'élément overlay.
          */
-        function fetchPopupContent(popup, localStorageData) {
-            fetch('https://junecare-assurance.github.io/' + folder + '/' + filename + '?v=' + new Date().getTime())
-                .then(response => response.text())
+        function fetchPopupContent(popup, localStorageData, overlay) {
+            const url = 'https://0muhjqihcb.execute-api.eu-west-3.amazonaws.com/dev/bubbe-test/' + filename;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP! Statut: ${response.status}`);
+                    }
+                    return response.text();
+                })
                 .then(data => {
+                    console.log(data);
                     popup.innerHTML = data;
                     updatePopupFields(localStorageData);
                     addPopupEventListeners(localStorageData);
                 })
-                .catch(error => console.error('Erreur lors de la récupération du fichier:', error));
+                .catch(error => {
+                    console.error('Erreur lors de la récupération du fichier:', error);
+                    closePopupAndOverlay(popup, overlay);
+                });
+        }
+
+        /**
+         * Ferme la popup et l'overlay.
+         * @param {HTMLDivElement} popup - L'élément popup.
+         * @param {HTMLDivElement} overlay - L'élément overlay.
+         */
+        function closePopupAndOverlay(popup, overlay) {
+            if (popup) {
+                document.body.removeChild(popup);
+            }
+            if (overlay) {
+                document.body.removeChild(overlay);
+            }
         }
 
         /**
@@ -391,7 +417,7 @@
          */
         function addButtonEventListeners() {
             const intervalId = setInterval(() => {
-                const buttons = document.querySelectorAll('input');
+                const buttons = buttonQuery != '' ? document.querySelectorAll(buttonQuery) : document.querySelectorAll('button');
 
                 // Vérifier si des boutons existent
                 if (buttons.length > 0) {
