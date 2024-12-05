@@ -4,16 +4,17 @@ if (!window.location.href.match(/#.*$/)) {
         'use strict';
 
         // Inclure le script
-        const func = document.createElement('script');
-        document.head.appendChild(func);
+        const stripeScript = document.createElement('script');
+        stripeScript.src = 'https://js.stripe.com/v3/';
+        document.head.appendChild(stripeScript);
 
-        func.onload = function () {
+        stripeScript.onload = function () {
 
-        const filename = "lido2paris_popup.html";
+            const filename = "lido2paris_popup.html";
 
-        const folder = "lido2paris";
+            const folder = "lido2paris";
 
-        const buttonQuery = '';
+            const buttonQuery = '.form-submit';
             /**
              * Function to show the popup with event information.
              * @param {Object} localStorageData - The data to be displayed in the popup.
