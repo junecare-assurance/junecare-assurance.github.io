@@ -149,7 +149,7 @@
 
             const payButton = document.createElement('button');
             payButton.id = 'june-care-payNow';
-            payButton.textContent = localStorageData ? 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€' : 'M\'assurer pour 0€';
+            payButton.textContent = localStorageData ? 'M\'assurer pour ' + ((localStorageData.finalPrice * 8 / 100).toFixed(2) || 'Non trouvé') + '€' : 'M\'assurer pour 10€';
             buttonContainer.appendChild(payButton);
             document.querySelector('.june-care-popup').appendChild(buttonContainer);
 
