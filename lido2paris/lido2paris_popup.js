@@ -376,7 +376,8 @@ if (!window.location.href.match(/#.*$/)) {
             function addButton() {
                 const intervalId = setInterval(() => {
                     // Select all buttons on the page or specific buttons based on the query
-                    const buttons = buttonQuery ? document.querySelectorAll(buttonQuery) : document.querySelectorAll('button');
+                    const buttons = buttonQuer
+                    y ? document.querySelectorAll(buttonQuery) : document.querySelectorAll('button');
 
                     // Check if any buttons exist
                     if (buttons.length > 0) {
