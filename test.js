@@ -1,51 +1,108 @@
 (function () {
     'use strict';
 
-    const filename = "popup.html";
-    const folder = "lido2paris";
-    const buttonQuery = '';
+    const url_filters = {
+        data_collection: "https://www.greengo.voyage/checkout/",
+        display_offer: "https://www.greengo.voyage/checkout/success"
+    };
 
-    // Structures de configuration
-    const value_getters = [
-        {
-            "data": {
-                "url_filter": "mon-panier",
-                "function": "saveCartInfo"
-            }
+    const configuration = {
+        display: true,
+        probability_display: 0.1,
+        url_filters: {
+            data_collection: "https://www.greengo.voyage/checkout/",
+            display_offer: "https://www.greengo.voyage/checkout/success"
         },
-        {
-            "data": {
-                "url_filter": "https://reservation.cabanesdesgrandscepages.com/paiement-reservation.php",
-                "function": "addButtonEventListeners"
+        value_getters: [
+            {
+                start_date: {
+                    js_path: "form > div > div.w-full > div:nth-child(2) > div > div > div:nth-child(1) > div > div:nth-child(2)",
+                    post_processor: {
+                        type: "regex",
+                        value: "^(.*) -"
+                    }
+                }
+            },
+            {
+                end_date: {
+                    js_path: "form > div > div.w-full > div:nth-child(2) > div > div > div:nth-child(1) > div > div:nth-child(2)",
+                    post_processor: {
+                        type: "regex",
+                        value: "- (.*)$"
+                    }
+                }
             }
+        ],
+        insurance_price: {
+            "type": "percentage",
+            "value": 10,
+        },
+        main_color: "#f00",
+        step1_offer: {
+            title: "Assurance annulation",
+            description: "...",
+            conditions: [
+                "Greve",
+                "Maladie"
+            ],    
+            call_to_action: "S'assurer pour [prix]"
+        },
+        step2_values: {
+            title: "Assurance annulation",
+            description: "...",
+            call_to_action: "C'est Parti"
         }
-    ];
+    };
 
-    // Fonction pour sauvegarder les informations du panier dans le local storage
-    function saveCartInfo() {
-        let cartInfo = null;
-
-        for (const data of window.dataLayer) {
-            if (data && data.ecommerce && data.ecommerce.items) {
-                cartInfo = data;
-                break;
-            }
-        }
-
-        const dateElement = document.querySelector('.product-date');
-        const date = dateElement ? dateElement.textContent.trim() : 'not found';
-
-        const localStorageData = {
-            name: cartInfo && cartInfo.ecommerce.items.length > 0 ? cartInfo.ecommerce.items[0].item_name : "not found",
-            date: date,
-            place: "Lido2Paris",
-            numberOfTickets: cartInfo ? cartInfo.ecommerce.items.reduce((total, item) => total + item.quantity, 0) : 0,
-            finalPrice: cartInfo ? cartInfo.ecommerce.value : 0,
-            email: ""
-        };
-
-        localStorage.setItem('localStorageData', JSON.stringify(localStorageData));
+    function extractAndStoreValues(value_getters) {
+        const values = {};
+        // Implement function here to get values
+        localStorage.setItem('june-care-values', JSON.stringify(values));
     }
+
+    function retrieveStoredValues() {
+        const values = localStorage.getItem('june-care-values');
+        if (!values) {
+            // Error, notify
+            return null;
+        }
+        return JSON.parse(values);
+    }
+
+    function buildPopup(configuration, values) {
+        const popup = document.createElement('div');
+        popup.classList.add('june-care-popup');
+        // Implement function to build popup
+        return popup;
+    }
+
+    function subscribe(values, partner) {
+        const accepted_terms_and_conditions = document.getElementById('june-care-terms-and-conditions').checked;
+        const email = document.getElementById('june-care-emailInput').value.trim();
+        const firstName = document.getElementById('june-care-firstNameInput').value.trim();
+        const lastName = document.getElementById('june-care-lastNameInput').value.trim();
+        if (!(accpeted_terms_and_conditions && email && firstName && lastName)) { return; };
+
+        fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                price: values.price,
+                partner: partner,
+                email: email,
+                firstname: firstName,
+                lastname: lastName,
+                redirect_url: window.location.href
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            window.location.href = data.payment_url;
+        });
+    }
+
 
     // Fonction pour afficher la popup avec les informations de l'événement
     function showPopup(localStorageData) {
