@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évolution des Deals et Liste des Contrats</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #808080; /* Changer la couleur verte en gris */
+            text-align: center;
+        }
+        h3 {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 25px;
+            text-align: center;
+        }
+        h4 {
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+            margin: 20px;
+        }
+        p {
+            margin: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        table thead {
+            background-color: #808080; /* Changer la couleur verte en gris */
+            color: white;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        table tbody tr:hover {
+            background-color: #e9e9e9;
+        }
+        #total-prime {
+            font-weight: bold;
+            color: #808080; /* Changer la couleur verte en gris */
+            text-align: center;
+        }
+        #list-contr {
+            text-decoration: underline;
+            text-align: left;
+        }
+        #line-chart {
+            display: inline-block;
+        }
+        #info-panel {
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: lightgray;
+            padding: 20px;
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart-container">
+        <table id="summary-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Moi</th>
+                    <th>Objectif</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Nombre de contrats</td>
+                    <td id="my-deals-count"></td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>CA généré</td>
+                    <td id="my-ca-generated"></td>
+                    <td>3000 €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Info</h4>
+        <div id="info-panel">
+            <p id="missing-amount"></p>
+            <p id="days-left"></p>
+            <p id="last-signature"></p>
+        </div>
+
+        <h3>Évolution du montant des deals conclus</h3>
+        <div id="chart-container">
+            <canvas id="line-chart"></canvas>
+            <input type="number" id="secondary-goal" placeholder="Entrez un objectif secondaire" value="2">
+        </div>
+        <h3 id="total-primes">TOTAL de mes primes : </h3>
+        <h3 id="list-contr">Liste de mes contracts :</h3>
+    </div>
+    <table id="contracts-table">
+        <thead>
+            <tr>
+                <th>Date de signature</th>
+                <th>Nom</th>
+                <th>CA généré</th>
+                <th>Sales commission</th>
+                <th>Ma prime</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les lignes seront ajoutées dynamiquement -->
+        </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
+    <script>
+        const apiToken = "e50e4eb9acdde30081b6cc2ce4f6d533169302bf";
+        const apiUrl = "https://vtcprotect.pipedrive.com/api/v1/deals?filter_id=49&api_token=" + apiToken;
+
+        // Stocker les valeurs calculées dans un objet
+        const calculatedValues = {};
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const deals = data.data;
+                const filteredDeals = deals.filter(deal => deal.user_id.id === 13079884 && new Date(deal.won_time) > new Date('11/11/2024'));
+                processDeals(filteredDeals);
+            })
+            .catch(error => console.error('Erreur:', error));
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function formaterDate(date) {
+            const joursSemaine = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+            const mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+            const jourSemaine = joursSemaine[date.getDay()];
+            const jour = date.getDate();
+            const moisNom = mois[date.getMonth()];
+            const annee = date.getFullYear();
+
+            return `${jourSemaine} ${jour} ${moisNom} ${annee}`;
+        }
+
+        async function processDeals(deals) {
+            const salesData = {};
+            const now = new Date();
+            const startDate = new Date(now);
+            startDate.setDate(startDate.getDate() - 29); // Inclure le jour actuel
+
+            // Initialiser salesData avec des valeurs à 0 pour chaque jour des 30 derniers jours
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(startDate);
+                date.setDate(date.getDate() + i);
+                const dateString = date.toISOString().split('T')[0];
+                salesData[dateString] = 0;
+            }
+
+            let dealsCount = 0;
+            let totalCA = 0;
+            let lastSignatureDate = null;
+
+            for (const deal of deals) {
+                try {
+                    const subscriptionResponse = await fetch(`https://vtcprotect.pipedrive.com/api/v1/subscriptions/find/${deal.id}?api_token=${apiToken}`);
+                    const subscriptionData = await subscriptionResponse.json();
+                    const subscriptionId = subscriptionData.data.id;
+
+                    const paymentsResponse = await fetch(`https://vtcprotect.pipedrive.com/api/v1/subscriptions/${subscriptionId}/payments?api_token=${apiToken}`);
+                    const paymentsData = await paymentsResponse.json();
+
+                    const abonnement = paymentsData.data.find(payment => payment.payment_type === 'recurring');
+                    const payementSupplementaire = paymentsData.data.find(payment => payment.payment_type === 'additional');
+                    const ca = (abonnement ? abonnement.amount * 6 : 0) + (payementSupplementaire ? payementSupplementaire.amount : 0);
+
+                    const wonTime = new Date(deal.won_time);
+                    if (wonTime >= startDate) {
+                        const date = wonTime.toISOString().split('T')[0];
+                        salesData[date] += ca;
+                        dealsCount++;
+                        totalCA += ca;
+                        if (!lastSignatureDate || wonTime > lastSignatureDate) {
+                            lastSignatureDate = wonTime;
+                        }
+                    }
+                    console.log(subscriptionData);
+                    // Stocker la valeur calculée
+                    calculatedValues[deal.id] = ca;
+
+                    // Ajoute un délai de 50ms entre chaque requête
+                    await delay(50);
+                } catch (error) {
+                    console.error('Erreur:', error);
+                }
+            }
+
+            // Mettre à jour la table de résumé
+            document.getElementById('my-deals-count').innerText = dealsCount;
+            document.getElementById('my-ca-generated').innerText = `${totalCA.toFixed(2)} €`;
+
+            const labels = Object.keys(salesData).sort();
+            const cumulativeData = labels.map((date, index) => {
+                let sum = 0;
+                for (let i = Math.max(0, index - 29); i <= index; i++) {
+                    sum += salesData[labels[i]];
+                }
+                return sum;
+            });
+
+            console.log('Labels:', labels); // Vérifiez les labels
+            console.log('Cumulative Data:', cumulativeData); // Vérifiez les données cumulatives
+
+            // Calculer les primes
+            let totalPrimes = 0;
+            const primes = labels.map((date, index) => {
+                const ca = salesData[date];
+                const previous30DaysCA = cumulativeData[index];
+                const prime = previous30DaysCA > 3000 ? ca * 0.2 : ca * 0.1;
+                totalPrimes += prime;
+                return prime;
+            });
+
+            // Afficher le total des primes
+            document.getElementById('total-primes').innerText = `TOTAL des primes : ${totalPrimes.toFixed(2)} €`;
+
+            // Ajouter 10 jours supplémentaires pour la prévisualisation
+            const previewLabels = [...labels];
+            const previewData = [...cumulativeData];
+            for (let i = 1; i <= 15; i++) {
+                const futureDate = new Date(now);
+                futureDate.setDate(futureDate.getDate() + i);
+                const futureDateString = futureDate.toISOString().split('T')[0];
+                previewLabels.push(futureDateString);
+
+                // Calculer la somme des ventes des 30 jours précédents pour chaque jour de la prévisualisation
+                let sum = 0;
+                for (let j = Math.max(0, previewLabels.length - 30); j < previewLabels.length; j++) {
+                    sum += salesData[previewLabels[j]] || 0;
+                }
+                previewData.push(sum);
+            }
+
+            // Calculer les informations pour le panneau
+            const currentCA = cumulativeData[cumulativeData.length - 1];
+            const missingAmount = Math.max(0, 3000 - currentCA);
+            const daysLeft = previewData.findIndex(ca => ca < 3000) - cumulativeData.length;
+            const lastSignature = lastSignatureDate ? formaterDate(lastSignatureDate) : 'N/A';
+
+            // Mettre à jour le panneau d'information
+            if (daysLeft < 0) {
+                document.getElementById('missing-amount').innerText = `Il manque ${missingAmount.toFixed(2)} euros pour toucher 20%`;
+            } else {
+                document.getElementById('days-left').innerText = `Il reste ${daysLeft > 0 ? daysLeft : 0} jours avant de re-passer à 10%`;
+            }
+            document.getElementById('last-signature').innerText = `Dernière signature : ${lastSignature}`;
+
+            createChart(labels, cumulativeData, previewLabels, previewData);
+            populateContractsTable(deals, startDate);
+        }
+
+        function createChart(labels, data, previewLabels, previewData) {
+            const ctx = document.getElementById('line-chart').getContext('2d');
+            console.log('Canvas context:', ctx); // Vérifiez le contexte du canvas
+
+            const getMaxYValue = (data) => {
+                const maxDataValue = Math.max(...data);
+                return maxDataValue < 3000 ? 3500 : maxDataValue * 1.5;
+            };
+
+            const lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...labels, ...previewLabels],
+                    datasets: [
+                        {
+                            label: 'Montant des ventes',
+                            data: [...data, ...new Array(previewLabels.length).fill(null)],
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: 'Prévisualisation',
+                            data: new Array(data.length).fill(null).concat(previewData),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    const date = new Date(value);
+                                    const joursSemaine = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+                                    const mois = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+                                    const jourSemaine = joursSemaine[date.getUTCDay()];
+                                    const jour = date.getUTCDate();
+                                    const moisNom = mois[date.getUTCMonth()];
+                                    return `${jourSemaine} ${jour} ${moisNom}`;
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: (context) => getMaxYValue([...data, ...previewData])
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    yMin: 3000,
+                                    yMax: 3000,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Objectif 3000€',
+                                        enabled: true,
+                                        position: 'end'
+                                    }
+                                },
+                                line2: {
+                                    type: 'line',
+                                    yMin: 2000,
+                                    yMax: 2000,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 2,
+                                    label: {
+                                        content: 'Objectif 2000€',
+                                        enabled: true,
+                                        position: 'end'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('secondary-goal').addEventListener('input', function() {
+                const secondaryGoal = parseFloat(this.value);
+                if (!isNaN(secondaryGoal) && secondaryGoal !== 0) {
+                    lineChart.options.plugins.annotation.annotations.line2.yMin = secondaryGoal;
+                    lineChart.options.plugins.annotation.annotations.line2.yMax = secondaryGoal;
+                    lineChart.options.plugins.annotation.annotations.line2.label.content = `Objectif ${secondaryGoal}€`;
+                    lineChart.options.plugins.annotation.annotations.line2.display = true;
+
+                    // Mettre à jour l'élément du DOM avec la valeur de l'objectif secondaire
+                    document.querySelector("body > div.bubble-element.Page.baTaGaYf.bubble-r-container.flex.column.main-page > div.bubble-element.Group.baTaHaSb.bubble-r-container.flex.column > input").value = secondaryGoal;
+                } else {
+                    lineChart.options.plugins.annotation.annotations.line2.display = false;
+                }
+                lineChart.update();
+            });
+        }
+
+        function populateContractsTable(deals, startDate) {
+            const tableBody = document.getElementById('contracts-table').getElementsByTagName('tbody')[0];
+            let cumulativeSales = 0;
+            let totalPrime = 0;
+
+            // Filtrer les deals des 30 derniers jours
+            const recentDeals = deals.filter(deal => {
+                const wonTime = new Date(deal.won_time);
+                return wonTime >= startDate;
+            });
+
+            // Calculer les primes en ordre croissant
+            recentDeals.sort((a, b) => new Date(a.won_time) - new Date(b.won_time)).forEach(deal => {
+                if (!deal.won_time) return; // Ignorer les deals sans won_time
+
+                const wonTime = new Date(deal.won_time);
+                const date = wonTime.toISOString().split('T')[0];
+                const name = deal.title;
+                const value = calculatedValues[deal.id]; // Utiliser la valeur calculée
+                const percentage = cumulativeSales < 3000 ? 10 : 20;
+                cumulativeSales += value;
+
+                const prime = (value * percentage) / 100;
+                totalPrime += prime;
+
+                deal.calculatedData = { date, name, value, percentage, prime };
+            });
+
+            // Afficher les données en ordre décroissant
+            recentDeals.reverse().forEach(deal => {
+                if (!deal.calculatedData) return;
+
+                const { date, name, value, percentage, prime } = deal.calculatedData;
+
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = date;
+                row.insertCell(1).textContent = name;
+                row.insertCell(2).textContent = value;
+                row.insertCell(3).textContent = percentage + "%";
+                row.insertCell(4).textContent = prime.toFixed(2);
+            });
+
+            document.getElementById('total-prime').textContent = totalPrime.toFixed(2) + ' €';
+        }
+    </script>
+</body>
+</html>

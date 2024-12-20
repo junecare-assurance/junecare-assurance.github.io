@@ -9,58 +9,32 @@
             data_collection: "_*_link_data_*_",
             display_offer: "_*_link_display_*_"
         },
-        value_getters: [
-            {
-                start_date: {
-                    js_path: "#blocRecap > div.recap-price > div.date-recap > div:nth-child(1)",
-                    post_processor: {
-                        type: "regex",
-                        value: "^Arrivée le (.*)"
-                    }
-                }
-            },
-            {
-                end_date: {
-                    js_path: "#blocRecap > div.recap-price > div.date-recap > div:nth-child(3)",
-                    post_processor: {
-                        type: "regex",
-                        value: "^Départ le (.*)"
-                    }
-                }
-            },
-            {
-                price: {
-                    js_path: "#bloc-total-recap",
-                    post_processor: {
-                        type: "regex",
-                        value: "(\\d+)"
-                    }
-                }
-            },
-            {
-                place: {
-                    js_path: "#blocRecap > div.recap-bc > div > div.recap-bc-name",
-                    post_processor: {
-                        type: "regex",
-                        value: "^(.*)"
-                    }
-                }
-            }
-        ],
+        value_getters:[_*_values_getters_*_],
         insurance_price: {
-            "type": "percentage",
-            "value": 10,
+            type: "_*_type_*_",
+            value: _*_value_*_,
         },
-        main_color: "_*_color_*_",
+        style: {
+            main_color: "_*_color_*_",
+            font: "_*_font_*_",
+            padding: "_*_padding_*_",
+            border_radius: "_*_border_radius_*_",
+            font_title: `_*_font_title_*_`,
+            font_descr: `_*_font_descr_*_`,
+            font_covtit: `_*_font_covtit_*_`,
+            margin_title: `_*_margin_title_*_`,
+            margin_descr: `_*_margin_descr_*_`,
+            margin_covtit: `_*_margin_covtit_*_`
+        },
         step1_offer: {
             title: "_*_titre_step1_*_",
-            description: "_*_description_step1_*_",
+            description: `_*_description_step1_*_`,
 			conditions: [_*_cover_*_],
             call_to_action: "_*_call_to_action_step1_*_"
         },
         step2_values: {
             title: "_*_titre_step2_*_",
-            description: "_*_description_step2_*_",
+            description: `_*_description_step2_*_`,
             call_to_action: "_*_call_to_action_step2_*_"
         }
     };
@@ -106,11 +80,23 @@
     }
 
     function buildPopup(configuration, values) {
+    	const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        overlay.style.zIndex = '999';
+        overlay.classList.add('june-care-overlay');
+        document.body.appendChild(overlay);
+
         const popup = document.createElement('div');
         popup.classList.add('june-care-popup');
 
         const headerDiv = createHeader(configuration.step1_offer.title);
         const description = document.createElement('p');
+        description.classList.add("june-care-descr");
         description.textContent = configuration.step1_offer.description;
         const coverage = createCoverageDetails(configuration.step1_offer.conditions);
         const eventDetailsDiv = createEventDetails(values);
@@ -151,6 +137,7 @@
 
         const cover = document.createElement('h4');
         cover.textContent = "Ce qui est couvert";
+        cover.classList.add("june-care-cover");
 
         const ulElement = document.createElement('ul');
         ulElement.className = 'june-care-benefits';
@@ -195,15 +182,22 @@
         eventDetailsDiv.style.display = "none";
 
         const eventDetails = [
-            { label: "Evenement", id: "june-care-nameInput", value:configuration.partner },
-            { label: "Date", id: "june-care-dateInput", value: values.start_date },
-            { label: "Lieu", id: "june-care-placeInput", value: values.place },
-            { label: "Nombre de billets", id: "june-care-ticketsInput", value: 1 },
-            { label: "Prix final", id: "june-care-priceInput", value: values.price },
-            { label: "Email", id: "june-care-emailInput", value: "" },
-            { label: "Prénom", id: "june-care-firstNameInput", value: "" },
-            { label: "Nom de famille", id: "june-care-lastNameInput", value: "" }
+            { label: "Evenement", id: "june-care-nameInput", value: configuration.partner }
         ];
+
+        configuration.value_getters.forEach(getter => {
+            for (const [key, config] of Object.entries(getter)) {
+                eventDetails.push({
+                    label: config.nom,
+                    id: `june-care-${key}Input`,
+                    value: values[key]
+                });
+            }
+        });
+
+        eventDetails.push({ label: "Email", id: "june-care-emailInput", value: "" });
+        eventDetails.push({ label: "Prénom", id: "june-care-firstNameInput", value: "" });
+        eventDetails.push({ label: "Nom de famille", id: "june-care-lastNameInput", value: "" });
 
         eventDetails.forEach(detail => {
             const inputContainer = document.createElement('p');
@@ -228,6 +222,7 @@
         });
 
         const checkboxContainer = document.createElement('p');
+        checkboxContainer.style.display = "flex";
         const checkboxInput = document.createElement('input');
         checkboxInput.type = "checkbox";
         checkboxInput.id = "june-care-assurance";
@@ -270,24 +265,49 @@
             return;
         }
 
-        fetch('https://pg-ai.bubbleapps.io/version-test/api/1.1/wf/checkout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                price: values.price,
-                partner: partner,
-                email: email,
-                firstname: firstName,
-                lastname: lastName,
-                redirect_url: window.location.href
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            window.location.href = data.response.payment_url;
-        });
+        fetch('https://dashboard-16672.bubbleapps.io/version-test/api/1.1/wf/create_client', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        email: email,
+        firstname: firstName,
+        lastname: lastName,
+        lieu: values.lieu ? values.lieu : "",
+        evenement: values.evenement ? values.evenement : partner,
+        prix: values.prix ? values.prix : 0,
+        nbr_ticket: values.nbr_ticket ? values.nbr_ticket : 1,
+        start_date: values.start_date ? values.start_date : "",
+        end_date: values.end_date ? values.end_date : "",
+        type_de_couverture: values.type_de_couverture ? values.type_de_couverture : "",
+        immat: values.immat ? values.immat : "",
+        categorie: values.categorie ? values.categorie : "",
+        modele: values.modele ? values.modele : "",
+        marque: values.marque ? values.marque : "",
+        pack: values.pack ? values.pack : "",
+        montant_franchise: values.montant_franchise ? values.montant_franchise : 0,
+        partner: partner,
+        redirect_url: window.location.href
+    })
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.response && data.response.payment_url) {
+        window.location.href = data.response.payment_url;
+    } else {
+        console.error('Invalid response structure:', data);
+    }
+})
+.catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+});
+
     }
 
     function closePopupAndOverlay(popup, overlay) {
@@ -296,26 +316,6 @@
         }
         if (overlay) {
             document.body.removeChild(overlay);
-        }
-    }
-
-    function updatePopupFields(localStorageData) {
-        if (localStorageData) {
-            updateInputField('june-care-nameInput', localStorageData.name, 'Non trouvé');
-            updateInputField('june-care-dateInput', localStorageData.start_date, 'Non trouvé');
-            updateInputField('june-care-placeInput', localStorageData.place, 'Non trouvé');
-            updateInputField('june-care-ticketsInput', localStorageData.numberOfTickets, 'Non trouvé');
-            updateInputField('june-care-priceInput', (localStorageData.price * 8 / 100).toFixed(2) + ' €', 'Non trouvé');
-            updateInputField('june-care-emailInput', localStorageData.email, '');
-            updateInputField('june-care-firstNameInput', localStorageData.firstName, '');
-            updateInputField('june-care-lastNameInput', localStorageData.lastName, '');
-        }
-    }
-
-    function updateInputField(id, value, defaultValue) {
-        const input = document.getElementById(id);
-        if (input) {
-            input.value = value ? value : defaultValue;
         }
     }
 
@@ -339,7 +339,7 @@
         payButton.id = 'june-care-payNow';
         
         // Extraire la valeur de values.price
-        const price = values.price;
+        const price = values.prix;
         console.log(price);
         // Calculer le prix de l'assurance
         const insurancePrice = (configuration.insurance_price.value / 100) * price;
@@ -363,7 +363,15 @@
         if (isFirstClick) {
             coverageDetails.style.display = 'none';
             eventDetails.style.display = 'block';
-            payButton.textContent = configuration.step2_values.call_to_action;
+            const price = values.prix;
+            console.log(price);
+            // Calculer le prix de l'assurance
+            const insurancePrice = (configuration.insurance_price.value / 100) * price;
+            console.log(insurancePrice);
+            // Remplacer [prix] dans le call_to_action par la valeur calculée
+            const callToAction = configuration.step2_values.call_to_action.replace('[prix]', insurancePrice.toFixed(2));
+            console.log(callToAction);
+            payButton.textContent = callToAction;
             isFirstClick = false;
         } else {
             subscribe(values, partner);
@@ -448,13 +456,14 @@
             /* Style for the SVG icons inside the list items */
             .june-care-benefits > li > svg {
                 flex-shrink: 0;
-                color: ${configuration.main_color};
+                color: ${configuration.style.main_color};
             }
 
             /* Style for the popup */
             .june-care-popup {
                 font-size: 0.9rem;
                 width: 540px;
+                font-family: ${configuration.style.font};
             }
 
             /* Responsive style for the popup */
@@ -485,9 +494,9 @@
                 top: 15%;
                 left: 50%;
                 transform: translate(-50%, -10%);
-                padding: 1.5rem;
+                padding: ${configuration.style.padding}px;
                 background-color: #FFFFFF;
-                border-radius: 0.5rem;
+                border-radius: ${configuration.style.border_radius}px;
                 z-index: 10000;
                 max-height: 90%;
                 overflow-y: auto;
@@ -503,10 +512,10 @@
 
             #june-care-payNow {
                 padding: 15px 30px;
-                background-color: ${configuration.main_color};
+                background-color: ${configuration.style.main_color};
                 color: white;
                 border: none;
-                border-radius: 10px;
+                border-radius: ${configuration.style.border_radius}px;
                 font-size: 18px;
                 font-weight: bold;
                 margin: auto;
@@ -518,7 +527,16 @@
             .june-care-popup_title{
                 display: flex;
                 align-items: center;
-                font-size: 30px;
+                font: ${configuration.style.font_title};
+                margin: ${configuration.style.margin_title};
+            }
+            .june-care-descr{
+                font: ${configuration.style.font_descr};
+                margin: ${configuration.style.margin_descr};
+            }
+            .june-care-cover{
+                font: ${configuration.style.font_covtit};
+                margin: ${configuration.style.margin_covtit};
             }
         `;
 
@@ -528,17 +546,38 @@
     }
 
 
+    function globToRegex(pattern) {
+        // Échapper les caractères spéciaux
+        const escapedPattern = pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&');
+        // Remplacer les * par .* pour correspondre à n'importe quelle séquence de caractères
+        const regexPattern = escapedPattern.replace(/\*/g, '.*');
+        return new RegExp('^' + regexPattern + '$');
+    }
+    
+    function globMatch(string, pattern) {
+        const regex = globToRegex(pattern);
+        return regex.test(string);
+    }
+    
     function initialize(configuration) {
         const currentUrl = window.location.href;
-
-        if (currentUrl.includes(configuration.url_filters.data_collection)) {
+    
+        if (globMatch(currentUrl, configuration.url_filters.data_collection)) {
             extractAndStoreValues(configuration.value_getters);
         }
-        if (currentUrl.includes(configuration.url_filters.display_offer)) {
-            const values = retrieveStoredValues();
-            if (values) {
-                injectStyles();
-                buildPopup(configuration, values);
+        if (globMatch(currentUrl, configuration.url_filters.display_offer)) {
+            if (configuration.display === true) {
+                // Générer un nombre aléatoire entre 0 et 1
+                const randomNumber = Math.random();
+    
+                // Vérifier si le nombre aléatoire est inférieur ou égal à configuration.probability_display
+                if (randomNumber <= configuration.probability_display) {
+                    const values = retrieveStoredValues();
+                    if (values) {
+                        injectStyles();
+                        buildPopup(configuration, values);
+                    }
+                }
             }
         }
     }
