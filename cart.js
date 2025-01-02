@@ -30,7 +30,7 @@ function dynamicCartSection(ob,itemCounter)
     boxDiv.appendChild(boxh3)
 
     let boxh4 = document.createElement('h4')
-    let h4Text = document.createTextNode('Amount: Rs' + ob.price)
+    let h4Text = document.createTextNode('Amount: ' + (ob.price / 90).toFixed(2) + " €")
     boxh4.appendChild(h4Text)
     boxDiv.appendChild(boxh4)
 
