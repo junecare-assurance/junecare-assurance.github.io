@@ -470,7 +470,8 @@
             /* Responsive style for the popup */
             @media (max-width: 495px) {
                 .june-care-popup {
-                    width: 90vw;
+                    width: 100vw;
+                    height: 100vw;
                 }
             }
 
