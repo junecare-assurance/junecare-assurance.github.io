@@ -63,7 +63,7 @@ function amountUpdate(amount)
 {
     let totalh4 = document.createElement('h4')
     // let totalh4Text = document.createTextNode(amount)
-    let totalh4Text = document.createTextNode('Amount: ' + (ob.price / 90).toFixed(2) + " €")
+    let totalh4Text = document.createTextNode('Amount: ' + (amount / 90).toFixed(2) + " €")
     totalh4Text.id = 'toth4'
     totalh4.appendChild(totalh4Text)
     totalDiv.appendChild(totalh4)
