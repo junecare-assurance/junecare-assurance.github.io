@@ -1,4 +1,3 @@
-
 (function () {
     'use strict';
 
@@ -42,28 +41,41 @@
 
     function extractAndStoreValues(value_getters) {
         const values = {};
-        value_getters.forEach(getter => {
+        const retryDelay = 1000; // 1 second
+    
+        function processGetter(getter) {
             for (const [key, config] of Object.entries(getter)) {
                 const element = document.querySelector(config.js_path);
                 if (element) {
                     let value = element.textContent || element.value;
-
+    
                     if (config.post_processor && config.post_processor.type === "regex") {
                         const regex = new RegExp(config.post_processor.value);
                         const match = value.match(regex);
                         if (match) {
-                            value = match[1];
+                        	value = match[1];
+                        	if (key == "Price") {
+                        	value = value.replace(/\s+/g, '').replace(/,/g, '.');
+                        	}
                         }
-                        console.log(match);
-                        console.log(regex);
                     }
-
+    
                     values[key] = value;
+                } else {
+                    // If element is not found, retry after 1 second
+                    setTimeout(() => processGetter(getter), retryDelay);
+                    return; // Exit the current iteration to avoid further processing
                 }
             }
+            // Store values in localStorage after all getters are processed
+            localStorage.setItem('june-care-values', JSON.stringify(values));
+        }
+    
+        value_getters.forEach(getter => {
+            processGetter(getter);
         });
-        localStorage.setItem('june-care-values', JSON.stringify(values));
     }
+    
 
     function retrieveStoredValues() {
         const values = localStorage.getItem('june-care-values');
@@ -266,28 +278,28 @@
             return;
         }
 
-        fetch('https://dashboard-16672.bubbleapps.io/version-test/api/1.1/wf/create_client', {
+        fetch('https://dashboard-16672.bubbleapps.io/api/1.1/wf/create_client', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        email: email,
-        firstname: firstName,
-        lastname: lastName,
-        lieu: values.lieu ? values.lieu : "",
-        evenement: values.evenement ? values.evenement : partner,
-        prix: values.prix ? values.prix : 0,
-        nbr_ticket: values.nbr_ticket ? values.nbr_ticket : 1,
-        start_date: values.start_date ? values.start_date : "",
-        end_date: values.end_date ? values.end_date : "",
-        type_de_couverture: values.type_de_couverture ? values.type_de_couverture : "",
-        immat: values.immat ? values.immat : "",
-        categorie: values.categorie ? values.categorie : "",
-        modele: values.modele ? values.modele : "",
-        marque: values.marque ? values.marque : "",
-        pack: values.pack ? values.pack : "",
-        montant_franchise: values.montant_franchise ? values.montant_franchise : 0,
+        Email: email,
+        First_Name: firstName,
+        Last_Name: lastName,
+        Location: values.Location ? values.Location : "",
+        Event: values.Event ? values.Event : partner,
+        Price: values.Price ? values.Price : 0,
+        Number_of_Tickets: values.Number_of_Tickets ? values.Number_of_Tickets : 1,
+        Start_Date: values.Start_Date ? values.Start_Date : "",
+        End_Date: values.End_Date ? values.End_Date : "",
+        Coverage_Type: values.Coverage_Type ? values.Coverage_Type : "",
+        License_Plate: values.License_Plate ? values.License_Plate : "",
+        Category: values.Category ? values.Category : "",
+        Model: values.Model ? values.Model : "",
+        Brand: values.Brand ? values.Brand : "",
+        Pack: values.Pack ? values.Pack : "",
+        Deductible_Amount: values.Deductible_Amount ? values.Deductible_Amount : 0,
         partner: partner,
         redirect_url: window.location.href
     })
@@ -340,14 +352,11 @@
         payButton.id = 'june-care-payNow';
         
         // Extraire la valeur de values.price
-        const price = values.prix;
-        console.log(price);
+        const price = values.Price;
         // Calculer le prix de l'assurance
-        const insurancePrice = (configuration.insurance_price.value / 100) * price;
-        console.log(insurancePrice);
+        const insurancePrice = (configuration.insurance_price.value) * price;
         // Remplacer [prix] dans le call_to_action par la valeur calculée
         const callToAction = configuration.step1_offer.call_to_action.replace('[prix]', insurancePrice.toFixed(2));
-        console.log(callToAction);
         payButton.textContent = callToAction;
 
         buttonContainer.appendChild(payButton);
@@ -364,14 +373,11 @@
         if (isFirstClick) {
             coverageDetails.style.display = 'none';
             eventDetails.style.display = 'block';
-            const price = values.prix;
-            console.log(price);
+            const price = values.Price;
             // Calculer le prix de l'assurance
-            const insurancePrice = (configuration.insurance_price.value / 100) * price;
-            console.log(insurancePrice);
+            const insurancePrice = (configuration.insurance_price.value) * price;
             // Remplacer [prix] dans le call_to_action par la valeur calculée
             const callToAction = configuration.step2_values.call_to_action.replace('[prix]', insurancePrice.toFixed(2));
-            console.log(callToAction);
             payButton.textContent = callToAction;
             isFirstClick = false;
         } else {
@@ -470,8 +476,7 @@
             /* Responsive style for the popup */
             @media (max-width: 495px) {
                 .june-care-popup {
-                    width: 100vw;
-                    height: 100vw;
+                    width: 90vw;
                 }
             }
 
@@ -563,7 +568,7 @@
     
     function initialize(configuration) {
         const currentUrl = window.location.href;
-    
+    	
         if (globMatch(currentUrl, configuration.url_filters.data_collection)) {
             extractAndStoreValues(configuration.value_getters);
         }
