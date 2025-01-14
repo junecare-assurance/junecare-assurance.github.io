@@ -84,27 +84,13 @@ function createStripeCheckoutSession() {
         },
         body: new URLSearchParams({
             'payment_method_types[]': 'card',
+            'mode': 'payment',
+            'success_url': 'https://junecare-assurance.github.io/orderPlaced.html',
+            'cancel_url': 'https://junecare-assurance.github.io/cart.html',
             'line_items[0][price_data][currency]': 'usd',
             'line_items[0][price_data][product_data][name]': 'T-shirt',
             'line_items[0][price_data][unit_amount]': '2000',
             'line_items[0][quantity]': '1',
-            'mode': 'payment',
-            'success_url': 'https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url': 'https://example.com/cancel',
-            'customer_email': 'customer@example.com',
-            'billing_address_collection': 'auto',
-            'shipping_address_collection[allowed_countries][0]': 'US',
-            'shipping_address_collection[allowed_countries][1]': 'CA',
-            'shipping_options[0][shipping_rate_data][type]': 'fixed_amount',
-            'shipping_options[0][shipping_rate_data][fixed_amount][amount]': '500',
-            'shipping_options[0][shipping_rate_data][fixed_amount][currency]': 'usd',
-            'shipping_options[0][shipping_rate_data][display_name]': 'Standard Shipping',
-            'shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]': 'day',
-            'shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]': '5',
-            'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]': 'day',
-            'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]': '7',
-            'metadata[order_id]': '12345',
-            'metadata[customer_id]': '67890'
         })
     })
     .then(response => response.json())
