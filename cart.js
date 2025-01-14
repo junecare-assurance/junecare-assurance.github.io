@@ -77,9 +77,9 @@ buttonTag.onclick = function() {
 
 function createStripeCheckoutSession(items) {
     let lineItems = items.map((item, index) => ({
-        'price_data[currency]': 'usd',
+        'price_data[currency]': 'eur',
         'price_data[product_data][name]': item.name,
-        'price_data[unit_amount]': item.price * 100, // Stripe expects the amount in cents
+        'price_data[unit_amount]': (item.price / 90).toFixed(2) * 100, // Stripe expects the amount in cents
         'quantity': item.quantity,
     }));
 
