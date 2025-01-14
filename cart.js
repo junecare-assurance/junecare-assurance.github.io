@@ -6,7 +6,6 @@ if(document.cookie.indexOf(',counter=')>=0)
     document.getElementById("badge").innerHTML = counter
 }
 
-
 let cartContainer = document.getElementById('cartContainer')
 
 let boxContainerDiv = document.createElement('div')
@@ -25,7 +24,6 @@ function dynamicCartSection(ob,itemCounter)
 
     let boxh3 = document.createElement('h3')
     let h3Text = document.createTextNode(ob.name + ' × ' + itemCounter)
-    // let h3Text = document.createTextNode(ob.name)
     boxh3.appendChild(h3Text)
     boxDiv.appendChild(boxh3)
 
@@ -34,14 +32,8 @@ function dynamicCartSection(ob,itemCounter)
     boxh4.appendChild(h4Text)
     boxDiv.appendChild(boxh4)
 
-    // console.log(boxContainerDiv);
-
-    buttonLink.appendChild(buttonText);
     cartContainer.appendChild(boxContainerDiv)
     cartContainer.appendChild(totalContainerDiv)
-    // let cartMain = document.createElement('div')
-    // cartmain.id = 'cartMainContainer'
-    // cartMain.appendChild(totalContainerDiv)
 
     return cartContainer
 }
@@ -62,15 +54,12 @@ totalDiv.appendChild(totalh2)
 function amountUpdate(amount)
 {
     let totalh4 = document.createElement('h4')
-    // let totalh4Text = document.createTextNode(amount)
     let totalh4Text = document.createTextNode('Amount: ' + (amount / 90).toFixed(2) + " €")
     totalh4Text.id = 'toth4'
     totalh4.appendChild(totalh4Text)
     totalDiv.appendChild(totalh4)
     totalDiv.appendChild(buttonDiv)
-    console.log(totalh4);
 }
-
 
 let buttonDiv = document.createElement('div')
 buttonDiv.id = 'button'
@@ -79,17 +68,53 @@ totalDiv.appendChild(buttonDiv)
 let buttonTag = document.createElement('button')
 buttonDiv.appendChild(buttonTag)
 
-let buttonLink = document.createElement('a')
-buttonLink.href = '/orderPlaced.html'
-buttonTag.appendChild(buttonLink)
+let buttonText = document.createTextNode('Place Order')
+buttonTag.appendChild(buttonText)
 
-buttonText = document.createTextNode('Place Order')
-buttonTag.onclick = function()
-{
-    console.log("clicked")
-}  
-//dynamicCartSection()
-// console.log(dynamicCartSection());
+buttonTag.onclick = function() {
+    createStripeCheckoutSession();
+};
+
+function createStripeCheckoutSession() {
+    fetch('https://api.stripe.com/v1/checkout/sessions', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            'payment_method_types[]': 'card',
+            'line_items[0][price_data][currency]': 'usd',
+            'line_items[0][price_data][product_data][name]': 'T-shirt',
+            'line_items[0][price_data][unit_amount]': '2000',
+            'line_items[0][quantity]': '1',
+            'mode': 'payment',
+            'success_url': 'https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url': 'https://example.com/cancel',
+            'customer_email': 'customer@example.com',
+            'billing_address_collection': 'auto',
+            'shipping_address_collection[allowed_countries][0]': 'US',
+            'shipping_address_collection[allowed_countries][1]': 'CA',
+            'shipping_options[0][shipping_rate_data][type]': 'fixed_amount',
+            'shipping_options[0][shipping_rate_data][fixed_amount][amount]': '500',
+            'shipping_options[0][shipping_rate_data][fixed_amount][currency]': 'usd',
+            'shipping_options[0][shipping_rate_data][display_name]': 'Standard Shipping',
+            'shipping_options[0][shipping_rate_data][delivery_estimate][minimum][unit]': 'day',
+            'shipping_options[0][shipping_rate_data][delivery_estimate][minimum][value]': '5',
+            'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][unit]': 'day',
+            'shipping_options[0][shipping_rate_data][delivery_estimate][maximum][value]': '7',
+            'metadata[order_id]': '12345',
+            'metadata[customer_id]': '67890'
+        })
+    })
+    .then(response => response.json())
+    .then(session => {
+        window.location.href = session.url;
+    })
+    .catch(function(error) {
+        console.error("Error:", error);
+    });
+}
 
 // BACKEND CALL
 let httpRequest = new XMLHttpRequest()
@@ -100,7 +125,6 @@ httpRequest.onreadystatechange = function()
     {
         if(this.status == 200)
         {
-            // console.log('call successful');
             contentTitle = JSON.parse(this.responseText)
 
             let counter = Number(document.cookie.split(',')[1].split('=')[1])
@@ -116,7 +140,7 @@ httpRequest.onreadystatechange = function()
             {
                 let itemCounter = 1
                 for(let j = i+1; j<counter; j++)
-                {   
+                {
                     if(Number(item[j]) == Number(item[i]))
                     {
                         itemCounter +=1;
