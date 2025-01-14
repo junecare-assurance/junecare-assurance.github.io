@@ -72,26 +72,37 @@ let buttonText = document.createTextNode('Place Order')
 buttonTag.appendChild(buttonText)
 
 buttonTag.onclick = function() {
-    createStripeCheckoutSession();
+    createStripeCheckoutSession(items);
 };
 
-function createStripeCheckoutSession() {
+function createStripeCheckoutSession(items) {
+    let lineItems = items.map((item, index) => ({
+        'price_data[currency]': 'usd',
+        'price_data[product_data][name]': item.name,
+        'price_data[unit_amount]': item.price * 100, // Stripe expects the amount in cents
+        'quantity': item.quantity,
+    }));
+
+    let formBody = lineItems.reduce((acc, item, index) => {
+        acc.append(`line_items[${index}][price_data][currency]`, item['price_data[currency]']);
+        acc.append(`line_items[${index}][price_data][product_data][name]`, item['price_data[product_data][name]']);
+        acc.append(`line_items[${index}][price_data][unit_amount]`, item['price_data[unit_amount]']);
+        acc.append(`line_items[${index}][quantity]`, item['quantity']);
+        return acc;
+    }, new URLSearchParams());
+
+    formBody.append('payment_method_types[]', 'card');
+    formBody.append('mode', 'payment');
+    formBody.append('success_url', 'https://junecare-assurance.github.io/orderPlaced.html');
+    formBody.append('cancel_url', 'https://junecare-assurance.github.io/cart.html');
+
     fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc',
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: new URLSearchParams({
-            'payment_method_types[]': 'card',
-            'mode': 'payment',
-            'success_url': 'https://junecare-assurance.github.io/orderPlaced.html',
-            'cancel_url': 'https://junecare-assurance.github.io/cart.html',
-            'line_items[0][price_data][currency]': 'usd',
-            'line_items[0][price_data][product_data][name]': 'T-shirt',
-            'line_items[0][price_data][unit_amount]': '2000',
-            'line_items[0][quantity]': '1',
-        })
+        body: formBody
     })
     .then(response => response.json())
     .then(session => {
@@ -122,6 +133,7 @@ httpRequest.onreadystatechange = function()
 
             let i;
             let totalAmount = 0
+            let items = [];
             for(i=0; i<counter; i++)
             {
                 let itemCounter = 1
@@ -132,11 +144,20 @@ httpRequest.onreadystatechange = function()
                         itemCounter +=1;
                     }
                 }
-                totalAmount += Number(contentTitle[item[i]-1].price) * itemCounter
-                dynamicCartSection(contentTitle[item[i]-1],itemCounter)
+                let itemData = contentTitle[item[i]-1];
+                totalAmount += Number(itemData.price) * itemCounter
+                items.push({
+                    name: itemData.name,
+                    price: itemData.price,
+                    quantity: itemCounter
+                });
+                dynamicCartSection(itemData, itemCounter)
                 i += (itemCounter-1)
             }
             amountUpdate(totalAmount)
+
+            // Store items globally for Stripe checkout
+            window.items = items;
         }
     }
         else
@@ -147,7 +168,3 @@ httpRequest.onreadystatechange = function()
 
 httpRequest.open('GET', 'https://5d76bf96515d1a0014085cf9.mockapi.io/product', true)
 httpRequest.send()
-
-
-
-
