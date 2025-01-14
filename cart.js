@@ -46,7 +46,7 @@ totalDiv.id = 'total'
 totalContainerDiv.appendChild(totalDiv)
 
 let totalh2 = document.createElement('h2')
-let h2Text = document.createTextNode('Total Amount')
+let h2Text = document.createTextNode('Montant Total de Votre Panier')
 totalh2.appendChild(h2Text)
 totalDiv.appendChild(totalh2)
 
@@ -54,7 +54,7 @@ totalDiv.appendChild(totalh2)
 function amountUpdate(amount)
 {
     let totalh4 = document.createElement('h4')
-    let totalh4Text = document.createTextNode('Amount: ' + (amount / 90).toFixed(2) + " €")
+    let totalh4Text = document.createTextNode('Montant: ' + (amount / 90).toFixed(2) + " €")
     totalh4Text.id = 'toth4'
     totalh4.appendChild(totalh4Text)
     totalDiv.appendChild(totalh4)
@@ -68,7 +68,7 @@ totalDiv.appendChild(buttonDiv)
 let buttonTag = document.createElement('button')
 buttonDiv.appendChild(buttonTag)
 
-let buttonText = document.createTextNode('Place Order')
+let buttonText = document.createTextNode('Passer la Commande')
 buttonTag.appendChild(buttonText)
 
 buttonTag.onclick = function() {
@@ -95,6 +95,8 @@ function createStripeCheckoutSession(items) {
     formBody.append('mode', 'payment');
     formBody.append('success_url', 'https://junecare-assurance.github.io/orderPlaced.html');
     formBody.append('cancel_url', 'https://junecare-assurance.github.io/cart.html');
+    formBody.append('payment_intent_data[description]', 'Paiement ShopLane');
+    formBody.append('payment_intent_data[statement_descriptor]', 'ShopLane');
 
     fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
