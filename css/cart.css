@@ -61,6 +61,7 @@ button
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    color: white;
 }
 button a
 {
