@@ -117,6 +117,7 @@ button a:focus
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        color: white;
     }
 }
 
@@ -176,6 +177,7 @@ button a:focus
     #button
     {
         text-align: center;
+        color: white;
     }
 }
 
