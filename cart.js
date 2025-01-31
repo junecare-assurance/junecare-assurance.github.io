@@ -101,7 +101,7 @@ function createStripeCheckoutSession(items) {
     fetch('https://api.stripe.com/v1/checkout/sessions', {
         method: 'POST',
         headers: {
-            'Authorization': 'Bearer sk_test_4eC39HqLyjWDarjtT1zdp7dc',
+            'Authorization': 'Bearer rk_test_51QnGFFQ6D4Te3bwdlFtwn9Ruk5K5iU7OJNFqv5zO4Miok0UM5NwRaG3w0iW163gccSi5aM6hpsrGFQNCpQ7ypzQv00uPOUzFNd',
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: formBody
